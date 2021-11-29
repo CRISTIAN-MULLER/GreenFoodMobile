@@ -6,11 +6,22 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-import LogoSVG from '../../assets/logo';
-import Gradient from './Gradient';
+import LogoSVG from '../../assets/LogoSVG';
+import Gradient from '../components/Gradient';
+import { RootStackParamList } from '../types/RootStackParamList';
 
-export function Welcome({ navigation }) {
+type WelcomeScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Welcome'
+>;
+
+type Props = {
+  navigation: WelcomeScreenNavigationProp;
+};
+
+export function Welcome({ navigation }: Props) {
   function handleStart() {
     navigation.navigate('Login');
   }
@@ -19,7 +30,7 @@ export function Welcome({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
         <Gradient />
-        <LogoSVG />
+        <LogoSVG width="248" height="243" />
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.7}
@@ -50,6 +61,7 @@ const styles = StyleSheet.create({
     height: '7%',
     //   left: 64,
     //   top: 450,
+    marginTop: 60,
     backgroundColor: '#FF8108',
     alignItems: 'center',
     justifyContent: 'center',

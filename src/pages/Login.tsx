@@ -5,43 +5,69 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
+  Pressable,
 } from 'react-native';
 
-import { FloatingLabelInput } from 'react-native-floating-label-input';
+import * as AuthSession from 'expo-auth-session';
 
+import { RootStackParamList } from '../types/RootStackParamList';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+
+import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 
-import LogoSVG from '../../assets/logo';
-import Gradient from './Gradient';
+import LogoSVG from '../../assets/LogoSVG';
+import Gradient from '../components/Gradient';
 
-export function Login() {
+type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList>;
+
+type Props = {
+  navigation: LoginScreenNavigationProp;
+};
+
+type AuthResponse = {
+  type: string;
+  params: {
+    access_token: string;
+  };
+};
+
+export function Login({ navigation }: Props) {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState<string>();
   const [show, setShow] = useState(false);
 
-  // function handleInputBlur() {
-  //   setIsFocused(false);
-  //   setIsFilled(!!name);
-  // }
+  const handleSignIn = async () => {
+    const CLIENT_ID =
+      '174198411470-5ni1ito2uvhmkp7shqlmh5ooiiepjt25.apps.googleusercontent.com';
+    const REDIRECT_URI =
+      'https://auth.expo.io/@cristian.muller/greenfoodmobile';
+    const RESPONSE_TYPE = 'token';
+    const SCOPE = encodeURI('profile email');
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
 
-  // function handleInputFocus() {
-  //   setIsFocused(true);
-  // }
-  // function handleInputChange(value: string) {
-  //   setIsFilled(!!value);
-  //   setName(value);
-  // }
+    const { type, params } = (await AuthSession.startAsync({
+      authUrl,
+    })) as AuthResponse;
+
+    if (type === 'success') {
+      navigation.navigate('Menu', {
+        token: params.access_token,
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
         <Gradient />
 
-        <LogoSVG />
-
+        <View style={{ marginBottom: 20 }}>
+          <LogoSVG width="170" height="150" />
+        </View>
         <View style={styles.login}>
           <Text style={styles.textLogin}>LOGIN</Text>
           <FloatingLabelInput
@@ -79,14 +105,19 @@ export function Login() {
             isPassword
             togglePassword={show}
             customShowPasswordComponent={
-              <Ionicons name="eye" size={24} color="black" />
+              <Ionicons
+                name="eye"
+                size={24}
+                color="rgba(0, 0, 0, 0.38)"
+                style={{ marginRight: 5 }}
+              />
             }
             customHidePasswordComponent={
               <Ionicons
                 name="eye-off"
                 size={24}
-                color="black"
-                margiRight={10}
+                color="rgba(0, 0, 0, 0.38)"
+                style={{ marginRight: 5 }}
               />
             }
             staticLabel
@@ -100,6 +131,7 @@ export function Login() {
               alignItems: 'center',
             }}
             labelStyles={{
+              color: 'red',
               backgroundColor: '#FFF8EC',
               padding: 2,
             }}
@@ -115,18 +147,36 @@ export function Login() {
             }}
           />
         </View>
-        <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.7}
+          onPress={() => handleSignIn()}
+        >
           <Text style={styles.text}>ENTRAR</Text>
         </TouchableOpacity>
-        <Text>Esqueceu a senha? Lembrar</Text>
-        <Text>Ainda não tem cadastro? Faça Agora</Text>
+        <Text style={styles.white}>
+          Esqueceu a senha? <Text style={styles.underscore}>Lembrar</Text>
+        </Text>
+        <Text style={styles.white}>
+          Ainda não tem cadastro?
+          <Pressable onPress={() => navigation.navigate('User')}>
+            <Text style={styles.underscore}>Faça Agora</Text>
+          </Pressable>
+        </Text>
 
         <View
-          style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}
+          style={{
+            width: '70%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 10,
+          }}
         >
           <View style={{ flex: 1, height: 1, backgroundColor: '#F9E0B366' }} />
           <View>
-            <Text style={{ width: 40, textAlign: 'center' }}>Ou</Text>
+            <Text style={{ width: 40, textAlign: 'center', color: '#FFFFFF' }}>
+              Ou
+            </Text>
           </View>
           <View
             style={{
@@ -137,17 +187,22 @@ export function Login() {
           />
         </View>
 
-        <Text>Entre com</Text>
+        <Text style={styles.white}>Entre com</Text>
         <View
           style={{
             width: '30%',
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '10%',
+            // marginBottom: '15%',
           }}
         >
-          <AntDesign name="google" size={36} color="#FFFFFF" />
+          <AntDesign
+            name="google"
+            size={36}
+            color="#FFFFFF"
+            onPress={() => handleSignIn()}
+          />
           <Entypo name="facebook-with-circle" size={36} color="#FFFFFF" />
         </View>
       </View>
@@ -172,6 +227,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF8EC',
     padding: 10,
     width: '70%',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
 
     //  height: '40%',
   },
@@ -183,24 +240,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-  fieldSet: {
-    margin: 10,
-    height: 40,
-    // paddingHorizontal: 10,
-    // paddingBottom: 10,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.12)',
-    borderRadius: 4,
-    alignItems: 'center',
+
+  white: {
+    color: '#FFFFFF',
+    marginBottom: 10,
   },
-  legend: {
-    position: 'absolute',
-    top: -10,
-    left: 10,
-    color: 'rgba(0, 0, 0, 0.6)',
-    //fontWeight: 'bold',
-    //backgroundColor: '#FFFFFF',
+  underscore: {
+    color: '#FF8108',
+    textDecorationLine: 'underline',
   },
 
   input: {
@@ -222,7 +269,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF8108',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    marginBottom: 10,
   },
   text: {
     fontSize: 15,

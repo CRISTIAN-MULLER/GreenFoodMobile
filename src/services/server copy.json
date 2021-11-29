@@ -1,0 +1,174 @@
+{
+  "products": [
+    {
+      "_id": { "$oid": "60c0ae7efebdca1288045337" },
+      "name": "Pepino Japonês",
+      "image": "pepino-japones.png",
+      "saleUnits": [
+        {
+          "active": true,
+          "_id": { "$oid": "60e5bc2fbf2b430015da538c" },
+          "saleUnit": "Un",
+          "price": { "$numberDouble": "0.9" },
+          "description": "Preço em Unidade"
+        },
+        {
+          "active": true,
+          "_id": { "$oid": "60e5bc2fbf2b430015da538d" },
+          "saleUnit": "Kg",
+          "price": { "$numberDouble": "4.49" },
+          "description": "Preço em KG"
+        }
+      ],
+      "category": "Verduras",
+      "active": true
+    },
+    {
+      "_id": { "$oid": "60c0ae7efebdca1288045330" },
+      "name": "Limão Taiti",
+      "image": "limao-taiti.png",
+      "saleUnits": [
+        {
+          "active": true,
+          "_id": { "$oid": "60e5bd03bf2b430015da53a4" },
+          "saleUnit": "Un",
+          "price": { "$numberDouble": "0.35" },
+          "description": "Limão"
+        },
+        {
+          "active": true,
+          "_id": { "$oid": "60e5bd03bf2b430015da53a5" },
+          "saleUnit": "Kg",
+          "price": { "$numberDouble": "3.79" },
+          "description": "Descrição"
+        }
+      ],
+      "category": "Frutas",
+      "active": true
+    },
+    {
+      "_id": { "$oid": "60c0ae7efebdca1288045336" },
+      "name": "Batata Inglesa",
+      "image": "batata-inglesa.png",
+      "saleUnits": [
+        {
+          "active": true,
+          "_id": { "$oid": "60e5bfffbf2b430015da53bc" },
+          "saleUnit": "Un",
+          "price": { "$numberDouble": "0.7" },
+          "description": "undefined"
+        },
+        {
+          "active": true,
+          "_id": { "$oid": "60e5bfffbf2b430015da53bd" },
+          "saleUnit": "Kg",
+          "price": { "$numberDouble": "4.69" },
+          "description": "Descrição"
+        }
+      ],
+      "category": "Verduras",
+      "active": true
+    },
+    {
+      "_id": { "$oid": "60c0ae7efebdca1288045333" },
+      "name": "Abacaxi Havaí",
+      "image": "abacaxi-havai.png",
+      "saleUnits": [
+        {
+          "active": true,
+          "_id": { "$oid": "60e5c1acbf2b430015da53cc" },
+          "saleUnit": "Un",
+          "price": { "$numberDouble": "9.5" },
+          "description": "undefined"
+        },
+        {
+          "active": false,
+          "_id": { "$oid": "60e5c1acbf2b430015da53cd" },
+          "saleUnit": "Kg",
+          "price": { "$numberDouble": "5.5" },
+          "description": "Descrição"
+        }
+      ],
+      "category": "Frutas",
+      "active": true
+    },
+    {
+      "_id": { "$oid": "60c0ae7efebdca128804532e" },
+      "name": "Agrião",
+      "image": "agriao.png",
+      "saleUnits": [
+        {
+          "active": true,
+          "_id": { "$oid": "60e5c2bcbf2b430015da53d4" },
+          "saleUnit": "Un",
+          "price": { "$numberDouble": "2.29" },
+          "description": "Descrição"
+        }
+      ],
+      "category": "Hortaliças",
+      "active": true
+    },
+    {
+      "_id": { "$oid": "60c0ae7efebdca1288045335" },
+      "name": "Cebola",
+      "image": "cebola.png",
+      "saleUnits": [
+        {
+          "active": true,
+          "_id": { "$oid": "60e5c32ebf2b430015da53d6" },
+          "saleUnit": "g",
+          "price": { "$numberDouble": "0.6" },
+          "description": "undefined"
+        },
+        {
+          "active": true,
+          "_id": { "$oid": "60e5c32ebf2b430015da53d7" },
+          "saleUnit": "Kg",
+          "price": { "$numberDouble": "3.49" },
+          "description": "Descrição"
+        }
+      ],
+      "category": "Verduras",
+      "active": true
+    },
+    {
+      "_id": { "$oid": "60c0ae7efebdca128804533a" },
+      "name": "Linhaça Dourada",
+      "image": "linhaca-dourada.png",
+      "saleUnits": [
+        {
+          "active": true,
+          "_id": { "$oid": "60e5c38abf2b430015da53da" },
+          "saleUnit": "g",
+          "price": { "$numberDouble": "0.02" },
+          "description": "undefined"
+        },
+        {
+          "active": true,
+          "_id": { "$oid": "60e5c38abf2b430015da53db" },
+          "saleUnit": "Kg",
+          "price": { "$numberDouble": "15.09" },
+          "description": "Descrição"
+        }
+      ],
+      "category": "Grãos",
+      "active": true
+    },
+    {
+      "_id": { "$oid": "60c0ae7efebdca1288045331" },
+      "name": "Goiaba Vermelha",
+      "image": "goiaba-vermelha.png",
+      "saleUnits": [
+        { "saleUnit": "Un", "price": { "$numberDouble": "0.75" } },
+        {
+          "saleUnit": "Kg",
+          "price": { "$numberDouble": "5.85" },
+          "description": "Descrição",
+          "active": true
+        }
+      ],
+      "category": "Frutas",
+      "active": true
+    }
+  ]
+}
