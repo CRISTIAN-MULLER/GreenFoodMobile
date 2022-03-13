@@ -1,29 +1,35 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
-import { Text, StyleSheet, Image, View } from 'react-native';
+import { Text, StyleSheet, Image, View, Modal } from 'react-native';
 import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
 
-//import colors from '../styles/colors';
-//import fonts from '../styles/fonts';
+import api from '../services/api';
 
-export interface ProductProps extends RectButtonProps {
-  data: {
-    _id: { $oid: string };
-    name: string;
-    image: string;
-    saleUnits: [
-      {
-        _id: { $oid: string };
-        saleUnit: string;
-        price: { $numberDouble: number };
-        active: boolean;
-      }
-    ];
-  };
+import { ProductCardSecondary } from './ProductCardSecondary';
+
+import { ProductProps, SaleUnitProps } from '../contexts/ProductContext';
+import { CartContext, CartItemContext } from '../contexts/CartContext';
+
+export interface ProductsProps extends RectButtonProps {
+  data: ProductProps;
 }
-export const PlantCardPrimary = ({ data, ...rest }: ProductProps) => {
-  const formatReal = (value) => {
+
+export const ProductCardPrimary = ({ data, ...rest }: ProductsProps) => {
+  const {
+    handleAddToCart,
+    setSaleUnit,
+    setCartItems,
+    cartItems,
+    saleUnit,
+    setItemTotalQty,
+    itemTotalQty,
+  } = useContext(CartContext);
+
+  const [showAddToCatProduct, setShowAddToCatProduct] =
+    useState<boolean>(false);
+
+  const formatReal = (value: number | bigint) => {
     const formatter = new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL',
@@ -38,14 +44,12 @@ export const PlantCardPrimary = ({ data, ...rest }: ProductProps) => {
         <Image source={{ uri: data.image }} style={styles.image} />
         {/* <SvgFromUri uri={imageSrc} height={70} width={70} /> */}
         <Text>{data.name}</Text>
-
         <View style={styles.priceView}>
           <View style={{ flexDirection: 'column' }}>
             {data.saleUnits.map((saleUnit, index) => {
               return (
-                <>
+                <View key={saleUnit._id}>
                   <Text
-                    key={saleUnit._id.$oid}
                     style={
                       index === data.saleUnits.length - 1
                         ? styles.saleUnitLastChild
@@ -55,14 +59,32 @@ export const PlantCardPrimary = ({ data, ...rest }: ProductProps) => {
                     {formatReal(saleUnit.price)}
                     <Text style={{ color: 'red' }}> {saleUnit.saleUnit}</Text>
                   </Text>
-                </>
+                </View>
               );
             })}
           </View>
           <View style={styles.iconContainer}>
-            <FontAwesome name="plus" size={16} color="#FF8108" />
+            <FontAwesome
+              name="plus"
+              size={24}
+              color="#FF8108"
+              onPress={() => setShowAddToCatProduct(!showAddToCatProduct)}
+            />
           </View>
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showAddToCatProduct}
+          onRequestClose={() => {
+            setCartItems({} as CartItemContext);
+            setSaleUnit({} as SaleUnitProps);
+            setItemTotalQty(0);
+            setShowAddToCatProduct(!showAddToCatProduct);
+          }}
+        >
+          <ProductCardSecondary data={data} />
+        </Modal>
       </RectButton>
     </View>
   );
@@ -71,14 +93,6 @@ export const PlantCardPrimary = ({ data, ...rest }: ProductProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //maxWidth: '45%',
-    //backgroundColor: 'red',
-    // paddingVertical: 10,
-    //alignItems: 'center',
-    // margin: 10,
-    // width: '100%',
-    // height: '100%',
-    // resizeMode: 'cover',[~´]=
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: 'rgba(33, 33, 33, 0.08)',
@@ -88,23 +102,15 @@ const styles = StyleSheet.create({
   },
   text: {
     alignContent: 'flex-start',
-    // color: colors.green_dark,
-    // fontFamily: fonts.heading,
-    //marginVertical: 16,
   },
   rect: {
-    //maxWidth: '45%',
-    //paddingVertical: 10,
-    //backgroundColor: 'red',
-    //justifyContent: 'flex-end',
-    //margin: 10,
     marginHorizontal: 5,
   },
 
   image: {
     flex: 1,
-    width: 160,
-    height: 160,
+    width: 150,
+    height: 130,
     resizeMode: 'contain',
   },
   saleUnit: {
@@ -127,8 +133,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     backgroundColor: '#1E9C25',
-    height: 24,
-    width: 24,
+    height: 36,
+    width: 36,
     marginBottom: -5,
     marginRight: -5,
     borderBottomRightRadius: 4,
@@ -137,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlantCardPrimary;
+export default ProductCardPrimary;

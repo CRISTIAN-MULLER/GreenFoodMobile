@@ -13,7 +13,7 @@ type UserProfile = {
   picture: string;
 };
 
-export default function TopBar<UserProfile>({ profile }) {
+export default function TopBar({ profile }) {
   return (
     <View style={styles.topBar}>
       <Ionicons name="menu" size={36} color="#FFFFFF" />
@@ -22,7 +22,7 @@ export default function TopBar<UserProfile>({ profile }) {
       </View>
 
       <MaterialCommunityIcons name="bell" size={24} color="#FFFFFF" />
-      <Image
+      {/* <Image
         source={{ uri: profile.picture }}
         style={{
           //flex: 1,
@@ -31,7 +31,7 @@ export default function TopBar<UserProfile>({ profile }) {
           borderRadius: 50,
           resizeMode: 'contain',
         }}
-      />
+      /> */}
 
       {/* <Ionicons name="md-share-social-sharp" size={24} color="#FFFFFF" /> */}
     </View>

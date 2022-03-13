@@ -12,13 +12,15 @@ import * as AuthSession from 'expo-auth-session';
 
 import { RootStackParamList } from '../types/RootStackParamList';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
 
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 
+import AuthContext from '../contexts/AuthContext';
+
 import LogoSVG from '../../assets/LogoSVG';
 import Gradient from '../components/Gradient';
+import api from '../services/api';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -36,27 +38,44 @@ type AuthResponse = {
 export function Login({ navigation }: Props) {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState<string>();
+  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState<string>('muller.cristian@outlook.com');
   const [show, setShow] = useState(false);
 
-  const handleSignIn = async () => {
-    const CLIENT_ID =
-      '174198411470-5ni1ito2uvhmkp7shqlmh5ooiiepjt25.apps.googleusercontent.com';
-    const REDIRECT_URI =
-      'https://auth.expo.io/@cristian.muller/greenfoodmobile';
-    const RESPONSE_TYPE = 'token';
-    const SCOPE = encodeURI('profile email');
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
+  const handleSignIn = async (source: string) => {
+    if (source === 'google') {
+      const CLIENT_ID =
+        '174198411470-5ni1ito2uvhmkp7shqlmh5ooiiepjt25.apps.googleusercontent.com';
+      const REDIRECT_URI =
+        'https://auth.expo.io/@cristian.muller/greenfoodmobile';
+      const RESPONSE_TYPE = 'token';
+      const SCOPE = encodeURI('profile email');
+      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
 
-    const { type, params } = (await AuthSession.startAsync({
-      authUrl,
-    })) as AuthResponse;
+      const { type, params } = (await AuthSession.startAsync({
+        authUrl,
+      })) as AuthResponse;
 
-    if (type === 'success') {
-      navigation.navigate('Menu', {
-        token: params.access_token,
-      });
+      if (type === 'success') {
+        navigation.navigate('Menu', {
+          token: params.access_token,
+        });
+      }
+    }
+
+    if (source === 'login') {
+      await api
+        .post(`login`, {
+          source,
+          email,
+          password,
+        })
+        .then(() => {
+          navigation.navigate('Menu', { token: '' });
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+        });
     }
   };
 
@@ -150,7 +169,7 @@ export function Login({ navigation }: Props) {
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.7}
-          onPress={() => handleSignIn()}
+          onPress={() => handleSignIn('login')}
         >
           <Text style={styles.text}>ENTRAR</Text>
         </TouchableOpacity>
@@ -201,7 +220,7 @@ export function Login({ navigation }: Props) {
             name="google"
             size={36}
             color="#FFFFFF"
-            onPress={() => handleSignIn()}
+            onPress={() => handleSignIn('google')}
           />
           <Entypo name="facebook-with-circle" size={36} color="#FFFFFF" />
         </View>
