@@ -1,70 +1,39 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { Load } from '../components/Load';
-
-import api from '../services/api';
-
-export type SaleUnitProps = {
-  _id: string;
-  active: boolean;
-  saleUnit: string;
-  price: number;
-  description: string;
-};
-
-export type ProductProps = {
-  _id: string;
-  name: string;
-  image: string;
-  saleUnits: [
-    {
-      _id: string;
-      active: boolean;
-      saleUnit: string;
-      price: number;
-      description: string;
-    }
-  ];
-  category: string;
-  active: boolean;
-  saleUnit: SaleUnitProps;
-  itemTotalQty: number;
-};
+import { useLazyQuery, useQuery } from '@apollo/client'
+import React, { createContext, useEffect, useState } from 'react'
+import { Load } from '../components/Load'
+import { GET_ALL_PRODUCTS } from '../gql/Product.gql'
+import { ProductProps, SaleUnitProps } from '../types/Product'
 
 interface ProductContext {
-  products: [ProductProps] | undefined;
-  loading: boolean;
+	products: [ProductProps] | undefined
+	setProducts: (product: [ProductProps]) => void
+	loading: boolean
+	setLoading: (loading: boolean) => void
+	loadingMore: boolean
+	setLoadingMore: (loading: boolean) => void
 }
 
-export const ProductContext = createContext({} as ProductContext);
+export const ProductContext = createContext({} as ProductContext)
 
 const ProductProvider: React.FC = ({ children }) => {
-  const [products, setProducts] = useState<[ProductProps]>();
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
+	const [products, setProducts] = useState<[ProductProps]>()
+	const [loading, setLoading] = useState(false)
+	const [loadingMore, setLoadingMore] = useState(false)
 
-  async function fetchProducts() {
-    const { data } = await api.get(`products?_sort=name&_order=asc`);
-    if (!data) return setLoading(true);
-    setProducts(data);
-    setLoading(false);
-  }
+	return (
+		<ProductContext.Provider
+			value={{
+				products,
+				setProducts,
+				loading,
+				setLoading,
+				loadingMore,
+				setLoadingMore,
+			}}
+		>
+			{children}
+		</ProductContext.Provider>
+	)
+}
 
-  function handleFetchMore(distance: number) {
-    if (distance < 1) return;
-    //setLoadingMore(true);
-    //setPage((oldValue) => oldValue + 1);
-    // const  fetchProducts();
-  }
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  return (
-    <ProductContext.Provider value={{ products, loading }}>
-      {children}
-    </ProductContext.Provider>
-  );
-};
-
-export default ProductProvider;
+export default ProductProvider
