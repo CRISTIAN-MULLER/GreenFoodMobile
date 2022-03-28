@@ -5,6 +5,7 @@ import AuthContext from './src/contexts/AuthContext'
 import ProfileProvider from './src/contexts/ProfileContext'
 import CartProvider from './src/contexts/CartContext'
 import ProductProvider from './src/contexts/ProductContext'
+import OrderProvider from './src/contexts/OrderContext'
 
 import Routes from './src/routes'
 
@@ -22,11 +23,13 @@ export default function App() {
 		<ApolloProvider client={apolloClient}>
 			<AuthContext.Provider value={{ isAuthenticated: false }}>
 				<ProfileProvider>
-					<CartProvider>
-						<ProductProvider>
-							<Routes />
-						</ProductProvider>
-					</CartProvider>
+					<OrderProvider>
+						<CartProvider>
+							<ProductProvider>
+								<Routes />
+							</ProductProvider>
+						</CartProvider>
+					</OrderProvider>
 				</ProfileProvider>
 			</AuthContext.Provider>
 		</ApolloProvider>

@@ -1,10 +1,10 @@
 import React, { createContext, useState } from 'react'
-import { CartItemsProps } from '../types/Cart'
+import { CartProps } from '../types/Cart'
 import { CartProductProps } from '../types/Product'
 
 export interface CartContext {
-	cart: CartItemsProps
-	setCart: (cart: CartItemsProps) => void
+	cart: CartProps
+	setCart: (cart: CartProps) => void
 	cartItem: CartProductProps
 	setCartItem: (item: CartProductProps) => void
 	handleAddItemToCart: (item: CartProductProps) => void
@@ -15,7 +15,7 @@ export interface CartContext {
 export const CartContext = createContext({} as CartContext)
 
 const CartProvider: React.FC = ({ children }) => {
-	const [cart, setCart] = useState<CartItemsProps>({
+	const [cart, setCart] = useState<CartProps>({
 		items: [],
 		itemsTotalQty: 0,
 		itemsTotalPrice: 0,
@@ -61,16 +61,6 @@ const CartProvider: React.FC = ({ children }) => {
 	}
 
 	function handleAddItemToCart(newItem: CartProductProps) {
-		// UPDATE_NFE_STATUS(state, payload) {
-		// 	state.list.map((shipping) => {
-		// 		const shippings = shipping.orders.filter((order) => {
-		// 			if (order.nfe && order.nfe.nfe_erp_id === payload.nfe_erp_id) {
-		// 				order.nfe = payload;
-		// 			}
-		// 		});
-		// 	});
-		// },
-
 		const cartItems = cart.items
 
 		if (!cartItems.length) {
@@ -94,39 +84,8 @@ const CartProvider: React.FC = ({ children }) => {
 			return
 		}
 		updateCart(cartItems)
-		// if (hasItem) {
-		// 	Alert.alert(
-		// 		'Item no Carrinho',
-		// 		'Este item Já existe no carrinho, gostaria de substituir ou adicionar.',
-		// 		[
-		// 			{
-		// 				text: 'Cancel',
-		// 				style: 'cancel',
-		// 			},
-		// 			{
-		// 				text: 'Adicionar',
-		// 				onPress: () => {
-		// 					newCart.items.push(newItem),
-		// 						(newCart.itemsTotalQty =
-		// 							cart.itemsTotalQty + newItem.itemTotalQty),
-		// 						(newCart.itemsTotalPrice =
-		// 							cart.itemsTotalPrice + newItem.itemTotalPrice)
-		// 				},
-		// 			},
-		// 			{ text: 'Substituir', onPress: () => {
-
-		// 			}
-		// 		},
-		// 		],
-		// 		{
-		// 			cancelable: true,
-		// 		},
-		// 	)
-		// 	// 	hasItem.itemTotalQty = hasItem.itemTotalQty + newItem.itemTotalQty
-		// 	//console.log('hasItem')
-		// }
-		//console.log(hasItem)
 	}
+
 	function handleRemoveItemFromCart(itemToRemove: CartProductProps) {
 		const newCartItems = cart.items.filter(
 			(item) => item._id !== itemToRemove._id,

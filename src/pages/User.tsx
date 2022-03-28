@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+
 import {
 	SafeAreaView,
 	StyleSheet,
 	View,
 	Text,
 	TouchableOpacity,
+	StatusBar,
 } from 'react-native'
 
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
@@ -13,14 +15,47 @@ import { FloatingLabelInput } from 'react-native-floating-label-input'
 import LogoSVG from '../../assets/LogoSVG'
 import Gradient from '../components/Gradient'
 import { NavigationProps } from '../types/Navigation'
+import { useMutation } from '@apollo/client'
+
+import { REGISTER } from '../gql/User.gql'
+import { ProfileContext } from '../contexts/ProfileContext'
 
 export function User({ navigation }: NavigationProps) {
-	const [password, setPassword] = useState('')
-	const [confirmationPassword, setConfirmationPassword] = useState('')
-	const [phone, setPhone] = useState('')
-	const [email, setEmail] = useState<string>()
-	const [name, setName] = useState<string>()
+	const { userProfile, setUserProfile } = useContext(ProfileContext)
+
+	const [password, setPassword] = useState<string>('')
+	const [confirmationPassword, setConfirmationPassword] = useState<string>('')
+	const [phone, setPhone] = useState<string>('')
+	const [email, setEmail] = useState<string>('')
+	const [firstName, setFirstName] = useState<string>('')
+	const [lastName, setLastName] = useState<string>('')
 	const [show, setShow] = useState(false)
+
+	const [registerNewUser] = useMutation(REGISTER)
+
+	async function handleRegisterNewUser() {
+		console.log(email, password, firstName, lastName, phone)
+
+		try {
+			const {
+				data: { registerUser },
+			} = await registerNewUser({
+				variables: {
+					data: {
+						password: password,
+						phone: phone,
+						email: email,
+						firstName: firstName,
+						lastName: lastName,
+					},
+				},
+			})
+			setUserProfile!(registerUser)
+			navigation.navigate('Menu')
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	// function handleInputBlur() {
 	//   setIsFocused(false);
@@ -39,8 +74,7 @@ export function User({ navigation }: NavigationProps) {
 		<SafeAreaView style={styles.container}>
 			<View style={styles.wrapper}>
 				<Gradient />
-
-				<View style={{ marginBottom: 20 }}>
+				<View style={{ marginTop: StatusBar.currentHeight }}>
 					<LogoSVG width='170' height='150' />
 				</View>
 				<View style={styles.userInputs}>
@@ -54,13 +88,32 @@ export function User({ navigation }: NavigationProps) {
 								style={{ marginLeft: 10 }}
 							/>
 						}
-						value={name}
+						value={firstName}
 						containerStyles={styles.textInput}
 						inputStyles={{
 							color: '#313130',
 							paddingHorizontal: 10,
 						}}
-						onChangeText={(name) => setName(name)}
+						onChangeText={(name) => setFirstName(name)}
+						label={''}
+					/>
+					<Text style={styles.text}>Sobrenome</Text>
+					<FloatingLabelInput
+						leftComponent={
+							<Ionicons
+								name='person'
+								size={24}
+								color='rgba(0, 0, 0, 0.6)'
+								style={{ marginLeft: 10 }}
+							/>
+						}
+						value={lastName}
+						containerStyles={styles.textInput}
+						inputStyles={{
+							color: '#313130',
+							paddingHorizontal: 10,
+						}}
+						onChangeText={(name) => setLastName(name)}
 						label={''}
 					/>
 					<Text style={styles.text}>E-mail</Text>
@@ -189,7 +242,7 @@ export function User({ navigation }: NavigationProps) {
 				<TouchableOpacity
 					style={styles.button}
 					activeOpacity={0.7}
-					onPress={() => navigation.navigate('Login')}
+					onPress={() => handleRegisterNewUser()}
 				>
 					<Text style={styles.text}>CADASTRAR</Text>
 				</TouchableOpacity>

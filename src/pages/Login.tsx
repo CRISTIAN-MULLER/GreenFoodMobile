@@ -190,16 +190,30 @@ export function Login({ navigation }: NavigationProps) {
 				>
 					<Text style={styles.text}>ENTRAR</Text>
 				</TouchableOpacity>
-				<Text style={styles.white}>
-					Esqueceu a senha? <Text style={styles.underscore}>Lembrar</Text>
-				</Text>
-				<Text style={styles.white}>
-					Ainda não tem cadastro?
+				<View
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						width: '70%',
+					}}
+				>
+					<Text style={styles.white}>Esqueceu a Senha?</Text>
+					<Pressable onPress={() => navigation.navigate('User')}>
+						<Text style={styles.underscore}>Lembrar</Text>
+					</Pressable>
+				</View>
+				<View
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						width: '70%',
+					}}
+				>
+					<Text style={styles.white}>Ainda não tem cadastro?</Text>
 					<Pressable onPress={() => navigation.navigate('User')}>
 						<Text style={styles.underscore}>Faça Agora</Text>
 					</Pressable>
-				</Text>
-
+				</View>
 				<View
 					style={{
 						width: '70%',
@@ -284,6 +298,7 @@ const styles = StyleSheet.create({
 	underscore: {
 		color: '#FF8108',
 		textDecorationLine: 'underline',
+		marginLeft: 5,
 	},
 
 	input: {

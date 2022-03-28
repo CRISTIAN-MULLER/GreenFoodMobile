@@ -3,12 +3,12 @@ import { StyleSheet, View } from 'react-native'
 
 import LottieView from 'lottie-react-native'
 
-import loading from '../../assets/loading.json'
+import menuLoading from '../../assets/menuLoad.json'
 
-export function Load() {
+export function MenuLoad() {
 	return (
 		<View style={styles.container}>
-			<LottieView source={loading} autoPlay loop style={styles.animation} />
+			<LottieView source={menuLoading} autoPlay loop style={styles.animation} />
 		</View>
 	)
 }

@@ -5,8 +5,8 @@ import { GET_ALL_PRODUCTS } from '../gql/Product.gql'
 import { ProductProps, SaleUnitProps } from '../types/Product'
 
 interface ProductContext {
-	products: [ProductProps] | undefined
-	setProducts: (product: [ProductProps]) => void
+	products: ProductProps[] | undefined
+	setProducts: (product: ProductProps[]) => void
 	loading: boolean
 	setLoading: (loading: boolean) => void
 	loadingMore: boolean
@@ -16,7 +16,7 @@ interface ProductContext {
 export const ProductContext = createContext({} as ProductContext)
 
 const ProductProvider: React.FC = ({ children }) => {
-	const [products, setProducts] = useState<[ProductProps]>()
+	const [products, setProducts] = useState<ProductProps[]>()
 	const [loading, setLoading] = useState(false)
 	const [loadingMore, setLoadingMore] = useState(false)
 

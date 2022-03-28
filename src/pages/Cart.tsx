@@ -17,6 +17,7 @@ import { CartContext } from '../contexts/CartContext'
 
 import { NavigationProps } from '../types/Navigation'
 import EmptyCartSVG from '../../assets/EmptyCartSVG'
+import { Button } from '../components/Button'
 
 export function Cart({ navigation }: NavigationProps) {
 	const { cart, formatCurrency } = useContext(CartContext)
@@ -61,8 +62,7 @@ export function Cart({ navigation }: NavigationProps) {
 							renderItem={({ item }) => <ProductCardTertiary data={item} />}
 							showsVerticalScrollIndicator={false}
 							numColumns={1}
-							onEndReachedThreshold={0.1}
-						></FlatList>
+						/>
 						<View
 							style={{
 								height: 1,
@@ -79,14 +79,10 @@ export function Cart({ navigation }: NavigationProps) {
 								{formatCurrency(cart.itemsTotalPrice)}
 							</Text>
 						</View>
-
-						<TouchableOpacity
-							style={styles.button}
-							activeOpacity={0.7}
-							onPress={() => navigation.navigate('Delivery')}
-						>
-							<Text style={styles.buttonText}>FINALIZAR</Text>
-						</TouchableOpacity>
+						<Button
+							buttonText={'FINALIZAR'}
+							onPress={() => navigation.navigate('AddressSelection')}
+						/>
 					</>
 				)}
 				<BottomBar navigation={navigation} />
@@ -127,26 +123,6 @@ const styles = StyleSheet.create({
 	productsCard: {
 		flex: 1,
 		//padding: 10,
-	},
-	button: {
-		// position: 'absolute',
-		//width: '70%',
-		height: 60,
-		marginHorizontal: 12,
-		//   left: 64,
-		//   top: 450,
-		marginTop: 30,
-		marginBottom: 10,
-		backgroundColor: '#FF8108',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 8,
-	},
-	buttonText: {
-		//flex: 1,
-		color: '#FFFFFF',
-		fontSize: 20,
-		fontWeight: '600',
 	},
 
 	svg: {

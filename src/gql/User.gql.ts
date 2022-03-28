@@ -9,10 +9,65 @@ const HELLO = gql`
 const LOGIN = gql`  
   mutation Login($data: LoginInput!) {
     login(data: $data) {
+      _id
+      foreignIds {
+        userId
+        provider
+      }
       firstName
       lastName
       fullName
       email
+      phone
+      profile_picture
+      role
+      addresses {
+        name
+        zipcode
+        street
+        houseNumber
+        district
+        city
+        state
+        reference
+        location {
+          type
+          coordinates
+        }
+      }
+    }
+  }
+`
+
+const REGISTER = gql`  
+  mutation RegisterUser($data: RegisterInput!) {
+    registerUser(data: $data) {
+      _id
+      foreignIds {
+        userId
+        provider
+      }
+      firstName
+      lastName
+      fullName
+      email
+      phone
+      profile_picture
+      role
+      addresses {
+        name
+        zipcode
+        street
+        houseNumber
+        district
+        city
+        state
+        reference
+        location {
+          type
+          coordinates
+        }
+      }
     }
   }
 `
@@ -30,4 +85,4 @@ const FOREIGN_LOGIN = gql`
 }
 `
 
-export { LOGIN, HELLO }
+export { LOGIN, HELLO, REGISTER }

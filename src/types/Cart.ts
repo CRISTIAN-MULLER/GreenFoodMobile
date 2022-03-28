@@ -1,6 +1,6 @@
 import { CartProductProps } from './Product'
 
-export type CartItemsProps = {
+export type CartProps = {
   items: CartProductProps[]
   itemsTotalQty: number
   itemsTotalPrice: number

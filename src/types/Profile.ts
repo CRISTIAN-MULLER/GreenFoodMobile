@@ -1,4 +1,7 @@
+import { UserAddressProps } from './Address'
+
 export type UserProfileProps = {
+  _id?: string,
   foreignId?: {
     id: string
     provider: string
@@ -11,14 +14,6 @@ export type UserProfileProps = {
   phone?: string
   profile_picture?: string
   role?: string
-  address?: {
-    zipcode: string
-    street: string
-    houseNumber: string
-    district: string
-    city: string
-    state: string
-    reference: string
-  }
+  addresses?: UserAddressProps[]
 }
 

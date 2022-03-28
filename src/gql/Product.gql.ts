@@ -1,22 +1,27 @@
 import { gql } from '@apollo/client'
 
 const GET_ALL_PRODUCTS = gql`
-	query GetAllProducts {
-  getAllProducts {
-    name
-    _id
-    description
-    image
-    saleUnits {
+
+    query GetAllProducts($data: PaginationInput!) {
+  getAllProducts(data: $data) {    
+    
+    products {
       _id
-      saleUnit
+      name
       description
-      price
+      image
+      saleUnits {
+        _id
+        saleUnit
+        description
+        price
+        active
+        isDefault
+      }
+      category
       active
-      isDefault
-    }
-    category
-    active
+    }    
+    next
   }
 }
 `
