@@ -7,9 +7,10 @@ import { User } from '../pages/User'
 import { Menu } from '../pages/Menu'
 import { Cart } from '../pages/Cart'
 import { RootStackParamList } from '../types/RootStackParamList'
-import { Payment } from '../pages/Payment'
+import { PaymentSelection } from '../pages/PaymentSelection'
 import { AddressSelection } from '../pages/AddressSelection'
 import { Address } from '../pages/Address'
+import { CreditCard } from '../pages/CreditCard'
 
 const stackRoutes = createNativeStackNavigator<RootStackParamList>()
 
@@ -26,7 +27,8 @@ const AppRoutes: React.FC = () => (
 		<stackRoutes.Screen name='Menu' component={Menu} />
 		<stackRoutes.Screen name='AddressSelection' component={AddressSelection} />
 		<stackRoutes.Screen name='Address' component={Address} />
-		<stackRoutes.Screen name='Payment' component={Payment} />
+		<stackRoutes.Screen name='PaymentSelection' component={PaymentSelection} />
+		<stackRoutes.Screen name='CreditCard' component={CreditCard} />
 	</stackRoutes.Navigator>
 )
 

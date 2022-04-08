@@ -1,4 +1,5 @@
 import { UserAddressProps } from './Address'
+import { UserPaymentMethodProps } from './PaymentMethod'
 
 export type RootStackParamList = {
   Welcome: undefined
@@ -12,6 +13,12 @@ export type RootStackParamList = {
     refresh?: boolean,
     setRefresh?: (refresh: boolean) => void
   }
-  Payment: undefined
   AddressSelection: undefined
+  PaymentSelection: undefined
+  CreditCard: {
+    paymentMethod: UserPaymentMethodProps,
+    action: string,
+    refresh?: boolean,
+    setRefresh?: (refresh: boolean) => void
+  }
 }

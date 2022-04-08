@@ -1,4 +1,5 @@
 import { UserAddressProps } from './Address'
+import { UserPaymentMethodProps } from './PaymentMethod'
 
 export type UserProfileProps = {
   _id?: string,
@@ -15,5 +16,6 @@ export type UserProfileProps = {
   profile_picture?: string
   role?: string
   addresses?: UserAddressProps[]
+  paymentMethods?: UserPaymentMethodProps[]
 }
 

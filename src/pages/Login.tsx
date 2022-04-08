@@ -6,6 +6,8 @@ import {
 	Text,
 	TouchableOpacity,
 	Pressable,
+	KeyboardAvoidingView,
+	Platform,
 } from 'react-native'
 
 import * as AuthSession from 'expo-auth-session'
@@ -98,164 +100,173 @@ export function Login({ navigation }: NavigationProps) {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.wrapper}>
-				<Gradient />
+			<KeyboardAvoidingView
+				style={styles.container}
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+			>
+				<View style={styles.wrapper}>
+					<Gradient />
 
-				<View style={{ marginBottom: 20 }}>
-					<LogoSVG width='170' height='150' />
-				</View>
-				<View style={styles.login}>
-					<Text style={styles.textLogin}>LOGIN</Text>
-					<FloatingLabelInput
-						label='E-mail'
-						value={email}
-						staticLabel
-						containerStyles={{
-							margin: 5,
-							height: 50,
-							borderStyle: 'solid',
-							borderWidth: 1,
-							borderColor: 'rgba(0, 0, 0, 0.12)',
-							borderRadius: 4,
-							alignItems: 'center',
-						}}
-						labelStyles={{
-							backgroundColor: '#FFF8EC',
-							padding: 2,
-						}}
-						customLabelStyles={{
-							fontSizeFocused: 16,
-						}}
-						inputStyles={{
-							color: '#313130',
-							paddingHorizontal: 10,
-						}}
-						onChangeText={(value) => {
-							setEmail(value)
-						}}
-					/>
+					<View style={{ marginBottom: 20 }}>
+						<LogoSVG width='170' height='150' />
+					</View>
+					<View style={styles.login}>
+						<Text style={styles.textLogin}>LOGIN</Text>
+						<FloatingLabelInput
+							label='E-mail'
+							value={email}
+							staticLabel
+							containerStyles={{
+								margin: 5,
+								height: 50,
+								borderStyle: 'solid',
+								borderWidth: 1,
+								borderColor: 'rgba(0, 0, 0, 0.12)',
+								borderRadius: 4,
+								alignItems: 'center',
+							}}
+							labelStyles={{
+								backgroundColor: '#FFF8EC',
+								padding: 2,
+							}}
+							customLabelStyles={{
+								fontSizeFocused: 16,
+							}}
+							inputStyles={{
+								color: '#313130',
+								paddingHorizontal: 10,
+							}}
+							onChangeText={(value) => {
+								setEmail(value)
+							}}
+						/>
 
-					<FloatingLabelInput
-						label='Senha'
-						value={password}
-						isPassword
-						togglePassword={show}
-						customShowPasswordComponent={
-							<Ionicons
-								name='eye'
-								size={24}
-								color='rgba(0, 0, 0, 0.38)'
-								style={{ marginRight: 5 }}
-							/>
-						}
-						customHidePasswordComponent={
-							<Ionicons
-								name='eye-off'
-								size={24}
-								color='rgba(0, 0, 0, 0.38)'
-								style={{ marginRight: 5 }}
-							/>
-						}
-						staticLabel
-						containerStyles={{
-							margin: 5,
-							height: 50,
-							borderStyle: 'solid',
-							borderWidth: 1,
-							borderColor: 'rgba(0, 0, 0, 0.12)',
-							borderRadius: 4,
-							alignItems: 'center',
+						<FloatingLabelInput
+							label='Senha'
+							value={password}
+							isPassword
+							togglePassword={show}
+							customShowPasswordComponent={
+								<Ionicons
+									name='eye'
+									size={24}
+									color='rgba(0, 0, 0, 0.38)'
+									style={{ marginRight: 5 }}
+								/>
+							}
+							customHidePasswordComponent={
+								<Ionicons
+									name='eye-off'
+									size={24}
+									color='rgba(0, 0, 0, 0.38)'
+									style={{ marginRight: 5 }}
+								/>
+							}
+							staticLabel
+							containerStyles={{
+								margin: 5,
+								height: 50,
+								borderStyle: 'solid',
+								borderWidth: 1,
+								borderColor: 'rgba(0, 0, 0, 0.12)',
+								borderRadius: 4,
+								alignItems: 'center',
+							}}
+							labelStyles={{
+								color: 'red',
+								backgroundColor: '#FFF8EC',
+								padding: 2,
+							}}
+							customLabelStyles={{
+								fontSizeFocused: 16,
+							}}
+							inputStyles={{
+								color: '#313130',
+								paddingHorizontal: 10,
+							}}
+							onChangeText={(value) => {
+								setPassword(value)
+							}}
+						/>
+					</View>
+					<TouchableOpacity
+						style={styles.button}
+						activeOpacity={0.7}
+						onPress={() => handleSignIn('login')}
+					>
+						<Text style={styles.text}>ENTRAR</Text>
+					</TouchableOpacity>
+					<View
+						style={{
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							width: '70%',
 						}}
-						labelStyles={{
-							color: 'red',
-							backgroundColor: '#FFF8EC',
-							padding: 2,
-						}}
-						customLabelStyles={{
-							fontSizeFocused: 16,
-						}}
-						inputStyles={{
-							color: '#313130',
-							paddingHorizontal: 10,
-						}}
-						onChangeText={(value) => {
-							setPassword(value)
-						}}
-					/>
-				</View>
-				<TouchableOpacity
-					style={styles.button}
-					activeOpacity={0.7}
-					onPress={() => handleSignIn('login')}
-				>
-					<Text style={styles.text}>ENTRAR</Text>
-				</TouchableOpacity>
-				<View
-					style={{
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						width: '70%',
-					}}
-				>
-					<Text style={styles.white}>Esqueceu a Senha?</Text>
-					<Pressable onPress={() => navigation.navigate('User')}>
-						<Text style={styles.underscore}>Lembrar</Text>
-					</Pressable>
-				</View>
-				<View
-					style={{
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						width: '70%',
-					}}
-				>
-					<Text style={styles.white}>Ainda não tem cadastro?</Text>
-					<Pressable onPress={() => navigation.navigate('User')}>
-						<Text style={styles.underscore}>Faça Agora</Text>
-					</Pressable>
-				</View>
-				<View
-					style={{
-						width: '70%',
-						flexDirection: 'row',
-						alignItems: 'center',
-						marginBottom: 10,
-					}}
-				>
-					<View style={{ flex: 1, height: 1, backgroundColor: '#F9E0B366' }} />
-					<View>
-						<Text style={{ width: 40, textAlign: 'center', color: '#FFFFFF' }}>
-							Ou
-						</Text>
+					>
+						<Text style={styles.white}>Esqueceu a Senha?</Text>
+						<Pressable onPress={() => navigation.navigate('User')}>
+							<Text style={styles.underscore}>Lembrar</Text>
+						</Pressable>
 					</View>
 					<View
 						style={{
-							flex: 1,
-							height: 1,
-							backgroundColor: '#F9E0B366',
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							width: '70%',
 						}}
-					/>
-				</View>
+					>
+						<Text style={styles.white}>Ainda não tem cadastro?</Text>
+						<Pressable onPress={() => navigation.navigate('User')}>
+							<Text style={styles.underscore}>Faça Agora</Text>
+						</Pressable>
+					</View>
+					<View
+						style={{
+							width: '70%',
+							flexDirection: 'row',
+							alignItems: 'center',
+							marginBottom: 10,
+						}}
+					>
+						<View
+							style={{ flex: 1, height: 1, backgroundColor: '#F9E0B366' }}
+						/>
+						<View>
+							<Text
+								style={{ width: 40, textAlign: 'center', color: '#FFFFFF' }}
+							>
+								Ou
+							</Text>
+						</View>
+						<View
+							style={{
+								flex: 1,
+								height: 1,
+								backgroundColor: '#F9E0B366',
+							}}
+						/>
+					</View>
 
-				<Text style={styles.white}>Entre com</Text>
-				<View
-					style={{
-						width: '30%',
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'space-between',
-						// marginBottom: '15%',
-					}}
-				>
-					<AntDesign
-						name='google'
-						size={36}
-						color='#FFFFFF'
-						onPress={() => handleSignIn('google')}
-					/>
-					<Entypo name='facebook-with-circle' size={36} color='#FFFFFF' />
+					<Text style={styles.white}>Entre com</Text>
+					<View
+						style={{
+							width: '30%',
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'space-between',
+							// marginBottom: '15%',
+						}}
+					>
+						<AntDesign
+							name='google'
+							size={36}
+							color='#FFFFFF'
+							onPress={() => handleSignIn('google')}
+						/>
+						<Entypo name='facebook-with-circle' size={36} color='#FFFFFF' />
+					</View>
 				</View>
-			</View>
+			</KeyboardAvoidingView>
 		</SafeAreaView>
 	)
 }

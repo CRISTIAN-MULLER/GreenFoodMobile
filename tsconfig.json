@@ -2,7 +2,10 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "module": "es2015",
+    "target": "es6",
+    "module": "commonjs",
+    "allowJs": true,
+    "checkJs": false,
   }
 }
   

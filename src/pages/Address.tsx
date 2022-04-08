@@ -74,7 +74,7 @@ export function Address({ navigation }: NavigationProps) {
 			(address) => address.name === name,
 		)
 
-		if (hasAddres.length) {
+		if (hasAddres.length && action === 'add') {
 			alert('Já existe um endereço com esse nome')
 			return
 		}

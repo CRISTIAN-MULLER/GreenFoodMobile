@@ -1,5 +1,5 @@
 Arguments: 
-  /home/cristian/.nvm/versions/node/v16.14.0/bin/node /home/cristian/.nvm/versions/node/v16.14.0/bin/yarn add -D @types/react-native-cookies
+  /home/cristian/.nvm/versions/node/v16.14.0/bin/node /home/cristian/.nvm/versions/node/v16.14.0/bin/yarn add @types/styled-components-react-nativ -D
 
 PATH: 
   /home/cristian/.nvm/versions/node/v16.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2freact-native-cookies: Not found
+  Error: https://registry.yarnpkg.com/@types%2fstyled-components-react-nativ: Not found
       at Request.params.callback [as _callback] (/home/cristian/.nvm/versions/node/v16.14.0/lib/node_modules/yarn/lib/cli.js:67029:18)
       at Request.self.callback (/home/cristian/.nvm/versions/node/v16.14.0/lib/node_modules/yarn/lib/cli.js:140883:22)
       at Request.emit (node:events:520:28)
@@ -41,6 +41,7 @@ npm manifest:
     },
     "dependencies": {
       "@apollo/client": "^3.5.10",
+      "@expo-google-fonts/roboto-mono": "^0.2.2",
       "@react-native-community/picker": "^1.8.1",
       "@react-navigation/bottom-tabs": "^6.0.9",
       "@react-navigation/native": "^6.0.6",
@@ -48,20 +49,22 @@ npm manifest:
       "@react-navigation/stack": "^6.0.11",
       "@types/react-native-dotenv": "^0.2.0",
       "@types/react-query": "^1.2.9",
+      "@types/styled-components": "^5.1.24",
       "axios": "^0.24.0",
       "expo": "~43.0.2",
       "expo-auth-session": "~3.4.2",
       "expo-linear-gradient": "~10.0.3",
       "expo-random": "~12.0.1",
       "expo-status-bar": "~1.1.0",
+      "formik": "^2.2.9",
       "graphql": "^16.3.0",
       "intl": "^1.2.5",
       "lottie-react-native": "4.0.3",
       "react": "17.0.1",
       "react-dom": "17.0.1",
+      "react-hook-form": "^7.29.0",
       "react-intl-number-format": "^1.1.1",
       "react-native": "0.64.3",
-      "react-native-cookies": "^3.3.0",
       "react-native-dotenv": "^3.3.1",
       "react-native-extended-stylesheet": "^0.12.0",
       "react-native-floating-label-input": "^1.3.11",
@@ -70,11 +73,16 @@ npm manifest:
       "react-native-reanimated": "^2.2.4",
       "react-native-safe-area-context": "3.3.2",
       "react-native-screens": "~3.8.0",
-      "react-native-svg": "12.1.1",
+      "react-native-status-bar-height": "^2.6.0",
+      "react-native-svg": "^12.3.0",
       "react-native-vector-icons": "^9.0.0",
       "react-native-web": "0.17.1",
       "react-number-format": "^4.8.0",
-      "react-query": "^3.34.16"
+      "react-query": "^3.34.16",
+      "rn-credit-card": "^1.0.4",
+      "rn-credit-card-textinput": "^1.1.6",
+      "styled-components-react-native": "^1.0.0",
+      "yup": "^0.32.11"
     },
     "devDependencies": {
       "@babel/core": "^7.12.9",
@@ -1118,6 +1126,13 @@ Lockfile:
     dependencies:
       regenerator-runtime "^0.13.4"
   
+  "@babel/runtime@^7.15.4":
+    version "7.17.8"
+    resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.8.tgz#3e56e4aff81befa55ac3ac6a0967349fd1c5bca2"
+    integrity sha512-dQpEpK0O9o6lj6oPu0gRDbbnk+4LeHlNcBpspf6Olzt3GIX4P1lWF1gS+pHLDFlaJvbR6q7jCfQ08zA4QJBnmA==
+    dependencies:
+      regenerator-runtime "^0.13.4"
+  
   "@babel/template@^7.0.0", "@babel/template@^7.16.0":
     version "7.16.0"
     resolved "https://registry.npmjs.org/@babel/template/-/template-7.16.0.tgz#d16a35ebf4cd74e202083356fab21dd89363ddd6"
@@ -1164,6 +1179,11 @@ Lockfile:
     integrity sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==
     dependencies:
       "@types/hammerjs" "^2.0.36"
+  
+  "@expo-google-fonts/roboto-mono@^0.2.2":
+    version "0.2.2"
+    resolved "https://registry.yarnpkg.com/@expo-google-fonts/roboto-mono/-/roboto-mono-0.2.2.tgz#90ba396114bf8b293154a25bd869de238b5f0884"
+    integrity sha512-x3a3wZ4Qq/OHzSL9fH492XCpTrCzhXvkVh+h9Q8+ESoHAqbR3EFx/SuZIFlLlX8Dg5AWesGOZxOQIRCOSo01nw==
   
   "@expo/config-plugins@3.1.0":
     version "3.1.0"
@@ -1574,6 +1594,14 @@ Lockfile:
     resolved "https://registry.npmjs.org/@types/hammerjs/-/hammerjs-2.0.40.tgz#ded0240b6ea1ad7afc1e60374c49087aaea5dbd8"
     integrity sha512-VbjwR1fhsn2h2KXAY4oy1fm7dCxaKy0D+deTb8Ilc3Eo3rc5+5eA4rfYmZaHgNJKxVyI0f6WIXzO2zLkVmQPHA==
   
+  "@types/hoist-non-react-statics@*":
+    version "3.3.1"
+    resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
+    integrity sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==
+    dependencies:
+      "@types/react" "*"
+      hoist-non-react-statics "^3.3.0"
+  
   "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
     version "2.0.3"
     resolved "https://registry.npmjs.org/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.3.tgz#4ba8ddb720221f432e443bd5f9117fd22cfd4762"
@@ -1592,6 +1620,11 @@ Lockfile:
     integrity sha512-c3mAZEuK0lvBp8tmuL74XRKn1+y2dcwOUpH7x4WrF6gk1GIgiluDRgMYQtw2OFcBvAJWlt6ASU3tSqxp0Uu0Aw==
     dependencies:
       "@types/istanbul-lib-report" "*"
+  
+  "@types/lodash@^4.14.175":
+    version "4.14.180"
+    resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.180.tgz#4ab7c9ddfc92ec4a887886483bc14c79fb380670"
+    integrity sha512-XOKXa1KIxtNXgASAnwj7cnttJxS4fksBRywK/9LzRV5YxrF80BXZIGeQSuoESQ/VkUj30Ae0+YcuHc15wJCB2g==
   
   "@types/node@*":
     version "16.11.9"
@@ -1635,6 +1668,15 @@ Lockfile:
     version "0.16.2"
     resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
     integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
+  
+  "@types/styled-components@^5.1.24":
+    version "5.1.24"
+    resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.24.tgz#b52ae677f03ea8a6018aa34c6c96b7018b7a3571"
+    integrity sha512-mz0fzq2nez+Lq5IuYammYwWgyLUE6OMAJTQL9D8hFLP4Pkh7gVYJii/VQWxq8/TK34g/OrkehXaFNdcEKcItug==
+    dependencies:
+      "@types/hoist-non-react-statics" "*"
+      "@types/react" "*"
+      csstype "^3.0.2"
   
   "@types/yargs-parser@*":
     version "20.2.1"
@@ -1996,7 +2038,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/blueimp-md5/-/blueimp-md5-2.19.0.tgz#b53feea5498dcb53dc6ec4b823adb84b729c4af0"
     integrity sha512-DRQrD6gJyy8FbiE4s+bDoXS9hiW3Vbx5uCdwvcCf3zLHL+Iv7LtGHLpr+GZV8rHG8tK766FGYBwRbu8pELTt+w==
   
-  boolbase@^1.0.0, boolbase@~1.0.0:
+  boolbase@^1.0.0:
     version "1.0.0"
     resolved "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
     integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
@@ -2169,6 +2211,13 @@ Lockfile:
     integrity sha512-PiT/hQmTonHhl/HFGN+Lx3JJUznrVYJ3+AQsnthneZbvW7x+f08Tk7yLJTLEOUvBTbduLeeBkxEaYXUOUrRq6g==
     dependencies:
       rsvp "^4.8.4"
+  
+  card-validator@^8.1.0:
+    version "8.1.1"
+    resolved "https://registry.yarnpkg.com/card-validator/-/card-validator-8.1.1.tgz#418f5f32435553fb9ca2a02634ad413bb38697a9"
+    integrity sha512-cN4FsKwoTfTFnqPwVc7TQLSsH/QMDB3n/gWm0XelcApz4sKipnOQ6k33sa3bWsNnnIpgs7eXOF+mUV2UQAX2Sw==
+    dependencies:
+      credit-card-type "^9.1.0"
   
   chalk@^2.0.0, chalk@^2.0.1, chalk@^2.4.2:
     version "2.4.2"
@@ -2442,6 +2491,11 @@ Lockfile:
       loose-envify "^1.3.1"
       object-assign "^4.1.1"
   
+  credit-card-type@^9.1.0:
+    version "9.1.0"
+    resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-9.1.0.tgz#54dd96c93b6579623e9c8656e6798fc2b93f5f05"
+    integrity sha512-CpNFuLxiPFxuZqhSKml3M+t0K/484pMAnfYWH14JoD7OZMnmC0Lmo+P7JX9SobqFpRoo7ifA18kOHdxJywYPEA==
+  
   cross-fetch@^3.0.4:
     version "3.1.4"
     resolved "https://registry.npmjs.org/cross-fetch/-/cross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
@@ -2473,15 +2527,16 @@ Lockfile:
     resolved "https://registry.npmjs.org/css-mediaquery/-/css-mediaquery-0.1.2.tgz#6a2c37344928618631c54bd33cedd301da18bea0"
     integrity sha1-aiw3NEkoYYYxxUvTPO3TAdoYvqA=
   
-  css-select@^2.1.0:
-    version "2.1.0"
-    resolved "https://registry.npmjs.org/css-select/-/css-select-2.1.0.tgz#6a34653356635934a81baca68d0255432105dbef"
-    integrity sha512-Dqk7LQKpwLoH3VovzZnkzegqNSuAziQyNZUcrdDM401iY+R5NkGBXGmtO05/yaXQziALuPogeG0b7UAgjnTJTQ==
+  css-select@^4.2.1:
+    version "4.3.0"
+    resolved "https://registry.yarnpkg.com/css-select/-/css-select-4.3.0.tgz#db7129b2846662fd8628cfc496abb2b59e41529b"
+    integrity sha512-wPpOYtnsVontu2mODhA19JrqWxNsfdatRKd64kmpRbQgh1KtItko5sTnEpPdpSaJszTOhEMlF/RPz28qj4HqhQ==
     dependencies:
       boolbase "^1.0.0"
-      css-what "^3.2.1"
-      domutils "^1.7.0"
-      nth-check "^1.0.2"
+      css-what "^6.0.1"
+      domhandler "^4.3.1"
+      domutils "^2.8.0"
+      nth-check "^2.0.1"
   
   css-tree@^1.0.0-alpha.39:
     version "1.1.3"
@@ -2491,10 +2546,10 @@ Lockfile:
       mdn-data "2.0.14"
       source-map "^0.6.1"
   
-  css-what@^3.2.1:
-    version "3.4.2"
-    resolved "https://registry.npmjs.org/css-what/-/css-what-3.4.2.tgz#ea7026fcb01777edbde52124e21f327e7ae950e4"
-    integrity sha512-ACUm3L0/jiZTqfzRM3Hi9Q8eZqd6IK37mMWPLz9PJxkLWllYeRf+EHUSHYEtFop2Eqytaq1FizFVh7XfBnXCDQ==
+  css-what@^6.0.1:
+    version "6.0.1"
+    resolved "https://registry.yarnpkg.com/css-what/-/css-what-6.0.1.tgz#3be33be55b9f302f710ba3a9c3abc1e2a63fc7eb"
+    integrity sha512-z93ZGFLNc6yaoXAmVhqoSIb+BduplteCt1fepvwhBUQK6MNE4g6fgjpuZKJKp0esUe+vXWlIkwZZjNWoOKw0ZA==
   
   csstype@^3.0.2:
     version "3.0.10"
@@ -2534,6 +2589,11 @@ Lockfile:
     version "0.6.0"
     resolved "https://registry.npmjs.org/dedent/-/dedent-0.6.0.tgz#0e6da8f0ce52838ef5cec5c8f9396b0c1b64a3cb"
     integrity sha1-Dm2o8M5Sg471zsXI+TlrDBtko8s=
+  
+  deepmerge@^2.1.1:
+    version "2.2.1"
+    resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
+    integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
   
   deepmerge@^3.2.0:
     version "3.3.0"
@@ -2596,31 +2656,35 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
     integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
   
-  dom-serializer@0:
-    version "0.2.2"
-    resolved "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.2.2.tgz#1afb81f533717175d478655debc5e332d9f9bb51"
-    integrity sha512-2/xPb3ORsQ42nHYiSunXkDjPLBaEj/xTwUO4B7XCZQTRk7EBtTOPaygh10YAAh2OI1Qrp6NWfpAhzswj0ydt9g==
+  dom-serializer@^1.0.1:
+    version "1.3.2"
+    resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-1.3.2.tgz#6206437d32ceefaec7161803230c7a20bc1b4d91"
+    integrity sha512-5c54Bk5Dw4qAxNOI1pFEizPSjVsx5+bpJKmL2kPn8JhBUq2q09tTCa3mjijun2NfK78NMouDYNMBkOrPZiS+ig==
     dependencies:
       domelementtype "^2.0.1"
+      domhandler "^4.2.0"
       entities "^2.0.0"
   
-  domelementtype@1:
-    version "1.3.1"
-    resolved "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.1.tgz#d048c44b37b0d10a7f2a3d5fee3f4333d790481f"
-    integrity sha512-BSKB+TSpMpFI/HOxCNr1O8aMOTZ8hT3pM3GQ0w/mWRmkhEDSFJkkyzz4XQsBV44BChwGkrDfMyjVD0eA2aFV3w==
-  
-  domelementtype@^2.0.1:
+  domelementtype@^2.0.1, domelementtype@^2.2.0:
     version "2.2.0"
-    resolved "https://registry.npmjs.org/domelementtype/-/domelementtype-2.2.0.tgz#9a0b6c2782ed6a1c7323d42267183df9bd8b1d57"
+    resolved "https://registry.yarnpkg.com/domelementtype/-/domelementtype-2.2.0.tgz#9a0b6c2782ed6a1c7323d42267183df9bd8b1d57"
     integrity sha512-DtBMo82pv1dFtUmHyr48beiuq792Sxohr+8Hm9zoxklYPfa6n0Z3Byjj2IV7bmr2IyqClnqEQhfgHJJ5QF0R5A==
   
-  domutils@^1.7.0:
-    version "1.7.0"
-    resolved "https://registry.npmjs.org/domutils/-/domutils-1.7.0.tgz#56ea341e834e06e6748af7a1cb25da67ea9f8c2a"
-    integrity sha512-Lgd2XcJ/NjEw+7tFvfKxOzCYKZsdct5lczQ2ZaQY8Djz7pfAD3Gbp8ySJWtreII/vDlMVmxwa6pHmdxIYgttDg==
+  domhandler@^4.2.0, domhandler@^4.3.1:
+    version "4.3.1"
+    resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-4.3.1.tgz#8d792033416f59d68bc03a5aa7b018c1ca89279c"
+    integrity sha512-GrwoxYN+uWlzO8uhUXRl0P+kHE4GtVPfYzVLcUxPL7KNdHKj66vvlhiweIHqYYXWlw+T8iLMp42Lm67ghw4WMQ==
     dependencies:
-      dom-serializer "0"
-      domelementtype "1"
+      domelementtype "^2.2.0"
+  
+  domutils@^2.8.0:
+    version "2.8.0"
+    resolved "https://registry.yarnpkg.com/domutils/-/domutils-2.8.0.tgz#4437def5db6e2d1f5d6ee859bd95ca7d02048135"
+    integrity sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==
+    dependencies:
+      dom-serializer "^1.0.1"
+      domelementtype "^2.2.0"
+      domhandler "^4.2.0"
   
   dotenv@^10.0.0:
     version "10.0.0"
@@ -2986,7 +3050,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/fbjs-css-vars/-/fbjs-css-vars-1.0.2.tgz#216551136ae02fe255932c3ec8775f18e2c078b8"
     integrity sha512-b2XGFAFdWZWg0phtAWLHCk836A1Xann+I+Dgd3Gk64MHKZO44FfoD1KxyvbSh0qZsIoXQGGlVztIY+oitJPpRQ==
   
-  fbjs@^0.8.4:
+  fbjs@^0.8.4, fbjs@^0.8.9:
     version "0.8.18"
     resolved "https://registry.npmjs.org/fbjs/-/fbjs-0.8.18.tgz#9835e0addb9aca2eff53295cd79ca1cfc7c9662a"
     integrity sha512-EQaWFK+fEPSoibjNy8IxUtaFOMXcWsY0JaVrQoZR9zC8N2Ygf9iDITPWjUTVIax95b6I742JFLqASHfsag/vKA==
@@ -3111,6 +3175,19 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.npmjs.org/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
     integrity sha1-gQaNKVqBQuwKxybG4iAMMPttXoA=
+  
+  formik@^2.2.9:
+    version "2.2.9"
+    resolved "https://registry.yarnpkg.com/formik/-/formik-2.2.9.tgz#8594ba9c5e2e5cf1f42c5704128e119fc46232d0"
+    integrity sha512-LQLcISMmf1r5at4/gyJigGn0gOwFbeEAlji+N9InZF6LIMXnFNkO42sCI8Jt84YZggpD4cPWObAZaxpEFtSzNA==
+    dependencies:
+      deepmerge "^2.1.1"
+      hoist-non-react-statics "^3.3.0"
+      lodash "^4.17.21"
+      lodash-es "^4.17.21"
+      react-fast-compare "^2.0.1"
+      tiny-warning "^1.0.2"
+      tslib "^1.10.0"
   
   fragment-cache@^0.2.1:
     version "0.2.1"
@@ -3416,7 +3493,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/intl/-/intl-1.2.5.tgz#82244a2190c4e419f8371f5aa34daa3420e2abde"
     integrity sha1-giRKIZDE5Bn4Nx9ao02qNCDiq94=
   
-  invariant@^2.1.0, invariant@^2.2.2, invariant@^2.2.4:
+  invariant@^2.2.2, invariant@^2.2.4:
     version "2.2.4"
     resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
     integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -3877,6 +3954,11 @@ Lockfile:
     dependencies:
       p-locate "^5.0.0"
   
+  lodash-es@^4.17.21:
+    version "4.17.21"
+    resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+    integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
+  
   lodash._reinterpolate@^3.0.0:
     version "3.0.0"
     resolved "https://registry.npmjs.org/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
@@ -3937,7 +4019,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
     integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
   
-  lodash@^4.17.14, lodash@^4.17.15:
+  lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.21:
     version "4.17.21"
     resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
     integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -4509,6 +4591,11 @@ Lockfile:
     dependencies:
       big-integer "^1.6.16"
   
+  nanoclone@^0.2.1:
+    version "0.2.1"
+    resolved "https://registry.yarnpkg.com/nanoclone/-/nanoclone-0.2.1.tgz#dd4090f8f1a110d26bb32c49ed2f5b9235209ed4"
+    integrity sha512-wynEP02LmIbLpcYw8uBKpcfF6dmg2vcpKqxeH5UcoKEYdExslsdUA4ugFauuaeYdTB76ez6gJW8XAZ6CgkXYxA==
+  
   nanoid@^3.1.23:
     version "3.1.30"
     resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.1.30.tgz#63f93cc548d2a113dc5dfbc63bfa09e2b9b64362"
@@ -4631,12 +4718,12 @@ Lockfile:
     dependencies:
       path-key "^2.0.0"
   
-  nth-check@^1.0.2:
-    version "1.0.2"
-    resolved "https://registry.npmjs.org/nth-check/-/nth-check-1.0.2.tgz#b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
-    integrity sha512-WeBOdju8SnzPN5vTUJYxYUxLeXpCaVP5i5e0LF8fg7WORF2Wd7wFX/pk0tYZk7s8T+J7VLy0Da6J1+wCT0AtHg==
+  nth-check@^2.0.1:
+    version "2.0.1"
+    resolved "https://registry.yarnpkg.com/nth-check/-/nth-check-2.0.1.tgz#2efe162f5c3da06a28959fbd3db75dbeea9f0fc2"
+    integrity sha512-it1vE95zF6dTT9lBsYbxvqh0Soy4SPowchj0UBGj/V6cTPnXXtQOPUbhZ6CmGzAD/rW22LQK6E96pcdJXk4A4w==
     dependencies:
-      boolbase "~1.0.0"
+      boolbase "^1.0.0"
   
   nullthrows@^1.1.1:
     version "1.1.1"
@@ -4958,6 +5045,14 @@ Lockfile:
       kleur "^3.0.3"
       sisteransi "^1.0.5"
   
+  prop-types@15.5.10:
+    version "15.5.10"
+    resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
+    integrity sha1-J5ffwxJhguOpXj37suiT3ddFYVQ=
+    dependencies:
+      fbjs "^0.8.9"
+      loose-envify "^1.3.1"
+  
   prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
@@ -4966,6 +5061,11 @@ Lockfile:
       loose-envify "^1.4.0"
       object-assign "^4.1.1"
       react-is "^16.8.1"
+  
+  property-expr@^2.0.4:
+    version "2.0.5"
+    resolved "https://registry.yarnpkg.com/property-expr/-/property-expr-2.0.5.tgz#278bdb15308ae16af3e3b9640024524f4dc02cb4"
+    integrity sha512-IJUkICM5dP5znhCckHSv30Q4b5/JA5enCtkRHYaOVOAocnH/1BQEYTC5NMfT3AVl/iXKdr3aqQbQn9DxyWknwA==
   
   pump@^3.0.0:
     version "3.0.0"
@@ -5038,6 +5138,16 @@ Lockfile:
       object-assign "^4.1.1"
       scheduler "^0.20.1"
   
+  react-fast-compare@^2.0.1:
+    version "2.0.4"
+    resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
+    integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+  
+  react-hook-form@^7.29.0:
+    version "7.29.0"
+    resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.29.0.tgz#5e7e41a483b70731720966ed8be52163ea1fecf1"
+    integrity sha512-NcJqWRF6el5HMW30fqZRt27s+lorvlCCDbTpAyHoodQeYWXgQCvZJJQLC1kRMKdrJknVH0NIg3At6TUzlZJFOQ==
+  
   react-intl-number-format@^1.1.1:
     version "1.1.1"
     resolved "https://registry.npmjs.org/react-intl-number-format/-/react-intl-number-format-1.1.1.tgz#5a3e0afc82829843a83a460296c6945c7b596e6f"
@@ -5055,6 +5165,19 @@ Lockfile:
     resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
     integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
   
+  react-lifecycles-compat@^3.0.4:
+    version "3.0.4"
+    resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+    integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+  
+  react-native-card-flip@^1.0.7:
+    version "1.0.7"
+    resolved "https://registry.yarnpkg.com/react-native-card-flip/-/react-native-card-flip-1.0.7.tgz#39de7ed22d0b3700e6007762f05fa60251c65503"
+    integrity sha512-SnbuHytwzFfBse7c9cWqw3EbcOcKp4+fxmMQfGg1YqWha48b35bQW57TV7lVXkZ8hB+cwoQtfScDIUOCpsDRVA==
+    dependencies:
+      prop-types "15.5.10"
+      react-lifecycles-compat "^3.0.4"
+  
   react-native-codegen@^0.0.6:
     version "0.0.6"
     resolved "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.0.6.tgz#b3173faa879cf71bfade8d030f9c4698388f6909"
@@ -5063,13 +5186,6 @@ Lockfile:
       flow-parser "^0.121.0"
       jscodeshift "^0.11.0"
       nullthrows "^1.1.1"
-  
-  react-native-cookies@^3.3.0:
-    version "3.3.0"
-    resolved "https://registry.yarnpkg.com/react-native-cookies/-/react-native-cookies-3.3.0.tgz#527f65eb2d8a7a000107706bb11beb57f511e701"
-    integrity sha512-GobKo8Kvyuif6ROj6rDAjQJpCSLazcZl6AgZb1z7ldB9FrMtetQzXvIehS0QcwbpnXWyJzXJaY0yrlDjFz+NaA==
-    dependencies:
-      invariant "^2.1.0"
   
   react-native-dotenv@^3.3.1:
     version "3.3.1"
@@ -5144,12 +5260,17 @@ Lockfile:
     dependencies:
       warn-once "^0.1.0"
   
-  react-native-svg@12.1.1:
-    version "12.1.1"
-    resolved "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.1.1.tgz#5f292410b8bcc07bbc52b2da7ceb22caf5bcaaee"
-    integrity sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q==
+  react-native-status-bar-height@^2.6.0:
+    version "2.6.0"
+    resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.6.0.tgz#b6afd25b6e3d533c43d0fcdcfd5cafd775592cea"
+    integrity sha512-z3SGLF0mHT+OlJDq7B7h/jXPjWcdBT3V14Le5L2PjntjjWM3+EJzq2BcXDwV+v67KFNJic5pgA26cCmseYek6w==
+  
+  react-native-svg@^12.3.0:
+    version "12.3.0"
+    resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-12.3.0.tgz#40f657c5d1ee366df23f3ec8dae76fd276b86248"
+    integrity sha512-ESG1g1j7/WLD7X3XRFTQHVv0r6DpbHNNcdusngAODIxG88wpTWUZkhcM3A2HJTb+BbXTFDamHv7FwtRKWQ/ALg==
     dependencies:
-      css-select "^2.1.0"
+      css-select "^4.2.1"
       css-tree "^1.0.0-alpha.39"
   
   react-native-vector-icons@^9.0.0:
@@ -5443,6 +5564,19 @@ Lockfile:
     integrity sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==
     dependencies:
       glob "^7.1.3"
+  
+  rn-credit-card-textinput@^1.1.6:
+    version "1.1.6"
+    resolved "https://registry.yarnpkg.com/rn-credit-card-textinput/-/rn-credit-card-textinput-1.1.6.tgz#593fe8cf29832e95f4b44c92544dcb567bc439fe"
+    integrity sha512-7dJ+I+JmtJgiYVxTdFdRAFSMaWCYLj2QpNZjAKEOPsZ/DwW6kM4KZqdanlyHAd8GQTjv/KHmwnE68ExBM3XHXw==
+  
+  rn-credit-card@^1.0.4:
+    version "1.0.4"
+    resolved "https://registry.yarnpkg.com/rn-credit-card/-/rn-credit-card-1.0.4.tgz#1e6fda093b8aadaf99678be4210d862387802092"
+    integrity sha512-h7J3vWUqdeHOglIiYUsdN9l6aiUHwxTtiv+T1BLC5LtZJCAYkX0ckxAzgX05kHt1oA0JoE0HG5A5ONm4/vb7JQ==
+    dependencies:
+      card-validator "^8.1.0"
+      react-native-card-flip "^1.0.7"
   
   rsvp@^4.8.4:
     version "4.8.5"
@@ -5857,6 +5991,11 @@ Lockfile:
     resolved "https://registry.npmjs.org/strip-eof/-/strip-eof-1.0.0.tgz#bb43ff5598a6eb05d89b59fcd129c983313606bf"
     integrity sha1-u0P/VZim6wXYm1n80SnJgzE2Br8=
   
+  styled-components-react-native@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/styled-components-react-native/-/styled-components-react-native-1.0.0.tgz#80ca3c93bd740f078ca660300d7cb2b565bd7f11"
+    integrity sha512-ATGIroEUdft2MQdVaH0LJlW9S+tN8PQLKpiPWw2MvLtT6nP31XyIEHRtq4tDf47JjlMAwyggPT+GclHrYEfgcg==
+  
   sucrase@^3.20.0:
     version "3.20.3"
     resolved "https://registry.npmjs.org/sucrase/-/sucrase-3.20.3.tgz#424f1e75b77f955724b06060f1ae708f5f0935cf"
@@ -5935,6 +6074,11 @@ Lockfile:
       readable-stream "~2.3.6"
       xtend "~4.0.1"
   
+  tiny-warning@^1.0.2:
+    version "1.0.3"
+    resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
+    integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
+  
   tmpl@1.0.5:
     version "1.0.5"
     resolved "https://registry.npmjs.org/tmpl/-/tmpl-1.0.5.tgz#8683e0b902bb9c20c4f726e3c0b69f36518c07cc"
@@ -5982,6 +6126,11 @@ Lockfile:
     resolved "https://registry.npmjs.org/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
     integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
   
+  toposort@^2.0.2:
+    version "2.0.2"
+    resolved "https://registry.yarnpkg.com/toposort/-/toposort-2.0.2.tgz#ae21768175d1559d48bef35420b2f4962f09c330"
+    integrity sha1-riF2gXXRVZ1IvvNUILL0li8JwzA=
+  
   tr46@~0.0.3:
     version "0.0.3"
     resolved "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
@@ -5998,6 +6147,11 @@ Lockfile:
     integrity sha512-63jtX/ZSwnUNi/WhXjnK8kz4cHHpYS60AnmA6ixz17l7E12a5puCWFlNpkne5Rl0J8TBPVHpGjsj4fxs8ObVLQ==
     dependencies:
       tslib "^2.1.0"
+  
+  tslib@^1.10.0:
+    version "1.14.1"
+    resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+    integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
   
   tslib@^2.0.1, tslib@^2.1.0, tslib@^2.3.0:
     version "2.3.1"
@@ -6370,6 +6524,19 @@ Lockfile:
     version "0.1.0"
     resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
     integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+  
+  yup@^0.32.11:
+    version "0.32.11"
+    resolved "https://registry.yarnpkg.com/yup/-/yup-0.32.11.tgz#d67fb83eefa4698607982e63f7ca4c5ed3cf18c5"
+    integrity sha512-Z2Fe1bn+eLstG8DRR6FTavGD+MeAwyfmouhHsIUgaADz8jvFKbO/fXc2trJKZg+5EBjh4gGm3iU/t3onKlXHIg==
+    dependencies:
+      "@babel/runtime" "^7.15.4"
+      "@types/lodash" "^4.14.175"
+      lodash "^4.17.21"
+      lodash-es "^4.17.21"
+      nanoclone "^0.2.1"
+      property-expr "^2.0.4"
+      toposort "^2.0.2"
   
   zen-observable-ts@^1.2.0:
     version "1.2.3"

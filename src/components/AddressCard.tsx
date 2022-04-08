@@ -100,25 +100,53 @@ export const AddressCard = ({
 						</View>
 					</View>
 				</RectButton>
-
-				<View style={{ flexDirection: 'row' }}>
+				<View
+					style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}
+				>
+					<View style={{ flexDirection: 'row' }}>
+						<TouchableHighlight
+							activeOpacity={0.6}
+							underlayColor='rgba(0, 0, 0, 0.06)'
+							style={{ height: 24, marginRight: 15, borderRadius: 4 }}
+							onPress={() => handleEditAddress(data, 'update')}
+						>
+							<MaterialIcons
+								name='edit'
+								size={24}
+								color='rgba(0, 0, 0, 0.60)'
+							/>
+						</TouchableHighlight>
+						<TouchableHighlight
+							activeOpacity={0.6}
+							underlayColor='rgba(0, 0, 0, 0.06)'
+							style={{ height: 24, borderRadius: 4 }}
+							onPress={() => {
+								setRefresh(!refresh)
+								handleAddress(data, 'delete')
+							}}
+						>
+							<MaterialIcons
+								name='delete-outline'
+								size={24}
+								color='rgba(0, 0, 0, 0.60)'
+							/>
+						</TouchableHighlight>
+					</View>
 					<TouchableHighlight
 						activeOpacity={0.6}
 						underlayColor='rgba(0, 0, 0, 0.06)'
-						style={{ height: 24, marginRight: 15, borderRadius: 4 }}
-						onPress={() => handleEditAddress(data, 'update')}
-					>
-						<MaterialIcons name='edit' size={24} color='rgba(0, 0, 0, 0.60)' />
-					</TouchableHighlight>
-					<MaterialIcons
-						name='delete-outline'
-						size={24}
-						color='rgba(0, 0, 0, 0.60)'
+						style={{ height: 24, borderRadius: 4 }}
 						onPress={() => {
 							setRefresh(!refresh)
 							handleAddress(data, 'delete')
 						}}
-					/>
+					>
+						<MaterialIcons
+							name='favorite'
+							size={24}
+							color='rgba(0, 0, 0, 0.60)'
+						/>
+					</TouchableHighlight>
 				</View>
 			</View>
 		</View>

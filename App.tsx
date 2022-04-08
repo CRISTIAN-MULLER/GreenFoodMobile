@@ -1,37 +1,26 @@
 import React from 'react'
-import { Platform } from 'react-native'
-
-import AuthContext from './src/contexts/AuthContext'
-import ProfileProvider from './src/contexts/ProfileContext'
-import CartProvider from './src/contexts/CartContext'
-import ProductProvider from './src/contexts/ProductContext'
-import OrderProvider from './src/contexts/OrderContext'
+import { UIManager, Platform } from 'react-native'
 
 import Routes from './src/routes'
 
-import { ApolloProvider } from '@apollo/client'
 import apolloClient from './src/services/apollo'
+import { ApolloProvider } from '@apollo/client'
+import { AppContextProvider } from './src/contexts/AppContextProvider'
 
 if (Platform.OS === 'android') {
 	// only Android needs polyfill
 	require('intl') // import intl object
 	require('intl/locale-data/jsonp/pt-BR') // load the required locale details
+	UIManager.setLayoutAnimationEnabledExperimental &&
+		UIManager.setLayoutAnimationEnabledExperimental(true)
 }
 
 export default function App() {
 	return (
 		<ApolloProvider client={apolloClient}>
-			<AuthContext.Provider value={{ isAuthenticated: false }}>
-				<ProfileProvider>
-					<OrderProvider>
-						<CartProvider>
-							<ProductProvider>
-								<Routes />
-							</ProductProvider>
-						</CartProvider>
-					</OrderProvider>
-				</ProfileProvider>
-			</AuthContext.Provider>
+			<AppContextProvider>
+				<Routes />
+			</AppContextProvider>
 		</ApolloProvider>
 	)
 }

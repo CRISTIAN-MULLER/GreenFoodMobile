@@ -1,12 +1,15 @@
 import React, { createContext, useState } from 'react'
+import { UserAddressProps } from '../types/Address'
 import { OrderProps } from '../types/Order'
-import { UserAddressProps, UserProfileProps } from '../types/Profile'
+import { UserPaymentMethodProps } from '../types/PaymentMethod'
 
 export interface OrderContext {
 	order: OrderProps | undefined
 	setOrder: (order: OrderProps) => void
 	deliveryAddress: UserAddressProps | undefined
 	setDeliveryAddress: (deliveryAddress: UserAddressProps) => void
+	paymentMethod: UserPaymentMethodProps | undefined
+	setPaymentMethod: (paymentMethod: UserPaymentMethodProps) => void
 }
 
 export const OrderContext = createContext({} as OrderContext)
@@ -14,6 +17,7 @@ export const OrderContext = createContext({} as OrderContext)
 const OrderProvider: React.FC = ({ children }) => {
 	const [order, setOrder] = useState<OrderProps>()
 	const [deliveryAddress, setDeliveryAddress] = useState<UserAddressProps>()
+	const [paymentMethod, setPaymentMethod] = useState<UserPaymentMethodProps>()
 
 	return (
 		<OrderContext.Provider
@@ -22,6 +26,8 @@ const OrderProvider: React.FC = ({ children }) => {
 				setOrder,
 				deliveryAddress,
 				setDeliveryAddress,
+				paymentMethod,
+				setPaymentMethod,
 			}}
 		>
 			{children}

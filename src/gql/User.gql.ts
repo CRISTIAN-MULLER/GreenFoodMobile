@@ -35,6 +35,14 @@ const LOGIN = gql`
           coordinates
         }
       }
+      paymentMethods {
+        cardName
+        cardHolderName
+        cardNumber
+        expirationDate
+        cardBrand
+        cvv
+      }
     }
   }
 `

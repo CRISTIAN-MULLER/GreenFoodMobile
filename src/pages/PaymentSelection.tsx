@@ -1,72 +1,87 @@
 import React, { useContext, useEffect, useState } from 'react'
 import {
+	Text,
 	SafeAreaView,
 	StyleSheet,
 	View,
 	StatusBar,
-	Text,
-	FlatList,
+	ScrollView,
 	Pressable,
+	FlatList,
 } from 'react-native'
 
 import TopBar from '../components/TopBar'
 import BottomBar from '../components/BottomBar'
 
-import { NavigationProps } from '../types/Navigation'
-import AddressCard from '../components/AddressCard'
-import { ProfileContext } from '../contexts/ProfileContext'
-import { Button } from '../components/Button'
-import { OrderContext } from '../contexts/OrderContext'
-import { UserAddressProps } from '../types/Address'
+import { generateCardHash } from 'pagarme-card-hash'
 
-export function AddressSelection({ navigation }: NavigationProps) {
-	const [selectedAddress, setSelectedAddress] = useState('Casa')
+import { NavigationProps } from '../types/Navigation'
+import { OrderContext } from '../contexts/OrderContext'
+import { ProfileContext } from '../contexts/ProfileContext'
+import { UserPaymentMethodProps } from '../types/PaymentMethod'
+import { Button } from '../components/Button'
+import { CreditCardCard } from '../components/CreditCardCard'
+
+export function PaymentSelection({ navigation }: NavigationProps) {
+	const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('Card')
 	const [refresh, setRefresh] = useState(false)
 	const { userProfile } = useContext(ProfileContext)
-	const { setDeliveryAddress } = useContext(OrderContext)
+	const { paymentMethod, setPaymentMethod } = useContext(OrderContext)
 
-	const handleSelectedAddress = (address: UserAddressProps) => {
-		setSelectedAddress(address.name)
-		setDeliveryAddress(address)
+	const handleSelectedPaymentMethod = (
+		paymentMethod: UserPaymentMethodProps,
+	) => {
+		setSelectedPaymentMethod(paymentMethod.cardName)
+		setPaymentMethod(paymentMethod)
+	}
+
+	const hash = async () => {
+		if (paymentMethod) {
+			try {
+				const hashedCard = await generateCardHash(
+					{
+						number: paymentMethod.cardNumber,
+						holderName: paymentMethod.cardHolderName,
+						expirationDate: paymentMethod.expirationDate,
+						cvv: paymentMethod.cvv,
+					},
+					'pk_test_dx1JqewJs4udQ8X3',
+				)
+
+				return hashedCard
+			} catch (err) {
+				console.log(err)
+			}
+		}
 	}
 
 	useEffect(() => {
 		// Subscribe for the focus Listener
 		const unsubscribe = navigation.addListener('focus', () => {
-			setSelectedAddress('Casa')
+			setSelectedPaymentMethod('Card')
 		})
 		return () => {
 			unsubscribe
 		}
 	}, [navigation])
-
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.wrapper}>
 				<TopBar />
-
-				<Text style={styles.textDelivery}>Endereço de Entrega</Text>
-				<Text style={styles.text}>
-					Selecione o endereço onde quer receber sua compra.
-				</Text>
+				<Text style={styles.textDelivery}>Método de Pagamento</Text>
+				<Text style={styles.text}>Selecione o método de Pagamento.</Text>
 
 				<Pressable
 					style={{ marginLeft: 30, marginBottom: 10 }}
 					onPress={() =>
-						navigation.navigate('Address', {
-							address: {
-								name: '',
-								zipcode: '',
-								street: '',
-								houseNumber: '',
-								district: '',
-								city: '',
-								state: '',
-								reference: '',
-								location: {
-									type: '',
-									coordinates: [0, 0],
-								},
+						navigation.navigate('CreditCard', {
+							paymentMethod: {
+								cardName: '',
+								cardHolderName: '',
+								cardNumber: '',
+								cardBrand: '',
+								expirationDate: '',
+								cvv: '',
 							},
 							action: 'add',
 							refresh: refresh,
@@ -74,20 +89,20 @@ export function AddressSelection({ navigation }: NavigationProps) {
 						})
 					}
 				>
-					<Text style={styles.addAddress}>+ NOVO ENDEREÇO</Text>
+					<Text style={styles.addCard}>+ NOVO CARTÃO</Text>
 				</Pressable>
 
 				<FlatList
 					extraData={refresh}
-					data={userProfile.addresses?.sort()}
-					keyExtractor={(address) => String(address.name)}
+					data={userProfile.paymentMethods?.sort()}
+					keyExtractor={(paymentMethod) => String(paymentMethod.cardName)}
 					renderItem={({ item }) => (
-						<AddressCard
+						<CreditCardCard
 							refresh={refresh}
 							setRefresh={setRefresh}
 							data={item}
-							isSelected={item.name === selectedAddress}
-							onPress={() => handleSelectedAddress(item)}
+							isSelected={item.cardName === selectedPaymentMethod}
+							onPress={() => handleSelectedPaymentMethod(item)}
 							navigation={navigation}
 						/>
 					)}
@@ -95,10 +110,7 @@ export function AddressSelection({ navigation }: NavigationProps) {
 					numColumns={1}
 				/>
 
-				<Button
-					buttonText={'CONFIMAR ENDEREÇO DE ENTREGA'}
-					onPress={() => navigation.navigate('PaymentSelection')}
-				/>
+				<Button buttonText={'CONFIMAR PAGAMENTO'} onPress={() => hash()} />
 				<BottomBar navigation={navigation} />
 			</View>
 		</SafeAreaView>
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		fontFamily: 'Roboto',
 	},
-	addAddress: {
+	addCard: {
 		color: '#FF8108',
 		fontSize: 18,
 		fontWeight: '700',
