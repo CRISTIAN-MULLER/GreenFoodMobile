@@ -3,12 +3,10 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { Picker } from '@react-native-community/picker'
 import NumericInput from 'react-native-numeric-input'
 
-import { CartContext } from '../contexts/CartContext'
-import { ProductHandleProps, SaleUnitProps } from '../types/Product'
-import { ProfileContext } from '../contexts/ProfileContext'
-import { ProductContext } from '../contexts/ProductContext'
+import { CartContext } from '@contexts/CartContext'
+import { ProductHandleProps, SaleUnitProps } from '@typings/Product'
 
-export const ProductCardSecondary = ({
+const ProductCardSecondary = ({
 	data,
 	showModalAddToCart,
 	setShowModalAddToCart,
@@ -29,7 +27,7 @@ export const ProductCardSecondary = ({
 
 	const saleUnitSelection = (id: any) => {
 		const selectedSaleUnit = data.saleUnits.find(
-			(saleUnit) => saleUnit._id == id,
+			(userSaleUnit) => userSaleUnit._id === id,
 		)
 		setSaleUnit(selectedSaleUnit!)
 		setItemTotalQty(1)
@@ -41,9 +39,9 @@ export const ProductCardSecondary = ({
 			_id: data._id,
 			name: data.name,
 			image: data.image,
-			saleUnit: saleUnit,
-			itemTotalQty: itemTotalQty,
-			itemTotalPrice: itemTotalPrice,
+			saleUnit,
+			itemTotalQty,
+			itemTotalPrice,
 		}
 		handleAddItemToCart(newItem)
 	}
@@ -59,7 +57,7 @@ export const ProductCardSecondary = ({
 		}
 
 		const defaultSaleunit = data.saleUnits.find(
-			(saleUnit) => saleUnit.isDefault === true,
+			(userSaleUnit) => userSaleUnit.isDefault === true,
 		)
 		setSaleUnit(defaultSaleunit!)
 		setItemTotalPrice(defaultSaleunit!.price * itemTotalQty)
@@ -101,15 +99,13 @@ export const ProductCardSecondary = ({
 							}}
 							mode='dropdown'
 						>
-							{data.saleUnits.map((saleUnit) => {
-								return (
-									<Picker.Item
-										label={saleUnit.saleUnit}
-										value={saleUnit._id}
-										key={saleUnit._id}
-									/>
-								)
-							})}
+							{data.saleUnits.map((userSaleUnit) => (
+								<Picker.Item
+									label={userSaleUnit.saleUnit}
+									value={userSaleUnit._id}
+									key={userSaleUnit._id}
+								/>
+							))}
 						</Picker>
 					</View>
 				</View>
@@ -163,7 +159,6 @@ export const ProductCardSecondary = ({
 					activeOpacity={0.7}
 					onPress={() => {
 						addItemToCart()
-						setItemTotalQty(1)
 						setShowModalAddToCart(!showModalAddToCart)
 					}}
 				>
@@ -173,6 +168,8 @@ export const ProductCardSecondary = ({
 		</View>
 	)
 }
+
+export default ProductCardSecondary
 
 const styles = StyleSheet.create({
 	container: {

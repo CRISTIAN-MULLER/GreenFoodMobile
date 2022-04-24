@@ -4,15 +4,11 @@ import { Text, StyleSheet, Image, View, Modal } from 'react-native'
 import { RectButton } from 'react-native-gesture-handler'
 import { FontAwesome } from '@expo/vector-icons'
 
-import { ProductCardSecondary } from './ProductCardSecondary'
-import { ProductHandleProps } from '../types/Product'
-import { CartContext } from '../contexts/CartContext'
+import { CartContext } from '@contexts/CartContext'
+import { ProductHandleProps } from '@typings/Product'
+import ProductCardSecondary from './ProductCardSecondary'
 
-export const ProductCardPrimary = ({
-	data,
-	showModalAddToCart: modalcart,
-	setShowModalAddToCart: modalfunc,
-}: ProductHandleProps) => {
+const ProductCardPrimary = ({ data }: ProductHandleProps) => {
 	const { cart, formatCurrency } = useContext(CartContext)
 
 	const [showModalAddToCart, setShowModalAddToCart] = useState(false)
@@ -30,27 +26,22 @@ export const ProductCardPrimary = ({
 					<View
 						style={{
 							marginBottom: -7,
-							//flexDirection: 'column',
-							//justifyContent: 'space-between',
-							//alignItems: 'flex-end',
 						}}
 					>
-						{data.saleUnits.map((saleUnit, index) => {
-							return (
-								<View key={saleUnit._id}>
-									<Text
-										style={
-											index === data.saleUnits.length - 1
-												? styles.saleUnitLastChild
-												: styles.saleUnit
-										}
-									>
-										{formatCurrency(saleUnit.price)}
-										<Text style={{ color: 'red' }}> {saleUnit.saleUnit}</Text>
-									</Text>
-								</View>
-							)
-						})}
+						{data.saleUnits.map((saleUnit, index) => (
+							<View key={saleUnit._id}>
+								<Text
+									style={
+										index === data.saleUnits.length - 1
+											? styles.saleUnitLastChild
+											: styles.saleUnit
+									}
+								>
+									{formatCurrency(saleUnit.price)}
+									<Text style={{ color: 'red' }}> {saleUnit.saleUnit}</Text>
+								</Text>
+							</View>
+						))}
 					</View>
 
 					{cart.items.find((item) => item._id === data._id) && (
@@ -62,7 +53,7 @@ export const ProductCardPrimary = ({
 				</View>
 				<Modal
 					animationType='slide'
-					transparent={true}
+					transparent
 					visible={showModalAddToCart}
 					onRequestClose={() => {
 						setShowModalAddToCart(!showModalAddToCart)
@@ -79,6 +70,8 @@ export const ProductCardPrimary = ({
 	)
 }
 
+export default ProductCardPrimary
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -88,9 +81,6 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		margin: 5,
 		justifyContent: 'space-between',
-	},
-	text: {
-		alignContent: 'flex-start',
 	},
 	rect: {
 		marginHorizontal: 5,
@@ -111,7 +101,7 @@ const styles = StyleSheet.create({
 
 	saleUnitLastChild: {
 		marginBottom: 5,
-		//flex: 1,
+		// flex: 1,
 		marginTop: 5,
 		color: 'rgba(0, 0, 0, 0.87)',
 	},
@@ -133,5 +123,3 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 })
-
-export default ProductCardPrimary

@@ -1,26 +1,26 @@
-import React, { ReactElement, useContext, useEffect, useState } from 'react'
-import { Text, StyleSheet, View, TouchableHighlight } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { StyleSheet, View, TouchableHighlight } from 'react-native'
 import { RectButton } from 'react-native-gesture-handler'
 
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'
 
-import { NavigationProps } from '../types/Navigation'
-import { ProfileContext } from '../contexts/ProfileContext'
+import { NavigationProps } from '@typings/Navigation'
+import { ProfileContext } from '@contexts/ProfileContext'
 import {
 	PaymentMethodHandleProps,
 	UserPaymentMethodProps,
-} from '../types/PaymentMethod'
+} from '@typings/PaymentMethod'
 
 import { getBrandIcon } from './Input/brand'
 import MiniCard from './MiniCard'
 
-export const CreditCardCard = ({
+const CreditCardCard = ({
 	data,
 	refresh,
 	setRefresh,
 	isSelected = false,
 	navigation,
-	...rest
+	onPress,
 }: PaymentMethodHandleProps & NavigationProps) => {
 	const { handlePaymentMethod } = useContext(ProfileContext)
 	const [icon, setIcon] = useState({
@@ -56,7 +56,7 @@ export const CreditCardCard = ({
 					flexDirection: 'row',
 				}}
 			>
-				<RectButton {...rest}>
+				<RectButton onPress={onPress}>
 					<View style={{ flexDirection: 'row' }}>
 						{isSelected ? (
 							<Ionicons

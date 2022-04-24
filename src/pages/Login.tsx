@@ -18,26 +18,24 @@ import * as AuthSession from 'expo-auth-session'
 import { FloatingLabelInput } from 'react-native-floating-label-input'
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
 
-import LogoSVG from '../../assets/LogoSVG'
-import Gradient from '../components/Gradient'
-
 import { useMutation } from '@apollo/client'
 
-import { LOGIN } from '../gql/User.gql'
+import Gradient from '@components/Gradient'
 
-import { NavigationProps } from '../types/Navigation'
-import { GoogleAuthResponse } from '../types/AuthResponse'
-import { ProfileContext } from '../contexts/ProfileContext'
-import { UserProfileProps } from '../types/Profile'
+import LogoSVG from '@assets/LogoSVG'
+import { NavigationProps } from '@typings/Navigation'
+import { GoogleAuthResponse } from '@typings/AuthResponse'
+import { ProfileContext } from '@contexts/ProfileContext'
+import { UserProfileProps } from '@typings/Profile'
+import { LOGIN } from '@gql/User.gql'
 
-export function Login({ navigation }: NavigationProps) {
-	const { userProfile, setUserProfile } = useContext(ProfileContext)
-
-	const [isFocused, setIsFocused] = useState(false)
-	const [isFilled, setIsFilled] = useState(false)
+const Login = ({ navigation }: NavigationProps) => {
+	const { setUserProfile } = useContext(ProfileContext)
 	const [password, setPassword] = useState('admin')
-	const [email, setEmail] = useState<string>('muller.cristian@outlook.com')
-	const [show, setShow] = useState(false)
+	const [userEmail, setUserEmail] = useState<string>(
+		'muller.cristian@outlook.com',
+	)
+	const [show] = useState(false)
 
 	const [loginUser] = useMutation(LOGIN)
 
@@ -59,17 +57,19 @@ export function Login({ navigation }: NavigationProps) {
 				const response = await fetch(
 					`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`,
 				)
-				const { email, family_name, given_name, id, name, picture } =
+				const { email, family_name, given_name, id, picture } =
 					await response.json()
 
-				//setUserProfile!(userProfileReturn)
+				// setUserProfile!(userProfileReturn)
 				const user: UserProfileProps = {
+					// eslint-disable-next-line camelcase
 					firstName: given_name,
+					// eslint-disable-next-line camelcase
 					lastName: family_name,
-					email: email,
-					profile_picture: picture,
+					email,
+					profilePicture: picture,
 					foreignId: {
-						id: id,
+						id,
 						provider: 'google',
 					},
 				}
@@ -79,22 +79,18 @@ export function Login({ navigation }: NavigationProps) {
 		}
 
 		if (source === 'login') {
-			try {
-				const {
-					data: { login },
-				} = await loginUser({
-					variables: {
-						data: {
-							email: email,
-							password: password,
-						},
+			const {
+				data: { login },
+			} = await loginUser({
+				variables: {
+					data: {
+						email: userEmail,
+						password,
 					},
-				})
-				setUserProfile!(login)
-				navigation.navigate('Menu')
-			} catch (error) {
-				console.log(error)
-			}
+				},
+			})
+			setUserProfile!(login)
+			navigation.navigate('Menu')
 		}
 	}
 
@@ -107,14 +103,14 @@ export function Login({ navigation }: NavigationProps) {
 				<View style={styles.wrapper}>
 					<Gradient />
 
-					<View style={{ marginBottom: 20 }}>
+					<View style={styles.logoView}>
 						<LogoSVG width='170' height='150' />
 					</View>
 					<View style={styles.login}>
 						<Text style={styles.textLogin}>LOGIN</Text>
 						<FloatingLabelInput
 							label='E-mail'
-							value={email}
+							value={userEmail}
 							staticLabel
 							containerStyles={{
 								margin: 5,
@@ -137,7 +133,7 @@ export function Login({ navigation }: NavigationProps) {
 								paddingHorizontal: 10,
 							}}
 							onChangeText={(value) => {
-								setEmail(value)
+								setUserEmail(value)
 							}}
 						/>
 
@@ -271,6 +267,8 @@ export function Login({ navigation }: NavigationProps) {
 	)
 }
 
+export default Login
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -282,7 +280,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	logoView: {
-		width: '70%',
+		marginBottom: 20,
 	},
 	login: {
 		backgroundColor: '#FFF8EC',
@@ -312,16 +310,6 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 	},
 
-	input: {
-		borderWidth: 2,
-		borderColor: '#FF8108',
-		//color: colors.heading,
-		width: '100%',
-		fontSize: 18,
-		marginTop: 50,
-		padding: 10,
-		textAlign: 'center',
-	},
 	button: {
 		// position: 'absolute',
 		width: '70%',

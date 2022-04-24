@@ -3,15 +3,15 @@ import { StyleSheet, View } from 'react-native'
 
 import LottieView from 'lottie-react-native'
 
-import loading from '../../assets/loading.json'
+import loading from '@assets/loading.json'
 
-export function Load() {
-	return (
-		<View style={styles.container}>
-			<LottieView source={loading} autoPlay loop style={styles.animation} />
-		</View>
-	)
-}
+const Load = () => (
+	<View style={styles.container}>
+		<LottieView source={loading} autoPlay loop style={styles.animation} />
+	</View>
+)
+
+export default Load
 
 const styles = StyleSheet.create({
 	container: {

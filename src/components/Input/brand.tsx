@@ -17,34 +17,34 @@ interface propsBrand {
 
 const cardBrand: propsBrand = {
 	visa: {
-		icon: <IconVisa width={'20%'} height={'20%'} />,
+		icon: <IconVisa width='20%' height='20%' />,
 	},
 	mastercard: {
-		icon: <IconMaster width={'25%'} height={'25%'} />,
+		icon: <IconMaster width='25%' height='25%' />,
 	},
 
 	amex: {
-		icon: <IconAmex width={'25%'} height={'25%'} />,
+		icon: <IconAmex width='25%' height='25%' />,
 	},
 
 	diners: {
-		icon: <IconDiners width={'20%'} height={'25%'} />,
+		icon: <IconDiners width='20%' height='25%' />,
 	},
 
 	maestro: {
-		icon: <IconMaestro width={'20%'} height={'25%'} />,
+		icon: <IconMaestro width='20%' height='25%' />,
 	},
 
 	elo: {
-		icon: <IconElo width={'20%'} height={'25%'} />,
+		icon: <IconElo width='20%' height='25%' />,
 	},
 
 	hipercard: {
-		icon: <IconHipercard width={'20%'} height={'20%'} />,
+		icon: <IconHipercard width='20%' height='20%' />,
 	},
 
 	undefined: {
-		icon: <LogoSVG width={'25%'} height={'25%'} />,
+		icon: <LogoSVG width='25%' height='25%' />,
 	},
 }
 
@@ -57,8 +57,11 @@ export const getBrandIcon = (number: string) => {
 	if (number && number.length >= 6) {
 		const brandIcon = getBrand(number)
 		if (!brandIcon) {
-			return cardBrand['undefined']
+			return cardBrand.undefined
 		}
-		return cardBrand.hasOwnProperty(brandIcon) ? cardBrand[brandIcon] : false
+		return Object.prototype.hasOwnProperty.call(cardBrand, brandIcon)
+			? cardBrand[brandIcon]
+			: false
 	}
+	return false
 }

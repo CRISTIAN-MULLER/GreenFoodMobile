@@ -1,16 +1,15 @@
 import React, { ComponentProps, FC } from 'react'
 
-export const combineComponents = (...components: FC[]): FC => {
-	return components.reduce(
-		(AccumulatedComponents, CurrentComponent) => {
-			return ({ children }: ComponentProps<FC>): JSX.Element => {
-				return (
+const combineComponents = (...components: FC[]): FC =>
+	components.reduce(
+		(AccumulatedComponents, CurrentComponent) =>
+			({ children }: ComponentProps<FC>): JSX.Element =>
+				(
 					<AccumulatedComponents>
 						<CurrentComponent>{children}</CurrentComponent>
 					</AccumulatedComponents>
-				)
-			}
-		},
+				),
 		({ children }) => <>{children}</>,
 	)
-}
+
+export default combineComponents

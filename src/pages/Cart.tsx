@@ -6,20 +6,19 @@ import {
 	View,
 	StatusBar,
 	FlatList,
-	TouchableOpacity,
 	Pressable,
 } from 'react-native'
 
-import TopBar from '../components/TopBar'
-import BottomBar from '../components/BottomBar'
-import ProductCardTertiary from '../components/ProductCardTertiary'
-import { CartContext } from '../contexts/CartContext'
+import TopBar from '@components/TopBar'
+import BottomBar from '@components/BottomBar'
+import ProductCardTertiary from '@components/ProductCardTertiary'
+import { CartContext } from '@contexts/CartContext'
 
-import { NavigationProps } from '../types/Navigation'
-import EmptyCartSVG from '../../assets/EmptyCartSVG'
-import { Button } from '../components/Button'
+import { NavigationProps } from '@typings/Navigation'
+import EmptyCartSVG from '@assets/EmptyCartSVG'
+import Button from '@components/Button'
 
-export function Cart({ navigation }: NavigationProps) {
+const Cart = ({ navigation }: NavigationProps) => {
 	const { cart, formatCurrency } = useContext(CartContext)
 
 	return (
@@ -69,7 +68,7 @@ export function Cart({ navigation }: NavigationProps) {
 								backgroundColor: 'rgba(33, 33, 33, 0.08)',
 								marginHorizontal: 12,
 							}}
-						></View>
+						/>
 
 						<View
 							style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -80,7 +79,7 @@ export function Cart({ navigation }: NavigationProps) {
 							</Text>
 						</View>
 						<Button
-							buttonText={'FINALIZAR'}
+							buttonText='FINALIZAR'
 							onPress={() => navigation.navigate('AddressSelection')}
 						/>
 					</>
@@ -90,6 +89,7 @@ export function Cart({ navigation }: NavigationProps) {
 		</SafeAreaView>
 	)
 }
+export default Cart
 
 const styles = StyleSheet.create({
 	container: {
@@ -99,11 +99,10 @@ const styles = StyleSheet.create({
 
 	wrapper: {
 		flex: 1,
-		//alignItems: 'center',
 		justifyContent: 'space-between',
 	},
 	text: {
-		//flex: 1,
+		// flex: 1,
 		marginHorizontal: 12,
 		marginTop: 15,
 		color: '#005723',
@@ -112,19 +111,6 @@ const styles = StyleSheet.create({
 		fontWeight: '600',
 		fontFamily: 'Roboto',
 	},
-	bottomText: {
-		//flex: 1,
-		marginHorizontal: 12,
-		color: 'rgba(0, 0, 0, 0.38)',
-		alignItems: 'flex-start',
-		fontSize: 15,
-		fontWeight: '500',
-	},
-	productsCard: {
-		flex: 1,
-		//padding: 10,
-	},
-
 	svg: {
 		flex: 1,
 		marginTop: -50,

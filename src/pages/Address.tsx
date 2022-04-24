@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState, Dispatch, SetStateAction } from 'react'
 import {
 	Text,
 	SafeAreaView,
@@ -10,22 +10,18 @@ import {
 	LogBox,
 } from 'react-native'
 
-import { useRoute } from '@react-navigation/core'
+import { useRoute } from '@react-navigation/native'
 
-import { Fontisto, MaterialIcons } from '@expo/vector-icons'
+import { Fontisto } from '@expo/vector-icons'
 
-import TopBar from '../components/TopBar'
-import BottomBar from '../components/BottomBar'
-
-import { NavigationProps } from '../types/Navigation'
 import { FloatingLabelInput } from 'react-native-floating-label-input'
-import { ProfileContext } from '../contexts/ProfileContext'
-//import { UserAddressProps } from '../types/Profile'
-import { Picker } from '@react-native-community/picker'
-import { OrderContext } from '../contexts/OrderContext'
-import { Load } from '../components/Load'
-import { UserAddressProps } from '../types/Address'
-import { Button } from '../components/Button'
+import TopBar from '@components/TopBar'
+import BottomBar from '@components/BottomBar'
+
+import { NavigationProps } from '@typings/Navigation'
+import { ProfileContext } from '@contexts/ProfileContext'
+import { UserAddressProps } from '@typings/Address'
+import Button from '@components/Button'
 
 LogBox.ignoreLogs([
 	'Non-serializable values were found in the navigation state',
@@ -35,10 +31,10 @@ interface Params {
 	address: UserAddressProps
 	action: string
 	refresh: boolean
-	setRefresh: (refresh: boolean) => void
+	setRefresh: Dispatch<SetStateAction<boolean>>
 }
 
-export function Address({ navigation }: NavigationProps) {
+const Address = ({ navigation }: NavigationProps) => {
 	const route = useRoute()
 	const { address, action, refresh, setRefresh } = route.params as Params
 
@@ -52,18 +48,17 @@ export function Address({ navigation }: NavigationProps) {
 	const [street, setStreet] = useState(address.street)
 	const [houseNumber, setHouseNumber] = useState(address.houseNumber)
 	const [reference, setReference] = useState(address.reference)
-	const [coordinates, setCoordinates] = useState(address.location.coordinates)
 
 	function setAddressData() {
 		const newDeliveryAddress: any = {
-			name: name,
-			zipcode: zipcode,
-			street: street,
-			houseNumber: houseNumber,
-			district: district,
-			city: city,
-			state: state,
-			reference: reference,
+			name,
+			zipcode,
+			street,
+			houseNumber,
+			district,
+			city,
+			state,
+			reference,
 			location: {
 				type: 'Point',
 				coordinates: [0, 0],
@@ -71,7 +66,7 @@ export function Address({ navigation }: NavigationProps) {
 		}
 
 		const hasAddres = userProfile.addresses!.filter(
-			(address) => address.name === name,
+			(userAddress: { name: string }) => userAddress.name === name,
 		)
 
 		if (hasAddres.length && action === 'add') {
@@ -107,7 +102,7 @@ export function Address({ navigation }: NavigationProps) {
 								borderBottomWidth: 1,
 							}}
 							onChangeText={(value) => setName(value)}
-							label={''}
+							label=''
 						/>
 					</View>
 					<TouchableOpacity style={styles.naviButton} activeOpacity={0.7}>
@@ -128,7 +123,7 @@ export function Address({ navigation }: NavigationProps) {
 								value={zipcode}
 								containerStyles={styles.textInput}
 								onChangeText={(value) => setZipcode(value)}
-								label={''}
+								label=''
 							/>
 						</View>
 						<View style={styles.state}>
@@ -137,7 +132,7 @@ export function Address({ navigation }: NavigationProps) {
 								value={state}
 								containerStyles={styles.textInput}
 								onChangeText={(value) => setState(value)}
-								label={''}
+								label=''
 							/>
 						</View>
 					</View>
@@ -146,14 +141,14 @@ export function Address({ navigation }: NavigationProps) {
 						value={city}
 						containerStyles={styles.textInput}
 						onChangeText={(value) => setCity(value)}
-						label={''}
+						label=''
 					/>
 					<Text style={styles.text}>Bairro</Text>
 					<FloatingLabelInput
 						value={district}
 						containerStyles={styles.textInput}
 						onChangeText={(value) => setDistrict(value)}
-						label={''}
+						label=''
 					/>
 					<View
 						style={{
@@ -168,7 +163,7 @@ export function Address({ navigation }: NavigationProps) {
 								value={street}
 								containerStyles={styles.textInput}
 								onChangeText={(value) => setStreet(value)}
-								label={''}
+								label=''
 							/>
 						</View>
 						<View style={styles.state}>
@@ -177,7 +172,7 @@ export function Address({ navigation }: NavigationProps) {
 								value={houseNumber}
 								containerStyles={styles.textInput}
 								onChangeText={(value) => setHouseNumber(value)}
-								label={''}
+								label=''
 							/>
 						</View>
 					</View>
@@ -187,10 +182,10 @@ export function Address({ navigation }: NavigationProps) {
 						value={reference}
 						containerStyles={styles.textInput}
 						onChangeText={(value) => setReference(value)}
-						label={''}
+						label=''
 					/>
 
-					<Button buttonText={'SALVAR'} onPress={() => setAddressData()} />
+					<Button buttonText='SALVAR' onPress={() => setAddressData()} />
 				</ScrollView>
 
 				<BottomBar navigation={navigation} />
@@ -198,6 +193,8 @@ export function Address({ navigation }: NavigationProps) {
 		</SafeAreaView>
 	)
 }
+
+export default Address
 
 const styles = StyleSheet.create({
 	container: {
@@ -226,18 +223,6 @@ const styles = StyleSheet.create({
 		fontWeight: '600',
 		fontFamily: 'Roboto',
 	},
-	picker: {
-		width: 130,
-	},
-
-	button: {
-		height: 50,
-		marginTop: 10,
-		backgroundColor: '#FF8108',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 8,
-	},
 	naviButton: {
 		height: 50,
 		backgroundColor: '#FFFFFF',
@@ -252,12 +237,6 @@ const styles = StyleSheet.create({
 	naviButtonText: {
 		marginLeft: 10,
 		color: '#FF8108',
-		fontSize: 20,
-		fontWeight: '600',
-	},
-	buttonText: {
-		marginLeft: 10,
-		color: '#FFFFFF',
 		fontSize: 20,
 		fontWeight: '600',
 	},
@@ -285,30 +264,5 @@ const styles = StyleSheet.create({
 		width: 80,
 		textAlign: 'left',
 		borderRadius: 4,
-	},
-
-	modal: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.5)',
-	},
-	modalWrapper: {
-		backgroundColor: '#FFFFFF',
-		height: 200,
-		width: 300,
-		borderRadius: 4,
-		//alignItems: 'center',
-		justifyContent: 'space-between',
-		paddingHorizontal: 40,
-		paddingVertical: 30,
-	},
-
-	modaltext: {
-		fontFamily: 'Roboto',
-		fontSize: 16,
-		fontWeight: '700',
-		textAlign: 'left',
-		color: 'rgba(0, 0, 0, 0.5)',
 	},
 })

@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {
+	Dispatch,
+	SetStateAction,
+	useContext,
+	useEffect,
+	useState,
+} from 'react'
 import {
 	Animated,
 	SafeAreaView,
@@ -11,24 +17,24 @@ import {
 	Dimensions,
 	Text,
 } from 'react-native'
-import { useRoute } from '@react-navigation/core'
+import { useRoute } from '@react-navigation/native'
 
-import { getBrand, getBrandIcon } from '../components/Input/brand'
+import { getBrandIcon } from '@components/Input/brand'
 
-import Card from '../components/Card'
-import Input from '../components/Input'
-import IconUser from '../../assets/icon-user'
-import IconCode from '../../assets/icon-code'
-import IconDate from '../../assets/icon-date'
-import IconNumber from '../../assets/icon-number'
+import Card from '@components/Card'
+import Input from '@components/Input'
+import IconUser from '@assets/icon-user'
+import IconCode from '@assets/icon-code'
+import IconDate from '@assets/icon-date'
+import IconNumber from '@assets/icon-number'
 
-import { BottomBar } from '../components/BottomBar'
-import TopBar from '../components/TopBar'
-import { NavigationProps } from '../types/Navigation'
+import { BottomBar } from '@components/BottomBar'
+import TopBar from '@components/TopBar'
+import { NavigationProps } from '@typings/Navigation'
 import { FloatingLabelInput } from 'react-native-floating-label-input'
-import { Button } from '../components/Button'
-import { UserPaymentMethodProps } from '../types/PaymentMethod'
-import { ProfileContext } from '../contexts/ProfileContext'
+import Button from '@components/Button'
+import { UserPaymentMethodProps } from '@typings/PaymentMethod'
+import { ProfileContext } from '@contexts/ProfileContext'
 
 const windowWidth = Dimensions.get('window').width
 
@@ -36,10 +42,10 @@ interface Params {
 	paymentMethod: UserPaymentMethodProps
 	action: string
 	refresh: boolean
-	setRefresh: (refresh: boolean) => void
+	setRefresh: Dispatch<SetStateAction<boolean>>
 }
 
-export function CreditCard({ navigation }: NavigationProps) {
+const CreditCard = ({ navigation }: NavigationProps) => {
 	const route = useRoute()
 	const { paymentMethod, action, refresh, setRefresh } = route.params as Params
 
@@ -53,12 +59,10 @@ export function CreditCard({ navigation }: NavigationProps) {
 	const [expirationDate, setexpirationDate] = useState(
 		paymentMethod.expirationDate,
 	)
-	const [cardBrand, setCardBrand] = useState(paymentMethod.cardBrand)
+	const [cardBrand] = useState(paymentMethod.cardBrand)
 	const [cvv, setCvv] = useState(paymentMethod.cvv)
 
-	const [widthAnimated, setWidthAnimated] = useState(
-		new Animated.Value(windowWidth),
-	)
+	const [widthAnimated] = useState(new Animated.Value(windowWidth))
 	const [backView, setBackView] = useState(false)
 	const [icon, setIcon] = useState({
 		icon: false,
@@ -70,21 +74,21 @@ export function CreditCard({ navigation }: NavigationProps) {
 				animatedCard(false)
 			}, 1000)
 		}
-		return
 	}
 
 	const setCardData = () => {
 		const newCreditCard: any = {
-			cardName: cardName,
-			cardHolderName: cardHolderName,
-			cardNumber: cardNumber,
-			cardBrand: cardBrand,
-			expirationDate: expirationDate,
-			cvv: cvv,
+			cardName,
+			cardHolderName,
+			cardNumber,
+			cardBrand,
+			expirationDate,
+			cvv,
 		}
 
 		const hasCards = userProfile.paymentMethods!.filter(
-			(paymentMethod) => paymentMethod.cardName === cardName,
+			(userPaymentMethod: { cardName: string }) =>
+				userPaymentMethod.cardName === cardName,
 		)
 
 		if (hasCards.length && action === 'add') {
@@ -165,14 +169,13 @@ export function CreditCard({ navigation }: NavigationProps) {
 									borderBottomWidth: 1,
 								}}
 								onChangeText={(value) => setCardName(value)}
-								label={''}
+								label=''
 							/>
 						</View>
 						<Animated.View style={{ width: widthAnimated }}>
 							<Card
 								cardHolderName={cardHolderName}
 								cardNumber={cardNumber}
-								cardBrand={cardBrand}
 								expirationDate={expirationDate}
 								cvv={cvv}
 								icon={icon?.icon}
@@ -244,13 +247,16 @@ export function CreditCard({ navigation }: NavigationProps) {
 							/>
 						</View>
 					</ScrollView>
-					<Button buttonText={'SALVAR'} onPress={() => setCardData()} />
+					<Button buttonText='SALVAR' onPress={() => setCardData()} />
 					<BottomBar navigation={navigation} />
 				</View>
 			</KeyboardAvoidingView>
 		</SafeAreaView>
 	)
 }
+
+export default CreditCard
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -264,7 +270,7 @@ const styles = StyleSheet.create({
 	},
 
 	textDelivery: {
-		//marginLeft: 5,
+		// marginLeft: 5,
 		marginTop: 10,
 		color: '#005723',
 		alignItems: 'flex-start',
@@ -281,95 +287,5 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: '600',
 		fontFamily: 'Roboto',
-	},
-	picker: {
-		height: 40,
-		width: 100,
-	},
-	button: {
-		// position: 'absolute',
-		//width: '100%',
-		height: 50,
-		//marginHorizontal: 12,
-		//   left: 64,
-		//   top: 450,
-		marginTop: 10,
-		backgroundColor: '#FF8108',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 8,
-	},
-	naviButton: {
-		// position: 'absolute',
-		//width: '70%',
-		height: 50,
-		//marginHorizontal: 12,
-		//   left: 64,
-		//   top: 450,
-		marginTop: 10,
-		//marginBottom: 10,
-		//padding: 10,
-		backgroundColor: '#FFFFFF',
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		borderRadius: 8,
-		borderStyle: 'solid',
-		borderWidth: 1,
-		borderColor: '#FF8108',
-	},
-	naviButtonText: {
-		//flex: 1,
-		marginLeft: 10,
-		color: '#FF8108',
-		fontSize: 20,
-		fontWeight: '600',
-	},
-	buttonText: {
-		//flex: 1,
-		marginLeft: 10,
-		color: '#FFFFFF',
-		fontSize: 20,
-		fontWeight: '600',
-	},
-	textInput: {
-		borderRadius: 8,
-		borderStyle: 'solid',
-		borderWidth: 1,
-		borderColor: 'rgba(33, 33, 33, 0.38)',
-
-		color: 'rgba(33, 33, 33, 0.8)',
-		//width: 'auto',
-		flexWrap: 'nowrap',
-		height: 44,
-
-		padding: 5,
-		textAlign: 'left',
-	},
-
-	cep: {
-		flex: 3,
-		alignItems: 'flex-start',
-		justifyContent: 'center',
-		//backgroundColor: 'red',
-		marginRight: 12,
-		//width: 'auto',
-		//height: '100%',
-		borderRadius: 4,
-		//padding: 5,
-		//textAlign: 'center',
-		width: '100%',
-	},
-	state: {
-		//	flex: 1,
-		//alignItems: 'flex-start',
-		//justifyContent: 'center',
-		//backgroundColor: 'grey',
-		width: 70,
-		//height: ,
-		textAlign: 'left',
-		borderRadius: 4,
-		//padding: 5,
-		//textAlign: 'center',
 	},
 })

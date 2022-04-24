@@ -4,9 +4,9 @@ import { RectButton } from 'react-native-gesture-handler'
 
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'
 
-import { AddressHandleProps, UserAddressProps } from '../types/Address'
-import { NavigationProps } from '../types/Navigation'
-import { ProfileContext } from '../contexts/ProfileContext'
+import { AddressHandleProps, UserAddressProps } from '@typings/Address'
+import { NavigationProps } from '@typings/Navigation'
+import { ProfileContext } from '@contexts/ProfileContext'
 
 export const AddressCard = ({
 	data,
@@ -14,7 +14,7 @@ export const AddressCard = ({
 	setRefresh,
 	isSelected = false,
 	navigation,
-	...rest
+	onPress,
 }: AddressHandleProps & NavigationProps) => {
 	const { handleAddress } = useContext(ProfileContext)
 
@@ -35,7 +35,7 @@ export const AddressCard = ({
 					flexDirection: 'row',
 				}}
 			>
-				<RectButton {...rest}>
+				<RectButton onPress={onPress}>
 					<View style={{ flexDirection: 'row' }}>
 						{isSelected ? (
 							<Ionicons
@@ -57,7 +57,7 @@ export const AddressCard = ({
 									fontWeight: '600',
 									fontSize: 16,
 									color: 'rgba(61, 61, 62, 1)',
-									//marginLeft: 10,
+									// marginLeft: 10,
 								}}
 							>
 								{data.name}
@@ -69,7 +69,7 @@ export const AddressCard = ({
 									fontWeight: '600',
 									fontSize: 16,
 									color: 'rgba(0, 0, 0, 0.38)',
-									//marginLeft: 35,
+									// marginLeft: 35,
 								}}
 							>
 								{data.street}, nº {data.houseNumber}

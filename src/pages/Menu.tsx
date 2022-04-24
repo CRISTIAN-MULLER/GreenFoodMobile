@@ -7,17 +7,17 @@ import {
 	FlatList,
 	ActivityIndicator,
 } from 'react-native'
-
-import { MenuLoad } from '../components/MenuLoad'
-import TopBar from '../components/TopBar'
-import BottomBar from '../components/BottomBar'
-
-import ProductCardPrimary from '../components/ProductCardPrimary'
-import { ProductContext } from '../contexts/ProductContext'
 import { useQuery } from '@apollo/client'
-import { GET_ALL_PRODUCTS } from '../gql/Product.gql'
-import { NavigationProps } from '../types/Navigation'
-import { ProductProps } from '../types/Product'
+
+import MenuLoad from '@components/MenuLoad'
+import TopBar from '@components/TopBar'
+import BottomBar from '@components/BottomBar'
+
+import ProductCardPrimary from '@components/ProductCardPrimary'
+import { ProductContext } from '@contexts/ProductContext'
+import { GET_ALL_PRODUCTS } from '@gql/Product.gql'
+import { NavigationProps } from '@typings/Navigation'
+import { ProductProps } from '@typings/Product'
 
 interface queryData {
 	data: {
@@ -25,13 +25,13 @@ interface queryData {
 	}
 }
 
-export function Menu({ navigation }: NavigationProps) {
+const Menu = ({ navigation }: NavigationProps) => {
 	const { products, setProducts, loadingMore, setLoadingMore } =
 		useContext(ProductContext)
 	const [showModalAddToCart, setShowModalAddToCart] = useState(false)
 	const [nextPage, setNextPage] = useState('')
 
-	const { loading, data, error, fetchMore } = useQuery(GET_ALL_PRODUCTS, {
+	const { loading, data, fetchMore } = useQuery(GET_ALL_PRODUCTS, {
 		variables: {
 			data: {
 				limit: 6,
@@ -55,7 +55,7 @@ export function Menu({ navigation }: NavigationProps) {
 						limit: 6,
 						sortAscending: true,
 						sortField: 'name',
-						nextPage: nextPage,
+						nextPage,
 					},
 				},
 			})
@@ -70,14 +70,13 @@ export function Menu({ navigation }: NavigationProps) {
 	useEffect(() => {
 		if (data) {
 			const {
-				getAllProducts: { products, next },
+				getAllProducts: { products: refetchedProducts, next },
 			} = data
 			setNextPage(next)
-			setProducts(products)
+			setProducts(refetchedProducts)
 		}
 	}, [data])
 	if (loading) return <MenuLoad />
-	if (error) console.log(error)
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -104,16 +103,18 @@ export function Menu({ navigation }: NavigationProps) {
 							loadingMore ? (
 								<ActivityIndicator size='large' color='#005723' />
 							) : (
-								<></>
+								<View />
 							)
 						}
-					></FlatList>
+					/>
 				</View>
 				<BottomBar navigation={navigation} />
 			</View>
 		</SafeAreaView>
 	)
 }
+
+export default Menu
 
 const styles = StyleSheet.create({
 	container: {
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
 
 	wrapper: {
 		flex: 1,
-		//alignItems: 'center',
+		// alignItems: 'center',
 		justifyContent: 'space-between',
 	},
 	productsCard: {

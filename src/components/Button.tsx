@@ -5,19 +5,18 @@ import {
 	StyleSheet,
 	TouchableOpacityProps,
 } from 'react-native'
-import { NavigationProps } from '../types/Navigation'
 
 interface ButtonPros extends TouchableOpacityProps {
 	buttonText: String
 }
 
-export function Button({ buttonText, ...rest }: ButtonPros) {
-	return (
-		<TouchableOpacity style={styles.button} activeOpacity={0.7} {...rest}>
-			<Text style={styles.buttonText}>{buttonText}</Text>
-		</TouchableOpacity>
-	)
-}
+const Button = ({ buttonText, onPress }: ButtonPros) => (
+	<TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={onPress}>
+		<Text style={styles.buttonText}>{buttonText}</Text>
+	</TouchableOpacity>
+)
+
+export default Button
 
 const styles = StyleSheet.create({
 	button: {

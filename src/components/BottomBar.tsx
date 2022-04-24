@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 import { MaterialIcons } from '@expo/vector-icons'
 
-import { CartContext } from '../contexts/CartContext'
-import { NavigationProps } from '../types/Navigation'
+import { CartContext } from '@contexts/CartContext'
+import { NavigationProps } from '@typings/Navigation'
 
 import { useRoute } from '@react-navigation/native'
 

@@ -9,17 +9,17 @@ import {
 	Pressable,
 } from 'react-native'
 
-import TopBar from '../components/TopBar'
-import BottomBar from '../components/BottomBar'
+import TopBar from '@components/TopBar'
+import BottomBar from '@components/BottomBar'
 
-import { NavigationProps } from '../types/Navigation'
-import AddressCard from '../components/AddressCard'
-import { ProfileContext } from '../contexts/ProfileContext'
-import { Button } from '../components/Button'
-import { OrderContext } from '../contexts/OrderContext'
-import { UserAddressProps } from '../types/Address'
+import { NavigationProps } from '@typings/Navigation'
+import AddressCard from '@components/AddressCard'
+import { ProfileContext } from '@contexts/ProfileContext'
+import Button from '@components/Button'
+import { OrderContext } from '@contexts/OrderContext'
+import { UserAddressProps } from '@typings/Address'
 
-export function AddressSelection({ navigation }: NavigationProps) {
+const AddressSelection = ({ navigation }: NavigationProps) => {
 	const [selectedAddress, setSelectedAddress] = useState('Casa')
 	const [refresh, setRefresh] = useState(false)
 	const { userProfile } = useContext(ProfileContext)
@@ -35,9 +35,7 @@ export function AddressSelection({ navigation }: NavigationProps) {
 		const unsubscribe = navigation.addListener('focus', () => {
 			setSelectedAddress('Casa')
 		})
-		return () => {
-			unsubscribe
-		}
+		return unsubscribe
 	}, [navigation])
 
 	return (
@@ -69,8 +67,8 @@ export function AddressSelection({ navigation }: NavigationProps) {
 								},
 							},
 							action: 'add',
-							refresh: refresh,
-							setRefresh: setRefresh,
+							refresh,
+							setRefresh,
 						})
 					}
 				>
@@ -96,7 +94,7 @@ export function AddressSelection({ navigation }: NavigationProps) {
 				/>
 
 				<Button
-					buttonText={'CONFIMAR ENDEREÇO DE ENTREGA'}
+					buttonText='CONFIMAR ENDEREÇO DE ENTREGA'
 					onPress={() => navigation.navigate('PaymentSelection')}
 				/>
 				<BottomBar navigation={navigation} />
@@ -104,6 +102,8 @@ export function AddressSelection({ navigation }: NavigationProps) {
 		</SafeAreaView>
 	)
 }
+
+export default AddressSelection
 
 const styles = StyleSheet.create({
 	container: {
@@ -137,25 +137,5 @@ const styles = StyleSheet.create({
 		fontFamily: 'Roboto',
 		marginTop: 15,
 		marginHorizontal: 10,
-	},
-	button: {
-		// position: 'absolute',
-		//width: '70%',
-		height: 50,
-		marginHorizontal: 12,
-		//   left: 64,
-		//   top: 450,
-		marginTop: 30,
-		marginBottom: 10,
-		backgroundColor: '#FF8108',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 8,
-	},
-	buttonText: {
-		//flex: 1,
-		color: '#FFFFFF',
-		fontSize: 20,
-		fontWeight: '600',
 	},
 })

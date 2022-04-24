@@ -12,16 +12,16 @@ import {
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { FloatingLabelInput } from 'react-native-floating-label-input'
 
-import LogoSVG from '../../assets/LogoSVG'
-import Gradient from '../components/Gradient'
-import { NavigationProps } from '../types/Navigation'
 import { useMutation } from '@apollo/client'
+import LogoSVG from '@assets/LogoSVG'
+import Gradient from '@components/Gradient'
+import { NavigationProps } from '@typings/Navigation'
 
-import { REGISTER } from '../gql/User.gql'
-import { ProfileContext } from '../contexts/ProfileContext'
+import { REGISTER } from '@gql/User.gql'
+import { ProfileContext } from '@contexts/ProfileContext'
 
-export function User({ navigation }: NavigationProps) {
-	const { userProfile, setUserProfile } = useContext(ProfileContext)
+const User = ({ navigation }: NavigationProps) => {
+	const { setUserProfile } = useContext(ProfileContext)
 
 	const [password, setPassword] = useState<string>('')
 	const [confirmationPassword, setConfirmationPassword] = useState<string>('')
@@ -29,32 +29,26 @@ export function User({ navigation }: NavigationProps) {
 	const [email, setEmail] = useState<string>('')
 	const [firstName, setFirstName] = useState<string>('')
 	const [lastName, setLastName] = useState<string>('')
-	const [show, setShow] = useState(false)
+	const [show] = useState(false)
 
 	const [registerNewUser] = useMutation(REGISTER)
 
 	async function handleRegisterNewUser() {
-		console.log(email, password, firstName, lastName, phone)
-
-		try {
-			const {
-				data: { registerUser },
-			} = await registerNewUser({
-				variables: {
-					data: {
-						password: password,
-						phone: phone,
-						email: email,
-						firstName: firstName,
-						lastName: lastName,
-					},
+		const {
+			data: { registerUser },
+		} = await registerNewUser({
+			variables: {
+				data: {
+					password,
+					phone,
+					email,
+					firstName,
+					lastName,
 				},
-			})
-			setUserProfile!(registerUser)
-			navigation.navigate('Menu')
-		} catch (error) {
-			console.log(error)
-		}
+			},
+		})
+		setUserProfile!(registerUser)
+		navigation.navigate('Menu')
 	}
 
 	// function handleInputBlur() {
@@ -95,7 +89,7 @@ export function User({ navigation }: NavigationProps) {
 							paddingHorizontal: 10,
 						}}
 						onChangeText={(name) => setFirstName(name)}
-						label={''}
+						label=''
 					/>
 					<Text style={styles.text}>Sobrenome</Text>
 					<FloatingLabelInput
@@ -114,7 +108,7 @@ export function User({ navigation }: NavigationProps) {
 							paddingHorizontal: 10,
 						}}
 						onChangeText={(name) => setLastName(name)}
-						label={''}
+						label=''
 					/>
 					<Text style={styles.text}>E-mail</Text>
 					<FloatingLabelInput
@@ -134,7 +128,7 @@ export function User({ navigation }: NavigationProps) {
 							paddingHorizontal: 10,
 						}}
 						onChangeText={(value) => setEmail(value)}
-						label={''}
+						label=''
 					/>
 
 					<Text style={styles.text}>Senha</Text>
@@ -173,7 +167,7 @@ export function User({ navigation }: NavigationProps) {
 							paddingHorizontal: 10,
 						}}
 						onChangeText={(value) => setPassword(value)}
-						label={''}
+						label=''
 					/>
 
 					<Text style={styles.text}>Confirmar senha</Text>
@@ -212,7 +206,7 @@ export function User({ navigation }: NavigationProps) {
 							paddingHorizontal: 10,
 						}}
 						onChangeText={(value) => setConfirmationPassword(value)}
-						label={''}
+						label=''
 					/>
 
 					<Text style={styles.text}>Telefone</Text>
@@ -227,9 +221,9 @@ export function User({ navigation }: NavigationProps) {
 						}
 						keyboardType='phone-pad'
 						staticLabel
-						label={''}
+						label=''
 						value={phone}
-						hintTextColor={'#aaa'}
+						hintTextColor='#aaa'
 						mask='(99) 99999-9999'
 						hint='(  ) _____-____'
 						containerStyles={styles.textInput}
@@ -250,6 +244,8 @@ export function User({ navigation }: NavigationProps) {
 		</SafeAreaView>
 	)
 }
+
+export default User
 
 const styles = StyleSheet.create({
 	container: {
@@ -278,8 +274,8 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: 44,
 		borderRadius: 4,
-		//padding: 5,
-		//textAlign: 'center',
+		// padding: 5,
+		// textAlign: 'center',
 	},
 	button: {
 		// position: 'absolute',

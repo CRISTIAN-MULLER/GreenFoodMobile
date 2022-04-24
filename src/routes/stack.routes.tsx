@@ -1,16 +1,16 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { Welcome } from '../pages/Welcome'
-import { Login } from '../pages/Login'
-import { User } from '../pages/User'
-import { Menu } from '../pages/Menu'
-import { Cart } from '../pages/Cart'
-import { RootStackParamList } from '../types/RootStackParamList'
-import { PaymentSelection } from '../pages/PaymentSelection'
-import { AddressSelection } from '../pages/AddressSelection'
-import { Address } from '../pages/Address'
-import { CreditCard } from '../pages/CreditCard'
+import RootStackParamList from '@typings/RootStackParamList'
+import Welcome from '@pages/Welcome'
+import Login from '@pages/Login'
+import User from '@pages/User'
+import Menu from '@pages/Menu'
+import Cart from '@pages/Cart'
+import PaymentSelection from '@pages/PaymentSelection'
+import AddressSelection from '@pages/AddressSelection'
+import Address from '@pages/Address'
+import CreditCard from '@pages/CreditCard'
 
 const stackRoutes = createNativeStackNavigator<RootStackParamList>()
 

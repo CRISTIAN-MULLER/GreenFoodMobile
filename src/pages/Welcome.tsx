@@ -7,11 +7,11 @@ import {
 	TouchableOpacity,
 } from 'react-native'
 
-import LogoSVG from '../../assets/LogoSVG'
-import Gradient from '../components/Gradient'
-import { NavigationProps } from '../types/Navigation'
+import LogoSVG from '@assets/LogoSVG'
+import Gradient from '@components/Gradient'
+import { NavigationProps } from '@typings/Navigation'
 
-export function Welcome({ navigation }: NavigationProps) {
+const Welcome = ({ navigation }: NavigationProps) => {
 	function handleStart() {
 		navigation.navigate('Login')
 	}
@@ -32,6 +32,8 @@ export function Welcome({ navigation }: NavigationProps) {
 		</SafeAreaView>
 	)
 }
+
+export default Welcome
 
 const styles = StyleSheet.create({
 	container: {

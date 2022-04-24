@@ -1,11 +1,17 @@
-import React, { createContext, useState } from 'react'
-import { UserAddressProps } from '../types/Address'
-import { UserPaymentMethodProps } from '../types/PaymentMethod'
-import { UserProfileProps } from '../types/Profile'
+import React, {
+	createContext,
+	Dispatch,
+	SetStateAction,
+	useMemo,
+	useState,
+} from 'react'
+import { UserAddressProps } from '@typings/Address'
+import { UserPaymentMethodProps } from '@typings/PaymentMethod'
+import { UserProfileProps } from '@typings/Profile'
 
-export interface ProfileContext {
+export interface ProfileContextProps {
 	userProfile: UserProfileProps
-	setUserProfile: (userProfile: UserProfileProps) => void
+	setUserProfile: Dispatch<SetStateAction<UserProfileProps>>
 	handleAddress: (address: UserAddressProps, action: string) => void
 	handlePaymentMethod: (
 		paymentMethod: UserPaymentMethodProps,
@@ -13,7 +19,7 @@ export interface ProfileContext {
 	) => void
 }
 
-export const ProfileContext = createContext({} as ProfileContext)
+export const ProfileContext = createContext({} as ProfileContextProps)
 
 const ProfileProvider: React.FC = ({ children }) => {
 	const [userProfile, setUserProfile] = useState<UserProfileProps>({
@@ -24,7 +30,7 @@ const ProfileProvider: React.FC = ({ children }) => {
 		email: 'string',
 		password: 'string',
 		phone: 'string',
-		profile_picture: 'string',
+		profilePicture: 'string',
 		role: 'string',
 		addresses: [
 			{
@@ -68,7 +74,15 @@ const ProfileProvider: React.FC = ({ children }) => {
 		if (action === 'update') {
 			const profileAddresses = userProfile.addresses!.map((address) => {
 				if (address.name === updateAddress.name) {
-					address = updateAddress
+					address.name = updateAddress.name
+					address.zipcode = updateAddress.zipcode
+					address.street = updateAddress.street
+					address.houseNumber = updateAddress.houseNumber
+					address.district = updateAddress.district
+					address.city = updateAddress.city
+					address.state = updateAddress.state
+					address.reference = updateAddress.reference
+					address.location = updateAddress.location
 				}
 				return address
 			})
@@ -107,7 +121,12 @@ const ProfileProvider: React.FC = ({ children }) => {
 			const profilePaymentMethods = userProfile.paymentMethods!.map(
 				(paymentMethod) => {
 					if (paymentMethod.cardName === updatePaymentMethod.cardName) {
-						paymentMethod = updatePaymentMethod
+						paymentMethod.cardNumber = updatePaymentMethod.cardNumber
+						paymentMethod.cardName = updatePaymentMethod.cardName
+						paymentMethod.cardHolderName = updatePaymentMethod.cardHolderName
+						paymentMethod.expirationDate = updatePaymentMethod.expirationDate
+						paymentMethod.cardBrand = updatePaymentMethod.cardBrand
+						paymentMethod.cvv = updatePaymentMethod.cvv
 					}
 					return paymentMethod
 				},
@@ -128,15 +147,18 @@ const ProfileProvider: React.FC = ({ children }) => {
 		}
 	}
 
+	const profileContext = useMemo(
+		() => ({
+			userProfile,
+			setUserProfile,
+			handleAddress,
+			handlePaymentMethod,
+		}),
+		[userProfile],
+	)
+
 	return (
-		<ProfileContext.Provider
-			value={{
-				userProfile,
-				setUserProfile,
-				handleAddress,
-				handlePaymentMethod,
-			}}
-		>
+		<ProfileContext.Provider value={profileContext}>
 			{children}
 		</ProfileContext.Provider>
 	)

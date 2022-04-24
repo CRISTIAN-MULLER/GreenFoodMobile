@@ -1,5 +1,10 @@
 import styled from 'styled-components/native'
 
+interface propsText {
+	fontSize: string
+	bold?: boolean
+}
+
 export const Container = styled.View`
 	width: 90%;
 `
@@ -17,14 +22,9 @@ export const View = styled.View``
 export const Text = styled.Text<propsText>`
 	width: auto;
 	color: #fafafa;
-	font-size: ${({ fontSize }) => (fontSize ? fontSize : '14px')};
+	font-size: ${({ fontSize }) => fontSize || '14px'};
 	font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
 `
-
-interface propsText {
-	fontSize: string
-	bold?: boolean
-}
 
 export const ViewInformation = styled.View`
 	padding: 4px;

@@ -1,18 +1,24 @@
-import React, { createContext, useState } from 'react'
-import { CartProps } from '../types/Cart'
-import { CartProductProps } from '../types/Product'
+import React, {
+	createContext,
+	Dispatch,
+	SetStateAction,
+	useMemo,
+	useState,
+} from 'react'
+import { CartProps } from '@typings/Cart'
+import { CartProductProps } from '@typings/Product'
 
-export interface CartContext {
+export interface CartContextProps {
 	cart: CartProps
-	setCart: (cart: CartProps) => void
+	setCart: Dispatch<SetStateAction<CartProps>>
 	cartItem: CartProductProps
-	setCartItem: (item: CartProductProps) => void
-	handleAddItemToCart: (item: CartProductProps) => void
-	handleRemoveItemFromCart: (item: CartProductProps) => void
-	formatCurrency: (currency: number) => string
+	setCartItem: Dispatch<SetStateAction<CartProductProps>>
+	handleAddItemToCart: (newItem: CartProductProps) => void
+	handleRemoveItemFromCart: (itemToRemove: CartProductProps) => void
+	formatCurrency: (value: number) => string
 }
 
-export const CartContext = createContext({} as CartContext)
+export const CartContext = createContext({} as CartContextProps)
 
 const CartProvider: React.FC = ({ children }) => {
 	const [cart, setCart] = useState<CartProps>({
@@ -20,6 +26,7 @@ const CartProvider: React.FC = ({ children }) => {
 		itemsTotalQty: 0,
 		itemsTotalPrice: 0,
 	})
+
 	const [cartItem, setCartItem] = useState<CartProductProps>({
 		_id: '',
 		name: '',
@@ -48,14 +55,16 @@ const CartProvider: React.FC = ({ children }) => {
 	async function updateCart(cartItems: CartProductProps[]) {
 		const newCart = {
 			items: cartItems,
-			itemsTotalQty: cartItems.reduce(function (previousValue, currentValue) {
-				return previousValue + currentValue.itemTotalQty
-			}, 0),
-			itemsTotalPrice: cartItems.reduce(function (previousValue, currentValue) {
-				return parseFloat(
-					(previousValue + currentValue.itemTotalPrice).toFixed(2),
-				)
-			}, 0),
+			itemsTotalQty: cartItems.reduce(
+				(previousValue, currentValue) =>
+					previousValue + currentValue.itemTotalQty,
+				0,
+			),
+			itemsTotalPrice: cartItems.reduce(
+				(previousValue, currentValue) =>
+					parseFloat((previousValue + currentValue.itemTotalPrice).toFixed(2)),
+				0,
+			),
 		}
 		setCart(newCart)
 	}
@@ -71,11 +80,12 @@ const CartProvider: React.FC = ({ children }) => {
 
 		const hasItem = cartItems.filter((item) => {
 			if (item._id === newItem._id) {
-				;(item.itemTotalQty = newItem.itemTotalQty),
-					(item.itemTotalPrice = newItem.itemTotalPrice),
-					(item.saleUnit = newItem.saleUnit)
+				item.itemTotalQty = newItem.itemTotalQty
+				item.itemTotalPrice = newItem.itemTotalPrice
+				item.saleUnit = newItem.saleUnit
 				return item
 			}
+			return false
 		})
 
 		if (!hasItem.length) {
@@ -93,20 +103,21 @@ const CartProvider: React.FC = ({ children }) => {
 		updateCart(newCartItems)
 	}
 
+	const cartContext = useMemo(
+		() => ({
+			cart,
+			setCart,
+			cartItem,
+			setCartItem,
+			handleAddItemToCart,
+			handleRemoveItemFromCart,
+			formatCurrency,
+		}),
+		[cart, cartItem],
+	)
+
 	return (
-		<CartContext.Provider
-			value={{
-				cart,
-				setCart,
-				cartItem,
-				setCartItem,
-				handleAddItemToCart,
-				handleRemoveItemFromCart,
-				formatCurrency,
-			}}
-		>
-			{children}
-		</CartContext.Provider>
+		<CartContext.Provider value={cartContext}>{children}</CartContext.Provider>
 	)
 }
 

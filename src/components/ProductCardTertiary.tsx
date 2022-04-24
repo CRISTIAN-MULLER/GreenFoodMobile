@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Text, StyleSheet, Image, View } from 'react-native'
-
-import { CartProductHandleProps } from '../types/Product'
 import { MaterialIcons } from '@expo/vector-icons'
 import NumericInput from 'react-native-numeric-input'
 
-import { CartContext } from '../contexts/CartContext'
+import { CartProductHandleProps } from '@typings/Product'
 
-export const ProductCardTertiary = ({ data }: CartProductHandleProps) => {
+import { CartContext } from '@contexts/CartContext'
+
+const ProductCardTertiary = ({ data }: CartProductHandleProps) => {
 	const { handleAddItemToCart, handleRemoveItemFromCart, formatCurrency } =
 		useContext(CartContext)
 
@@ -30,7 +30,7 @@ export const ProductCardTertiary = ({ data }: CartProductHandleProps) => {
 	return (
 		<View style={styles.container} key={data._id}>
 			<Image source={{ uri: data.image }} style={styles.image} />
-			<View style={styles.verticalBar}></View>
+			<View style={styles.verticalBar} />
 			<View
 				style={{
 					flex: 1,
@@ -124,7 +124,6 @@ export const ProductCardTertiary = ({ data }: CartProductHandleProps) => {
 					/>
 				</View>
 			</View>
-			{/* </RectButton> */}
 		</View>
 	)
 }
@@ -138,20 +137,13 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		marginHorizontal: 12,
 		margin: 5,
-		//paddingHorizontal: 5,
+		// paddingHorizontal: 5,
 		backgroundColor: 'rgba(98, 0, 238, 0.04)',
 		flexDirection: 'row',
-		//justifyContent: 'space-between',
+		// justifyContent: 'space-between',
 		alignItems: 'center',
 	},
 
-	wrapper: {
-		//flex: 1,
-		backgroundColor: 'rgba(98, 0, 238, 0.04)',
-		flexDirection: 'row',
-		//justifyContent: 'space-between',
-		alignItems: 'center',
-	},
 	verticalBar: {
 		height: 50,
 		width: 1,
@@ -159,26 +151,12 @@ const styles = StyleSheet.create({
 		//	position: 'absolute',
 		marginLeft: 10,
 	},
-	text: {
-		//alignContent: 'flex-start',
-		// color: colors.green_dark,
-		// fontFamily: fonts.heading,
-		//marginVertical: 16,
-	},
-	rect: {
-		//maxWidth: '45%',
-		//paddingVertical: 10,
-		//backgroundColor: 'red',
-		//justifyContent: 'flex-end',
-		//margin: 10,
-		//marginHorizontal: 5,
-	},
 
 	image: {
-		//flex: 1,
+		// flex: 1,
 		width: 75,
 		height: 75,
-		//resizeMode: 'contain',
+		// resizeMode: 'contain',
 	},
 })
 

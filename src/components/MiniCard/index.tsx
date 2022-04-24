@@ -14,21 +14,19 @@ const MiniCard: React.FC<propsCard> = ({
 	cardNumber,
 	cardName,
 	icon,
-}) => {
-	return (
-		<Container>
-			<Content>
-				<ViewInformation>
-					<View>
-						<Text fontSize='12px'>{cardName}</Text>
-						<Text fontSize='16px'>**** **** **** {cardNumber.slice(-4)}</Text>
-						<Text fontSize='16px'>{cardHolderName}</Text>
-					</View>
-					{icon && icon}
-				</ViewInformation>
-			</Content>
-		</Container>
-	)
-}
+}) => (
+	<Container>
+		<Content>
+			<ViewInformation>
+				<View>
+					<Text fontSize='12px'>{cardName}</Text>
+					<Text fontSize='16px'>**** **** **** {cardNumber.slice(-4)}</Text>
+					<Text fontSize='16px'>{cardHolderName}</Text>
+				</View>
+				{icon && icon}
+			</ViewInformation>
+		</Content>
+	</Container>
+)
 
 export default MiniCard

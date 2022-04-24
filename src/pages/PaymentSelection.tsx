@@ -5,34 +5,33 @@ import {
 	StyleSheet,
 	View,
 	StatusBar,
-	ScrollView,
 	Pressable,
 	FlatList,
 } from 'react-native'
 
-import TopBar from '../components/TopBar'
-import BottomBar from '../components/BottomBar'
-
 import { generateCardHash } from 'pagarme-card-hash'
 
-import { NavigationProps } from '../types/Navigation'
-import { OrderContext } from '../contexts/OrderContext'
-import { ProfileContext } from '../contexts/ProfileContext'
-import { UserPaymentMethodProps } from '../types/PaymentMethod'
-import { Button } from '../components/Button'
-import { CreditCardCard } from '../components/CreditCardCard'
+import TopBar from '@components/TopBar'
+import BottomBar from '@components/BottomBar'
 
-export function PaymentSelection({ navigation }: NavigationProps) {
+import { NavigationProps } from '@typings/Navigation'
+import { OrderContext } from '@contexts/OrderContext'
+import { ProfileContext } from '@contexts/ProfileContext'
+import { UserPaymentMethodProps } from '@typings/PaymentMethod'
+import Button from '@components/Button'
+import CreditCardCard from '@components/CreditCardCard'
+
+const PaymentSelection = ({ navigation }: NavigationProps) => {
 	const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('Card')
 	const [refresh, setRefresh] = useState(false)
 	const { userProfile } = useContext(ProfileContext)
 	const { paymentMethod, setPaymentMethod } = useContext(OrderContext)
 
 	const handleSelectedPaymentMethod = (
-		paymentMethod: UserPaymentMethodProps,
+		chosenPaymentMethod: UserPaymentMethodProps,
 	) => {
-		setSelectedPaymentMethod(paymentMethod.cardName)
-		setPaymentMethod(paymentMethod)
+		setSelectedPaymentMethod(chosenPaymentMethod.cardName)
+		setPaymentMethod(chosenPaymentMethod)
 	}
 
 	const hash = async () => {
@@ -53,6 +52,7 @@ export function PaymentSelection({ navigation }: NavigationProps) {
 				console.log(err)
 			}
 		}
+		return false
 	}
 
 	useEffect(() => {
@@ -60,9 +60,7 @@ export function PaymentSelection({ navigation }: NavigationProps) {
 		const unsubscribe = navigation.addListener('focus', () => {
 			setSelectedPaymentMethod('Card')
 		})
-		return () => {
-			unsubscribe
-		}
+		return unsubscribe
 	}, [navigation])
 	return (
 		<SafeAreaView style={styles.container}>
@@ -84,8 +82,8 @@ export function PaymentSelection({ navigation }: NavigationProps) {
 								cvv: '',
 							},
 							action: 'add',
-							refresh: refresh,
-							setRefresh: setRefresh,
+							refresh,
+							setRefresh,
 						})
 					}
 				>
@@ -95,7 +93,9 @@ export function PaymentSelection({ navigation }: NavigationProps) {
 				<FlatList
 					extraData={refresh}
 					data={userProfile.paymentMethods?.sort()}
-					keyExtractor={(paymentMethod) => String(paymentMethod.cardName)}
+					keyExtractor={(chosenPaymentMethod) =>
+						String(chosenPaymentMethod.cardName)
+					}
 					renderItem={({ item }) => (
 						<CreditCardCard
 							refresh={refresh}
@@ -110,12 +110,14 @@ export function PaymentSelection({ navigation }: NavigationProps) {
 					numColumns={1}
 				/>
 
-				<Button buttonText={'CONFIMAR PAGAMENTO'} onPress={() => hash()} />
+				<Button buttonText='CONFIMAR PAGAMENTO' onPress={hash} />
 				<BottomBar navigation={navigation} />
 			</View>
 		</SafeAreaView>
 	)
 }
+
+export default PaymentSelection
 
 const styles = StyleSheet.create({
 	container: {
@@ -149,25 +151,5 @@ const styles = StyleSheet.create({
 		fontFamily: 'Roboto',
 		marginTop: 15,
 		marginHorizontal: 10,
-	},
-	button: {
-		// position: 'absolute',
-		//width: '70%',
-		height: 50,
-		marginHorizontal: 12,
-		//   left: 64,
-		//   top: 450,
-		marginTop: 30,
-		marginBottom: 10,
-		backgroundColor: '#FF8108',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 8,
-	},
-	buttonText: {
-		//flex: 1,
-		color: '#FFFFFF',
-		fontSize: 20,
-		fontWeight: '600',
 	},
 })

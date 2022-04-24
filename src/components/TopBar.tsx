@@ -6,7 +6,7 @@ import TextLogoSVG from '../../assets/TextLogoSVG'
 
 import { ProfileContext } from '../contexts/ProfileContext'
 
-export default function TopBar() {
+const TopBar = () => {
 	const { userProfile } = useContext(ProfileContext)
 
 	return (
@@ -21,9 +21,9 @@ export default function TopBar() {
 				<Text style={styles.topBarText}>{userProfile.firstName}</Text>
 			</View>
 			<Image
-				source={{ uri: userProfile.profile_picture }}
+				source={{ uri: userProfile.profilePicture }}
 				style={{
-					//flex: 1,
+					// flex: 1,
 					width: 45,
 					height: 45,
 					borderRadius: 50,
@@ -35,6 +35,8 @@ export default function TopBar() {
 		</View>
 	)
 }
+
+export default TopBar
 
 const styles = StyleSheet.create({
 	topBar: {
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
 	topBarTextView: {
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		//marginHorizontal: 50,
+		// marginHorizontal: 50,
 	},
 
 	topBarText: {

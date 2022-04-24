@@ -22,30 +22,28 @@ const Input: React.FC<propsInput> = ({
 	type,
 	options,
 	onChangeText,
-}) => {
-	return (
-		<Container width={width}>
-			{icon && icon}
+}) => (
+	<Container width={width}>
+		{icon && icon}
 
-			{mask ? (
-				<MaskTextInput
-					keyboardType='number-pad'
-					value={value}
-					type={type}
-					options={options}
-					onChangeText={(text) => onChangeText(text)}
-					placeholder={placeholder}
-				/>
-			) : (
-				<TextInput
-					autoCapitalize='characters'
-					value={value}
-					onChangeText={(text) => onChangeText(text)}
-					placeholder={placeholder}
-				/>
-			)}
-		</Container>
-	)
-}
+		{mask ? (
+			<MaskTextInput
+				keyboardType='number-pad'
+				value={value}
+				type={type}
+				options={options}
+				onChangeText={(text) => onChangeText(text)}
+				placeholder={placeholder}
+			/>
+		) : (
+			<TextInput
+				autoCapitalize='characters'
+				value={value}
+				onChangeText={(text) => onChangeText(text)}
+				placeholder={placeholder}
+			/>
+		)}
+	</Container>
+)
 
 export default Input
