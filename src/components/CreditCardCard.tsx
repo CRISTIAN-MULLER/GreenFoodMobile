@@ -58,19 +58,15 @@ const CreditCardCard = ({
 			>
 				<RectButton onPress={onPress}>
 					<View style={{ flexDirection: 'row' }}>
-						{isSelected ? (
-							<Ionicons
-								name='radio-button-on-outline'
-								size={24}
-								color='#FF8108'
-							/>
-						) : (
-							<Ionicons
-								name='radio-button-off-outline'
-								size={24}
-								color='#FF8108'
-							/>
-						)}
+						<Ionicons
+							name={`${
+								isSelected
+									? 'radio-button-on-outline'
+									: 'radio-button-off-outline'
+							}`}
+							size={24}
+							color='#FF8108'
+						/>
 
 						<View style={{ marginLeft: 10, marginRight: -30 }}>
 							<MiniCard

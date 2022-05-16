@@ -1,8 +1,8 @@
-import React from 'react';
-import { SvgXml } from 'react-native-svg';
+import React from 'react'
+import { SvgXml } from 'react-native-svg'
 
 export default function LogoSVG({ width, height }) {
-  const logo = `<svg width="371" height="380" viewBox="0 0 371 333" fill="none" xmlns="http://www.w3.org/2000/svg">
+	const logo = `<svg width="371" height="380" viewBox="0 0 371 333" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_7_105)">
     <path d="M142.312 103.89C142.312 103.89 114.797 32.4084 88.2112 9.55603C61.6254 -13.2974 0 12.0172 0 12.0172C0 12.0172 6.01538 66.949 49.9224 106.404C93.8271 145.863 142.312 103.89 142.312 103.89Z" fill="#247D27"/>
     <path d="M235.769 121.059C235.769 177.424 193.735 223.116 141.884 223.116C90.0337 223.116 48 177.424 48 121.059C48 64.6927 90.0337 19 141.884 19C193.735 19 235.769 64.6927 235.769 121.059Z" fill="#FF7B06"/>
@@ -31,7 +31,7 @@ export default function LogoSVG({ width, height }) {
     </clipPath>
     </defs>
     </svg>
-    `;
-  const LogoSVG = () => <SvgXml xml={logo} width={width} height={height} />;
-  return <LogoSVG />;
+    `
+	const LogoSVG = () => <SvgXml xml={logo} width={width} height={height} />
+	return <LogoSVG />
 }

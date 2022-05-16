@@ -20,8 +20,8 @@ const MiniCard: React.FC<propsCard> = ({
 			<ViewInformation>
 				<View>
 					<Text fontSize='12px'>{cardName}</Text>
-					<Text fontSize='16px'>**** **** **** {cardNumber.slice(-4)}</Text>
-					<Text fontSize='16px'>{cardHolderName}</Text>
+					<Text fontSize='12px'>**** **** **** {cardNumber.slice(-4)}</Text>
+					<Text fontSize='14px'>{cardHolderName}</Text>
 				</View>
 				{icon && icon}
 			</ViewInformation>

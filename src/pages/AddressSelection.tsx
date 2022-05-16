@@ -20,7 +20,7 @@ import { OrderContext } from '@contexts/OrderContext'
 import { UserAddressProps } from '@typings/Address'
 
 const AddressSelection = ({ navigation }: NavigationProps) => {
-	const [selectedAddress, setSelectedAddress] = useState('Casa')
+	const [selectedAddress, setSelectedAddress] = useState('')
 	const [refresh, setRefresh] = useState(false)
 	const { userProfile } = useContext(ProfileContext)
 	const { setDeliveryAddress } = useContext(OrderContext)
@@ -32,11 +32,21 @@ const AddressSelection = ({ navigation }: NavigationProps) => {
 
 	useEffect(() => {
 		// Subscribe for the focus Listener
+
 		const unsubscribe = navigation.addListener('focus', () => {
-			setSelectedAddress('Casa')
+			const favoriteAddress = userProfile.addresses!.find(
+				(address) => address.isFavorite === true,
+			)
+			if (favoriteAddress) {
+				setSelectedAddress(favoriteAddress.name)
+				setDeliveryAddress(favoriteAddress)
+			} else if (userProfile.addresses!.length > 0) {
+				setSelectedAddress(userProfile.addresses![0].name)
+				setDeliveryAddress(userProfile.addresses![0])
+			}
 		})
 		return unsubscribe
-	}, [navigation])
+	}, [navigation, userProfile])
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -65,6 +75,7 @@ const AddressSelection = ({ navigation }: NavigationProps) => {
 									type: '',
 									coordinates: [0, 0],
 								},
+								isFavorite: false,
 							},
 							action: 'add',
 							refresh,
@@ -81,6 +92,7 @@ const AddressSelection = ({ navigation }: NavigationProps) => {
 					keyExtractor={(address) => String(address.name)}
 					renderItem={({ item }) => (
 						<AddressCard
+							handleSelectedAddress={handleSelectedAddress}
 							refresh={refresh}
 							setRefresh={setRefresh}
 							data={item}

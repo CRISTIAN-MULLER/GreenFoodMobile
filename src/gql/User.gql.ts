@@ -1,11 +1,5 @@
 import { gql } from '@apollo/client'
 
-const HELLO = gql`
-	query Query {
-		hello
-	}
-`
-
 const LOGIN = gql`
 	mutation Login($data: LoginInput!) {
 		login(data: $data) {
@@ -93,4 +87,4 @@ const FOREIGN_LOGIN = gql`
 	}
 `
 
-export { LOGIN, HELLO, REGISTER, FOREIGN_LOGIN }
+export { LOGIN, REGISTER, FOREIGN_LOGIN }

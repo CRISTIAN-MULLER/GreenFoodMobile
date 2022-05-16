@@ -1,8 +1,11 @@
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 
+const uri = 'http://192.168.100.3:4000/graphql'
+// const uri = 'https://green-foodie-api.herokuapp.com/graphql'
+
 const httpLink = new HttpLink({
-	uri: 'http://192.168.100.3:4000/graphql',
+	uri,
 })
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -18,8 +21,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 // Initialize Apollo Client
 const client = new ApolloClient({
-	uri: 'http://192.168.100.3:4000/graphql',
-	// uri: 'https://green-foodier-api.herokuapp.com/graphql',
+	uri,
 	link: from([errorLink, httpLink]),
 	cache: new InMemoryCache({
 		addTypename: false,

@@ -15,7 +15,7 @@ import BottomBar from '@components/BottomBar'
 
 import ProductCardPrimary from '@components/ProductCardPrimary'
 import { ProductContext } from '@contexts/ProductContext'
-import { GET_ALL_PRODUCTS } from '@gql/Product.gql'
+import GET_ALL_PRODUCTS from '@gql/Product.gql'
 import { NavigationProps } from '@typings/Navigation'
 import { ProductProps } from '@typings/Product'
 

@@ -9,8 +9,6 @@ import {
 	FlatList,
 } from 'react-native'
 
-import { generateCardHash } from 'pagarme-card-hash'
-
 import TopBar from '@components/TopBar'
 import BottomBar from '@components/BottomBar'
 
@@ -25,7 +23,7 @@ const PaymentSelection = ({ navigation }: NavigationProps) => {
 	const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('Card')
 	const [refresh, setRefresh] = useState(false)
 	const { userProfile } = useContext(ProfileContext)
-	const { paymentMethod, setPaymentMethod } = useContext(OrderContext)
+	const { setPaymentMethod } = useContext(OrderContext)
 
 	const handleSelectedPaymentMethod = (
 		chosenPaymentMethod: UserPaymentMethodProps,
@@ -34,31 +32,11 @@ const PaymentSelection = ({ navigation }: NavigationProps) => {
 		setPaymentMethod(chosenPaymentMethod)
 	}
 
-	const hash = async () => {
-		if (paymentMethod) {
-			try {
-				const hashedCard = await generateCardHash(
-					{
-						number: paymentMethod.cardNumber,
-						holderName: paymentMethod.cardHolderName,
-						expirationDate: paymentMethod.expirationDate,
-						cvv: paymentMethod.cvv,
-					},
-					'pk_test_dx1JqewJs4udQ8X3',
-				)
-
-				return hashedCard
-			} catch (err) {
-				console.log(err)
-			}
-		}
-		return false
-	}
-
 	useEffect(() => {
 		// Subscribe for the focus Listener
 		const unsubscribe = navigation.addListener('focus', () => {
-			setSelectedPaymentMethod('Card')
+			setSelectedPaymentMethod(userProfile.paymentMethods![0].cardName)
+			setPaymentMethod(userProfile.paymentMethods![0])
 		})
 		return unsubscribe
 	}, [navigation])
@@ -110,7 +88,10 @@ const PaymentSelection = ({ navigation }: NavigationProps) => {
 					numColumns={1}
 				/>
 
-				<Button buttonText='CONFIMAR PAGAMENTO' onPress={hash} />
+				<Button
+					buttonText='CONFIMAR FORMA DE PAGAMENTO'
+					onPress={() => navigation.navigate('Order')}
+				/>
 				<BottomBar navigation={navigation} />
 			</View>
 		</SafeAreaView>

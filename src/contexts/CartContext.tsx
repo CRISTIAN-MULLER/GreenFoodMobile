@@ -11,6 +11,7 @@ import { CartProductProps } from '@typings/Product'
 export interface CartContextProps {
 	cart: CartProps
 	setCart: Dispatch<SetStateAction<CartProps>>
+	cartInitialState: CartProps
 	cartItem: CartProductProps
 	setCartItem: Dispatch<SetStateAction<CartProductProps>>
 	handleAddItemToCart: (newItem: CartProductProps) => void
@@ -20,12 +21,14 @@ export interface CartContextProps {
 
 export const CartContext = createContext({} as CartContextProps)
 
+const cartInitialState = {
+	items: [],
+	itemsTotalQty: 0,
+	itemsTotalPrice: 0,
+}
+
 const CartProvider: React.FC = ({ children }) => {
-	const [cart, setCart] = useState<CartProps>({
-		items: [],
-		itemsTotalQty: 0,
-		itemsTotalPrice: 0,
-	})
+	const [cart, setCart] = useState<CartProps>(cartInitialState)
 
 	const [cartItem, setCartItem] = useState<CartProductProps>({
 		_id: '',
@@ -107,6 +110,7 @@ const CartProvider: React.FC = ({ children }) => {
 		() => ({
 			cart,
 			setCart,
+			cartInitialState,
 			cartItem,
 			setCartItem,
 			handleAddItemToCart,

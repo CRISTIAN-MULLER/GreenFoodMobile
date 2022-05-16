@@ -14,6 +14,7 @@ export type UserAddressProps = {
 		type: string
 		coordinates: [number, number]
 	}
+	isFavorite: boolean
 }
 
 export interface AddressHandleProps extends RectButtonProps {
@@ -21,4 +22,5 @@ export interface AddressHandleProps extends RectButtonProps {
 	isSelected: boolean
 	refresh: boolean
 	setRefresh: Dispatch<SetStateAction<boolean>>
+	handleSelectedAddress: (arg0: UserAddressProps) => void
 }

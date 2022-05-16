@@ -46,6 +46,7 @@ const ProfileProvider: React.FC = ({ children }) => {
 					type: 'string',
 					coordinates: [0, 0],
 				},
+				isFavorite: false,
 			},
 		],
 		paymentMethods: [

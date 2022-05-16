@@ -3,11 +3,6 @@ import { UserAddressProps } from './Address'
 import { UserPaymentMethodProps } from './PaymentMethod'
 
 type RootStackParamList = {
-	Welcome: undefined
-	Login: undefined
-	User: undefined
-	Menu: undefined
-	Cart: undefined
 	Address: {
 		address: UserAddressProps
 		action: string
@@ -15,13 +10,21 @@ type RootStackParamList = {
 		setRefresh?: Dispatch<SetStateAction<boolean>>
 	}
 	AddressSelection: undefined
-	PaymentSelection: undefined
+	Cart: undefined
 	CreditCard: {
 		paymentMethod: UserPaymentMethodProps
 		action: string
 		refresh?: boolean
 		setRefresh?: Dispatch<SetStateAction<boolean>>
 	}
+	Delivery: undefined
+	Login: undefined
+	Menu: undefined
+	Order: undefined
+	PaymentSelection: undefined
+	TrackOrder: undefined
+	User: undefined
+	Welcome: undefined
 }
 
 export default RootStackParamList

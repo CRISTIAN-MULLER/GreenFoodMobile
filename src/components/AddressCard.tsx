@@ -10,16 +10,25 @@ import { ProfileContext } from '@contexts/ProfileContext'
 
 export const AddressCard = ({
 	data,
+	handleSelectedAddress,
 	refresh,
 	setRefresh,
 	isSelected = false,
 	navigation,
 	onPress,
 }: AddressHandleProps & NavigationProps) => {
-	const { handleAddress } = useContext(ProfileContext)
+	const { userProfile, handleAddress } = useContext(ProfileContext)
 
-	function handleEditAddress(address: UserAddressProps, action: string) {
+	const handleEditAddress = (address: UserAddressProps, action: string) => {
 		navigation.navigate('Address', { address, action, refresh, setRefresh })
+	}
+
+	const handleFavoriteAddress = (address: UserAddressProps) => {
+		userProfile.addresses!.forEach((userAddress) => {
+			userAddress.isFavorite = false
+		})
+		address.isFavorite = true
+		handleSelectedAddress(address)
 	}
 
 	return (
@@ -37,19 +46,16 @@ export const AddressCard = ({
 			>
 				<RectButton onPress={onPress}>
 					<View style={{ flexDirection: 'row' }}>
-						{isSelected ? (
-							<Ionicons
-								name='radio-button-on-outline'
-								size={24}
-								color='#FF8108'
-							/>
-						) : (
-							<Ionicons
-								name='radio-button-off-outline'
-								size={24}
-								color='#FF8108'
-							/>
-						)}
+						<Ionicons
+							name={`${
+								isSelected
+									? 'radio-button-on-outline'
+									: 'radio-button-off-outline'
+							}`}
+							size={24}
+							color='#FF8108'
+						/>
+
 						<View style={{ marginLeft: 10 }}>
 							<Text
 								style={{
@@ -138,11 +144,11 @@ export const AddressCard = ({
 						style={{ height: 24, borderRadius: 4 }}
 						onPress={() => {
 							setRefresh(!refresh)
-							handleAddress(data, 'delete')
+							handleFavoriteAddress(data)
 						}}
 					>
 						<MaterialIcons
-							name='favorite'
+							name={`${data.isFavorite ? 'favorite' : 'favorite-border'}`}
 							size={24}
 							color='rgba(0, 0, 0, 0.60)'
 						/>
