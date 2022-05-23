@@ -38,6 +38,9 @@ const Menu = ({ navigation }: NavigationProps) => {
 				sortAscending: true,
 				sortField: 'name',
 			},
+			filter: {
+				status: 'ativo',
+			},
 		},
 	})
 
@@ -56,6 +59,9 @@ const Menu = ({ navigation }: NavigationProps) => {
 						sortAscending: true,
 						sortField: 'name',
 						nextPage,
+					},
+					filter: {
+						status: 'ativo',
 					},
 				},
 			})

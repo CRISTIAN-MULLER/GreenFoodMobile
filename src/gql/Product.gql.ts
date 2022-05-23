@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 const GET_ALL_PRODUCTS = gql`
-	query GetAllProducts($data: PaginationInput!) {
-		getAllProducts(data: $data) {
+	query GetAllProducts($data: PaginationInput!, $filter: ProductFilter) {
+		getAllProducts(data: $data, filter: $filter) {
 			products {
 				_id
 				name
@@ -16,8 +16,8 @@ const GET_ALL_PRODUCTS = gql`
 					active
 					isDefault
 				}
-				category
-				active
+				categories
+				status
 			}
 			next
 		}

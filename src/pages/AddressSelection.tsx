@@ -72,8 +72,13 @@ const AddressSelection = ({ navigation }: NavigationProps) => {
 								state: '',
 								reference: '',
 								location: {
-									type: '',
-									coordinates: [0, 0],
+									type: 'LatLng',
+									coordinates: {
+										latitude: 0,
+										longitude: 0,
+										latitudeDelta: 0,
+										longitudeDelta: 0,
+									},
 								},
 								isFavorite: false,
 							},

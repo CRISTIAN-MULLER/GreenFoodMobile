@@ -15,6 +15,7 @@ const LOGIN = gql`
 			phone
 			profilePicture
 			role
+			favoriteProducts
 			addresses {
 				name
 				zipcode
@@ -26,7 +27,12 @@ const LOGIN = gql`
 				reference
 				location {
 					type
-					coordinates
+					coordinates {
+						latitude
+						longitude
+						latitudeDelta
+						longitudeDelta
+					}
 				}
 			}
 			paymentMethods {
@@ -56,6 +62,7 @@ const REGISTER = gql`
 			phone
 			profilePicture
 			role
+			favoriteProducts
 			addresses {
 				name
 				zipcode
@@ -67,8 +74,115 @@ const REGISTER = gql`
 				reference
 				location {
 					type
-					coordinates
+					coordinates {
+						latitude
+						longitude
+						latitudeDelta
+						longitudeDelta
+					}
 				}
+			}
+			paymentMethods {
+				cardName
+				cardHolderName
+				cardNumber
+				expirationDate
+				cardBrand
+				cvv
+			}
+		}
+	}
+`
+
+const UPDATE = gql`
+	mutation updateUser($data: UserUpdateInput!) {
+		updateUser(data: $data) {
+			_id
+			foreignIds {
+				userId
+				provider
+			}
+			firstName
+			lastName
+			fullName
+			email
+			phone
+			profilePicture
+			role
+			favoriteProducts
+			addresses {
+				name
+				zipcode
+				street
+				houseNumber
+				district
+				city
+				state
+				reference
+				location {
+					type
+					coordinates {
+						latitude
+						longitude
+						latitudeDelta
+						longitudeDelta
+					}
+				}
+			}
+			paymentMethods {
+				cardName
+				cardHolderName
+				cardNumber
+				expirationDate
+				cardBrand
+				cvv
+			}
+		}
+	}
+`
+
+const DELETE_ADDRESS = gql`
+	mutation deleteAddress($data: UserUpdateInput!) {
+		deleteAddress(data: $data) {
+			_id
+			foreignIds {
+				userId
+				provider
+			}
+			firstName
+			lastName
+			fullName
+			email
+			phone
+			profilePicture
+			role
+			favoriteProducts
+			addresses {
+				name
+				zipcode
+				street
+				houseNumber
+				district
+				city
+				state
+				reference
+				location {
+					type
+					coordinates {
+						latitude
+						longitude
+						latitudeDelta
+						longitudeDelta
+					}
+				}
+			}
+			paymentMethods {
+				cardName
+				cardHolderName
+				cardNumber
+				expirationDate
+				cardBrand
+				cvv
 			}
 		}
 	}
@@ -87,4 +201,4 @@ const FOREIGN_LOGIN = gql`
 	}
 `
 
-export { LOGIN, REGISTER, FOREIGN_LOGIN }
+export { LOGIN, REGISTER, FOREIGN_LOGIN, UPDATE, DELETE_ADDRESS }

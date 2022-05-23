@@ -33,7 +33,12 @@ const GET_ALL_ORDERS = gql`
 					reference
 					location {
 						type
-						coordinates
+						coordinates {
+							latitude
+							longitude
+							latitudeDelta
+							longitudeDelta
+						}
 					}
 					isFavorite
 				}
@@ -84,7 +89,12 @@ const CREATE_ORDER = gql`
 				reference
 				location {
 					type
-					coordinates
+					coordinates {
+						latitude
+						longitude
+						latitudeDelta
+						longitudeDelta
+					}
 				}
 				isFavorite
 			}

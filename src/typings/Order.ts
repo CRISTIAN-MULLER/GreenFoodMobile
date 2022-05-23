@@ -13,7 +13,12 @@ export type OrderProps = {
 		reference: string
 		location: {
 			type: string
-			coordinates: [number, number]
+			coordinates: {
+				latitude: number
+				longitude: number
+				latitudeDelta: number
+				longitudeDelta: number
+			}
 		}
 	}
 	items: [

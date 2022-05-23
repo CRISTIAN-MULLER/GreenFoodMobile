@@ -8,8 +8,12 @@ import React, {
 import { UserAddressProps } from '@typings/Address'
 import { UserPaymentMethodProps } from '@typings/PaymentMethod'
 import { UserProfileProps } from '@typings/Profile'
+import { useMutation } from '@apollo/client'
+import { UPDATE, DELETE_ADDRESS } from '@gql/User.gql'
 
 export interface ProfileContextProps {
+	newAddress: UserAddressProps
+	setNewAddress: (address: UserAddressProps) => void
 	userProfile: UserProfileProps
 	setUserProfile: Dispatch<SetStateAction<UserProfileProps>>
 	handleAddress: (address: UserAddressProps, action: string) => void
@@ -22,6 +26,30 @@ export interface ProfileContextProps {
 export const ProfileContext = createContext({} as ProfileContextProps)
 
 const ProfileProvider: React.FC = ({ children }) => {
+	const [UpdateUser] = useMutation(UPDATE)
+	const [DeleteAddress] = useMutation(DELETE_ADDRESS)
+
+	const [newAddress, setNewAddress] = useState<UserAddressProps>({
+		name: 'string',
+		zipcode: 'string',
+		street: 'string',
+		houseNumber: 'string',
+		district: 'string',
+		city: 'string',
+		state: 'string',
+		reference: 'string',
+		location: {
+			type: 'string',
+			coordinates: {
+				latitude: 0,
+				longitude: 0,
+				latitudeDelta: 0,
+				longitudeDelta: 0,
+			},
+		},
+		isFavorite: false,
+	})
+
 	const [userProfile, setUserProfile] = useState<UserProfileProps>({
 		_id: '',
 		firstName: 'string',
@@ -32,23 +60,7 @@ const ProfileProvider: React.FC = ({ children }) => {
 		phone: 'string',
 		profilePicture: 'string',
 		role: 'string',
-		addresses: [
-			{
-				name: 'string',
-				zipcode: 'string',
-				street: 'string',
-				houseNumber: 'string',
-				district: 'string',
-				city: 'string',
-				state: 'string',
-				reference: 'string',
-				location: {
-					type: 'string',
-					coordinates: [0, 0],
-				},
-				isFavorite: false,
-			},
-		],
+		addresses: [newAddress],
 		paymentMethods: [
 			{
 				cardNumber: 'string',
@@ -61,35 +73,40 @@ const ProfileProvider: React.FC = ({ children }) => {
 		],
 	})
 
-	function handleAddress(updateAddress: UserAddressProps, action: string) {
+	const handleAddress = async (
+		updateAddress: UserAddressProps,
+		action: string,
+	) => {
 		const profile = userProfile
-
 		if (action === 'delete') {
-			const profileAddresses = userProfile.addresses!.filter(
-				(address) => address.name !== updateAddress.name,
-			)
-			profile.addresses = [...profileAddresses]
-			setUserProfile(profile)
+			const {
+				data: { deleteAddress: user },
+			} = await DeleteAddress({
+				variables: {
+					data: {
+						UserId: userProfile._id,
+						address: {
+							name: updateAddress.name,
+						},
+					},
+				},
+			})
+			setUserProfile(user)
 			return
 		}
-		if (action === 'update') {
-			const profileAddresses = userProfile.addresses!.map((address) => {
-				if (address.name === updateAddress.name) {
-					address.name = updateAddress.name
-					address.zipcode = updateAddress.zipcode
-					address.street = updateAddress.street
-					address.houseNumber = updateAddress.houseNumber
-					address.district = updateAddress.district
-					address.city = updateAddress.city
-					address.state = updateAddress.state
-					address.reference = updateAddress.reference
-					address.location = updateAddress.location
-				}
-				return address
-			})
 
-			profile.addresses = [...profileAddresses]
-			setUserProfile(profile)
+		if (action === 'update') {
+			const {
+				data: { updateUser: user },
+			} = await UpdateUser({
+				variables: {
+					data: {
+						UserId: userProfile._id,
+						address: updateAddress,
+					},
+				},
+			})
+			setUserProfile(user)
 			return
 		}
 
@@ -150,6 +167,8 @@ const ProfileProvider: React.FC = ({ children }) => {
 
 	const profileContext = useMemo(
 		() => ({
+			newAddress,
+			setNewAddress,
 			userProfile,
 			setUserProfile,
 			handleAddress,

@@ -97,7 +97,7 @@ const Order = ({ navigation }: NavigationProps) => {
 			const newOrder: OrderProps = {
 				customerId: userProfile._id!,
 				deliveryAddress: deliveryAddress!,
-				items: cartItems,
+				items: cartItems!,
 				phone: userProfile.phone!,
 				payment: {
 					paymentMethod: 'DEBIT_CARD',

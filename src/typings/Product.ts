@@ -32,7 +32,7 @@ export type ProductProps = {
 			isDefault: boolean
 		},
 	]
-	category: string
+	categories: [string]
 	active: boolean
 }
 

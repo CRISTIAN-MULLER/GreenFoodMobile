@@ -9,6 +9,7 @@ type RootStackParamList = {
 		refresh?: boolean
 		setRefresh?: Dispatch<SetStateAction<boolean>>
 	}
+	Maps: undefined
 	AddressSelection: undefined
 	Cart: undefined
 	CreditCard: {

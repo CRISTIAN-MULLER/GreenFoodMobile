@@ -1,16 +1,22 @@
 import React, { useContext, useState, Dispatch, SetStateAction } from 'react'
+import { useRoute } from '@react-navigation/native'
 import {
 	Text,
 	SafeAreaView,
 	StyleSheet,
 	View,
+	Modal,
+	Image,
+	Dimensions,
 	StatusBar,
 	TouchableOpacity,
 	ScrollView,
 	LogBox,
 } from 'react-native'
+import MapView, { Region } from 'react-native-maps'
+import * as Location from 'expo-location'
 
-import { useRoute } from '@react-navigation/native'
+import marker from '@assets/icon-marker.png'
 
 import { Fontisto } from '@expo/vector-icons'
 
@@ -20,7 +26,7 @@ import BottomBar from '@components/BottomBar'
 
 import { NavigationProps } from '@typings/Navigation'
 import { ProfileContext } from '@contexts/ProfileContext'
-import { UserAddressProps } from '@typings/Address'
+import { UserAddressProps, brazilianStates } from '@typings/Address'
 import Button from '@components/Button'
 
 LogBox.ignoreLogs([
@@ -40,6 +46,7 @@ const Address = ({ navigation }: NavigationProps) => {
 
 	const { userProfile, handleAddress } = useContext(ProfileContext)
 
+	const [showMapModal, setShowMapModal] = useState(false)
 	const [name, setName] = useState(address.name)
 	const [zipcode, setZipcode] = useState(address.zipcode)
 	const [state, setState] = useState(address.state)
@@ -49,8 +56,37 @@ const Address = ({ navigation }: NavigationProps) => {
 	const [houseNumber, setHouseNumber] = useState(address.houseNumber)
 	const [reference, setReference] = useState(address.reference)
 
+	const [location, setLocation] = useState<Region>({
+		latitude: -20.12013,
+		longitude: -40.179103,
+		latitudeDelta: 0.000922,
+		longitudeDelta: 0.000421,
+	})
+
+	const onRegionChange = async (region: Region) => {
+		const mapAddress = await Location.reverseGeocodeAsync(region)
+		const getUf = () => {
+			try {
+				const { uF } = brazilianStates[mapAddress[0].region!]
+				return uF
+			} catch {
+				;() => {
+					throw new Error()
+				}
+			}
+			return 'ES'
+		}
+
+		setZipcode(mapAddress[0].postalCode!)
+		setStreet(mapAddress[0].street ? mapAddress[0].street : mapAddress[0].name!)
+		setDistrict(mapAddress[0].district!)
+		setCity(mapAddress[0].subregion!)
+		setState(getUf)
+		setLocation(region)
+	}
+
 	function setAddressData() {
-		const newDeliveryAddress: any = {
+		const newDeliveryAddress: UserAddressProps = {
 			name,
 			zipcode,
 			street,
@@ -60,9 +96,15 @@ const Address = ({ navigation }: NavigationProps) => {
 			state,
 			reference,
 			location: {
-				type: 'Point',
-				coordinates: [0, 0],
+				type: 'LatLng',
+				coordinates: {
+					latitude: location.latitude,
+					longitude: location.longitude,
+					latitudeDelta: location.latitudeDelta,
+					longitudeDelta: location.longitudeDelta,
+				},
 			},
+			isFavorite: false,
 		}
 
 		const hasAddres = userProfile.addresses!.filter(
@@ -77,6 +119,23 @@ const Address = ({ navigation }: NavigationProps) => {
 		handleAddress(newDeliveryAddress, action)
 		setRefresh(!refresh)
 		navigation.navigate('AddressSelection')
+	}
+
+	const handleMapNavigation = async () => {
+		const { status } = await Location.requestForegroundPermissionsAsync()
+		if (status !== 'granted') {
+			alert('É necessaria a permissão de localização para utilizar o mapa.')
+			return
+		}
+		const currentLocation = await Location.getCurrentPositionAsync({
+			accuracy: 4,
+		})
+		setLocation({
+			latitude: currentLocation.coords.latitude,
+			longitude: currentLocation.coords.longitude,
+			latitudeDelta: 0.000922,
+			longitudeDelta: 0.000421,
+		})
 	}
 
 	return (
@@ -105,7 +164,13 @@ const Address = ({ navigation }: NavigationProps) => {
 							label=''
 						/>
 					</View>
-					<TouchableOpacity style={styles.naviButton} activeOpacity={0.7}>
+					<TouchableOpacity
+						style={styles.naviButton}
+						activeOpacity={0.7}
+						onPress={() => {
+							setShowMapModal(!showMapModal)
+						}}
+					>
 						<Fontisto name='map-marker-alt' size={24} color='#FF8108' />
 						<Text style={styles.naviButtonText}>ESCOLHER NO MAPA</Text>
 					</TouchableOpacity>
@@ -187,6 +252,37 @@ const Address = ({ navigation }: NavigationProps) => {
 
 					<Button buttonText='SALVAR' onPress={() => setAddressData()} />
 				</ScrollView>
+				<Modal
+					animationType='slide'
+					transparent
+					visible={showMapModal}
+					onShow={() => handleMapNavigation()}
+					onRequestClose={() => {
+						setShowMapModal(!showMapModal)
+					}}
+				>
+					<MapView
+						style={styles.map}
+						initialRegion={location}
+						loadingEnabled
+						loadingIndicatorColor='#FF8108'
+						onRegionChangeComplete={onRegionChange}
+					/>
+
+					<View style={styles.markerFixed}>
+						<Image style={styles.marker} source={marker} />
+					</View>
+
+					<SafeAreaView style={styles.footer}>
+						<Text style={styles.region}>
+							{street}, {district}, {city}
+						</Text>
+
+						<Text style={styles.region}>
+							Dica: Para melhorar a precisão aumente o zoom do mapa e aguarde.
+						</Text>
+					</SafeAreaView>
+				</Modal>
 
 				<BottomBar navigation={navigation} />
 			</View>
@@ -264,5 +360,31 @@ const styles = StyleSheet.create({
 		width: 80,
 		textAlign: 'left',
 		borderRadius: 4,
+	},
+	map: {
+		flex: 1,
+		width: Dimensions.get('window').width,
+		height: Dimensions.get('window').height,
+	},
+	markerFixed: {
+		left: '50%',
+
+		position: 'absolute',
+		top: '50%',
+	},
+	marker: {
+		height: 30,
+		width: 30,
+	},
+	footer: {
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+		bottom: 0,
+		position: 'absolute',
+		width: '100%',
+	},
+	region: {
+		color: '#fff',
+		lineHeight: 15,
+		margin: 10,
 	},
 })
