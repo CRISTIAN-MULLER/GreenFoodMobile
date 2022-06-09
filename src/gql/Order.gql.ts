@@ -1,10 +1,13 @@
 import { gql } from '@apollo/client'
 
 const GET_ALL_ORDERS = gql`
-	query GetAllOrders($data: PaginationInput!) {
-		getAllOrders(data: $data) {
+	query GetAllOrders($data: PaginationInput!, $filter: OrderFilter) {
+		getAllOrders(data: $data, filter: $filter) {
 			orders {
 				_id
+				createdAt
+				updatedAt
+				orderNumber
 				customerId
 				items {
 					productId
@@ -43,13 +46,31 @@ const GET_ALL_ORDERS = gql`
 					isFavorite
 				}
 				payment {
-					paymentMethod
+					paymentMethod {
+						app {
+							cardNumber
+							cardName
+							cardHolderName
+							expirationDate
+							cardBrand
+							cvv
+							isFavorite
+						}
+						delivery {
+							card {
+								cardBrand
+								type
+							}
+							cash {
+								change
+							}
+						}
+					}
 					paymentStatus
-					cardBrand
-					change
 				}
 				origin
 				status
+				step
 				observation
 			}
 			next
@@ -60,6 +81,8 @@ const CREATE_ORDER = gql`
 	mutation CreateOrder($data: OrderInput!) {
 		createOrder(data: $data) {
 			_id
+			createdAt
+			updatedAt
 			orderNumber
 			customerId
 			items {
@@ -99,10 +122,27 @@ const CREATE_ORDER = gql`
 				isFavorite
 			}
 			payment {
-				paymentMethod
+				paymentMethod {
+					app {
+						cardNumber
+						cardName
+						cardHolderName
+						expirationDate
+						cardBrand
+						cvv
+						isFavorite
+					}
+					delivery {
+						card {
+							cardBrand
+							type
+						}
+						cash {
+							change
+						}
+					}
+				}
 				paymentStatus
-				cardBrand
-				change
 			}
 			origin
 			status

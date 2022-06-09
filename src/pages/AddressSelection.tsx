@@ -34,15 +34,17 @@ const AddressSelection = ({ navigation }: NavigationProps) => {
 		// Subscribe for the focus Listener
 
 		const unsubscribe = navigation.addListener('focus', () => {
-			const favoriteAddress = userProfile.addresses!.find(
-				(address) => address.isFavorite === true,
-			)
-			if (favoriteAddress) {
-				setSelectedAddress(favoriteAddress.name)
-				setDeliveryAddress(favoriteAddress)
-			} else if (userProfile.addresses!.length > 0) {
-				setSelectedAddress(userProfile.addresses![0].name)
-				setDeliveryAddress(userProfile.addresses![0])
+			if (userProfile.addresses) {
+				const favoriteAddress = userProfile.addresses.find(
+					(address) => address.isFavorite === true,
+				)
+				if (favoriteAddress) {
+					setSelectedAddress(favoriteAddress.name)
+					setDeliveryAddress(favoriteAddress)
+				} else if (userProfile.addresses.length > 0) {
+					setSelectedAddress(userProfile.addresses[0].name)
+					setDeliveryAddress(userProfile.addresses[0])
+				}
 			}
 		})
 		return unsubscribe
@@ -51,7 +53,7 @@ const AddressSelection = ({ navigation }: NavigationProps) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.wrapper}>
-				<TopBar />
+				<TopBar navigation={navigation} />
 
 				<Text style={styles.textDelivery}>Endereço de Entrega</Text>
 				<Text style={styles.text}>

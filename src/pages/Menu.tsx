@@ -7,7 +7,6 @@ import {
 	FlatList,
 	ActivityIndicator,
 } from 'react-native'
-import { useQuery } from '@apollo/client'
 
 import MenuLoad from '@components/MenuLoad'
 import TopBar from '@components/TopBar'
@@ -15,23 +14,16 @@ import BottomBar from '@components/BottomBar'
 
 import ProductCardPrimary from '@components/ProductCardPrimary'
 import { ProductContext } from '@contexts/ProductContext'
-import GET_ALL_PRODUCTS from '@gql/Product.gql'
 import { NavigationProps } from '@typings/Navigation'
-import { ProductProps } from '@typings/Product'
-
-interface queryData {
-	data: {
-		getAllProducts: { products: ProductProps[]; previous: string; next: string }
-	}
-}
+import { useQuery } from '@apollo/client'
+import GET_ALL_PRODUCTS from '@gql/Product.gql'
 
 const Menu = ({ navigation }: NavigationProps) => {
-	const { products, setProducts, loadingMore, setLoadingMore } =
+	const { handleFetchMore, products, setProducts, loadingMore, setNextPage } =
 		useContext(ProductContext)
 	const [showModalAddToCart, setShowModalAddToCart] = useState(false)
-	const [nextPage, setNextPage] = useState('')
 
-	const { loading, data, fetchMore } = useQuery(GET_ALL_PRODUCTS, {
+	const { loading, data } = useQuery(GET_ALL_PRODUCTS, {
 		variables: {
 			data: {
 				limit: 6,
@@ -43,35 +35,6 @@ const Menu = ({ navigation }: NavigationProps) => {
 			},
 		},
 	})
-
-	async function handleFetchMore(distance: number) {
-		if (distance < 1) return
-		if (nextPage) {
-			setLoadingMore(true)
-			const {
-				data: {
-					getAllProducts: { products: refetchedProducts, next },
-				},
-			}: queryData = await fetchMore({
-				variables: {
-					data: {
-						limit: 6,
-						sortAscending: true,
-						sortField: 'name',
-						nextPage,
-					},
-					filter: {
-						status: 'ativo',
-					},
-				},
-			})
-			setNextPage(next)
-			const newProducts = [...products!, ...refetchedProducts]
-
-			setProducts(newProducts)
-			setLoadingMore(false)
-		}
-	}
 
 	useEffect(() => {
 		if (data) {
@@ -87,7 +50,7 @@ const Menu = ({ navigation }: NavigationProps) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.wrapper}>
-				<TopBar />
+				<TopBar navigation={navigation} />
 				<View style={styles.productsCard}>
 					<FlatList
 						data={products}

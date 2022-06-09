@@ -1,5 +1,10 @@
+import { RectButtonProps } from 'react-native-gesture-handler'
+import { UserPaymentMethodProps } from './PaymentMethod'
+
 export type OrderProps = {
 	_id?: string
+	createdAt?: Date
+	updatedAt?: Date
 	orderNumber?: number
 	customerId: string
 	deliveryAddress: {
@@ -38,13 +43,15 @@ export type OrderProps = {
 	]
 	phone: string
 	payment: {
-		paymentMethod: string
+		paymentMethod: UserPaymentMethodProps
 		paymentStatus: string
-		cardBrand: string
-		change: number
 	}
 	origin: string
 	status: string
 	step: number
 	observation: string
+}
+
+export interface OrderHandleProps extends RectButtonProps {
+	data: OrderProps
 }

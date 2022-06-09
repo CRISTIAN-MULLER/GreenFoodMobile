@@ -5,12 +5,15 @@ import NumericInput from 'react-native-numeric-input'
 
 import { CartContext } from '@contexts/CartContext'
 import { ProductHandleProps, SaleUnitProps } from '@typings/Product'
+import { MaterialIcons } from '@expo/vector-icons'
+import { ProfileContext } from '@contexts/ProfileContext'
 
 const ProductCardSecondary = ({
 	data,
 	showModalAddToCart,
 	setShowModalAddToCart,
 }: ProductHandleProps) => {
+	const { userProfile } = useContext(ProfileContext)
 	const { cart, handleAddItemToCart, formatCurrency } = useContext(CartContext)
 	const [saleUnit, setSaleUnit] = useState<SaleUnitProps>({
 		_id: '',
@@ -46,6 +49,16 @@ const ProductCardSecondary = ({
 		handleAddItemToCart(newItem)
 	}
 
+	const checkIsFavorite = (itemId: string) => {
+		const isFavorite = userProfile.favoriteProducts?.find(
+			(item) => item.toString() === itemId,
+		)
+		if (isFavorite) {
+			return 'favorite'
+		}
+		return 'favorite-outline'
+	}
+
 	useEffect(() => {
 		const hasItem = cart.items.find((item) => item._id === data._id)
 
@@ -66,6 +79,18 @@ const ProductCardSecondary = ({
 	return (
 		<View style={styles.container}>
 			<View style={styles.wrapper}>
+				<View
+					style={{
+						marginTop: 10,
+						alignSelf: 'flex-end',
+					}}
+				>
+					<MaterialIcons
+						name={checkIsFavorite(data._id)}
+						size={40}
+						color='#FF8108'
+					/>
+				</View>
 				<Image source={{ uri: data.image }} style={styles.image} />
 				<View style={styles.card}>
 					<Text
@@ -189,10 +214,10 @@ const styles = StyleSheet.create({
 		paddingBottom: 12,
 	},
 	image: {
-		flex: 1,
-		width: '100%',
-		height: 100,
+		width: '60%',
+		height: '40%',
 		resizeMode: 'contain',
+		marginTop: -35,
 	},
 	text: {
 		color: 'rgba(0, 0, 0, 0.6)',

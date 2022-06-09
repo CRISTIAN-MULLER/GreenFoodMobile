@@ -8,20 +8,34 @@ export interface CardProps {
 	expirationDate: string
 	cardBrand: string
 	cvv: string
+	isFavorite: boolean
 }
 
 export type UserPaymentMethodProps = {
-	cardNumber: string
-	cardName: string
-	cardHolderName: string
-	expirationDate: string
-	cardBrand: string
-	cvv: string
+	app?: {
+		cardNumber: string
+		cardName: string
+		cardHolderName: string
+		expirationDate: string
+		cardBrand: string
+		cvv: string
+		isFavorite: boolean
+	}
+	delivery?: {
+		card?: {
+			cardBrand: string
+			type: string
+		}
+		cash?: {
+			change: string
+		}
+	}
 }
 
 export interface PaymentMethodHandleProps extends RectButtonProps {
-	data: UserPaymentMethodProps
+	data: CardProps
 	isSelected: boolean
 	refresh: boolean
+	handleSelectedPaymentMethod: (arg0: CardProps) => void
 	setRefresh: Dispatch<SetStateAction<boolean>>
 }

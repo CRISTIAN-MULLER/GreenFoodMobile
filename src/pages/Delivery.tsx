@@ -32,7 +32,7 @@ const Delivery = ({ navigation }: NavigationProps) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.wrapper}>
-				<TopBar />
+				<TopBar navigation={navigation} />
 				<View style={styles.svg}>
 					<DeliveryBoySVG width='100%' height='100%' />
 				</View>

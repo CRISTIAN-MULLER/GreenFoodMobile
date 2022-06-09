@@ -1,13 +1,6 @@
 import React, { useContext, useState } from 'react'
 
-import {
-	SafeAreaView,
-	StyleSheet,
-	View,
-	Text,
-	TouchableOpacity,
-	StatusBar,
-} from 'react-native'
+import { SafeAreaView, StyleSheet, View, Text, StatusBar } from 'react-native'
 
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { FloatingLabelInput } from 'react-native-floating-label-input'
@@ -19,6 +12,7 @@ import { NavigationProps } from '@typings/Navigation'
 
 import { REGISTER } from '@gql/User.gql'
 import { ProfileContext } from '@contexts/ProfileContext'
+import Button from '@components/Button'
 
 const User = ({ navigation }: NavigationProps) => {
 	const { setUserProfile } = useContext(ProfileContext)
@@ -31,7 +25,11 @@ const User = ({ navigation }: NavigationProps) => {
 	const [lastName, setLastName] = useState<string>('')
 	const [show] = useState(false)
 
-	const [registerNewUser] = useMutation(REGISTER)
+	const [registerNewUser] = useMutation(REGISTER, {
+		onError(err) {
+			console.log('erro', err)
+		},
+	})
 
 	async function handleRegisterNewUser() {
 		const {
@@ -44,9 +42,11 @@ const User = ({ navigation }: NavigationProps) => {
 					email,
 					firstName,
 					lastName,
+					role: 'customer',
 				},
 			},
 		})
+
 		setUserProfile!(registerUser)
 		navigation.navigate('Menu')
 	}
@@ -66,10 +66,10 @@ const User = ({ navigation }: NavigationProps) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<Gradient />
 			<View style={styles.wrapper}>
-				<Gradient />
 				<View style={{ marginTop: StatusBar.currentHeight }}>
-					<LogoSVG width='170' height='150' />
+					<LogoSVG width='120' height='100' />
 				</View>
 				<View style={styles.userInputs}>
 					<Text style={styles.text}>Nome</Text>
@@ -232,15 +232,13 @@ const User = ({ navigation }: NavigationProps) => {
 						}}
 					/>
 				</View>
-
-				<TouchableOpacity
-					style={styles.button}
-					activeOpacity={0.7}
-					onPress={() => handleRegisterNewUser()}
-				>
-					<Text style={styles.text}>CADASTRAR</Text>
-				</TouchableOpacity>
 			</View>
+			<Button
+				buttonText='CADASTRAR'
+				onPress={() => {
+					handleRegisterNewUser()
+				}}
+			/>
 		</SafeAreaView>
 	)
 }
@@ -272,22 +270,22 @@ const styles = StyleSheet.create({
 	textInput: {
 		backgroundColor: '#FFFFFF',
 		width: '100%',
-		height: 44,
+		height: 40,
 		borderRadius: 4,
 		// padding: 5,
 		// textAlign: 'center',
 	},
-	button: {
-		// position: 'absolute',
-		width: '100%',
-		height: '7%',
-		//   left: 64,
-		//   top: 450,
-		backgroundColor: '#FF8108',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 8,
-		marginTop: 20,
-		marginBottom: 20,
-	},
+	// button: {
+	// 	// position: 'absolute',
+	// 	width: '100%',
+	// 	height: '7%',
+	// 	//   left: 64,
+	// 	//   top: 450,
+	// 	backgroundColor: '#FF8108',
+	// 	alignItems: 'center',
+	// 	justifyContent: 'center',
+	// 	borderRadius: 8,
+	// 	marginTop: 20,
+	// 	marginBottom: 20,
+	// },
 })

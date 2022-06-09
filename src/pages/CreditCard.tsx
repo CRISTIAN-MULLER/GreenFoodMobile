@@ -33,13 +33,13 @@ import TopBar from '@components/TopBar'
 import { NavigationProps } from '@typings/Navigation'
 import { FloatingLabelInput } from 'react-native-floating-label-input'
 import Button from '@components/Button'
-import { UserPaymentMethodProps } from '@typings/PaymentMethod'
+import { CardProps } from '@typings/PaymentMethod'
 import { ProfileContext } from '@contexts/ProfileContext'
 
 const windowWidth = Dimensions.get('window').width
 
 interface Params {
-	paymentMethod: UserPaymentMethodProps
+	paymentMethod: CardProps
 	action: string
 	refresh: boolean
 	setRefresh: Dispatch<SetStateAction<boolean>>
@@ -69,7 +69,7 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 	})
 
 	const lazyCardFlip = () => {
-		if (cvv.length >= 2) {
+		if (cvv!.length >= 2) {
 			setTimeout(() => {
 				animatedCard(false)
 			}, 1000)
@@ -87,8 +87,7 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 		}
 
 		const hasCards = userProfile.paymentMethods!.filter(
-			(userPaymentMethod: { cardName: string }) =>
-				userPaymentMethod.cardName === cardName,
+			(userPaymentMethod) => userPaymentMethod.cardName === cardName,
 		)
 
 		if (hasCards.length && action === 'add') {
@@ -102,7 +101,7 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 	}
 
 	useEffect(() => {
-		setIcon(getBrandIcon(cardNumber))
+		setIcon(getBrandIcon(cardNumber!))
 	})
 
 	const animatedCard = (back: boolean) => {
@@ -148,7 +147,7 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			>
 				<View style={styles.wrapper}>
-					<TopBar />
+					<TopBar navigation={navigation} />
 					<ScrollView style={{ flex: 1, marginHorizontal: 10 }}>
 						<View
 							style={{
@@ -174,10 +173,10 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 						</View>
 						<Animated.View style={{ width: widthAnimated }}>
 							<Card
-								cardHolderName={cardHolderName}
-								cardNumber={cardNumber}
-								expirationDate={expirationDate}
-								cvv={cvv}
+								cardHolderName={cardHolderName!}
+								cardNumber={cardNumber!}
+								expirationDate={expirationDate!}
+								cvv={cvv!}
 								icon={icon?.icon}
 								back={backView}
 							/>
@@ -185,7 +184,7 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 
 						<Input
 							placeholder='Nome do titular'
-							value={cardHolderName}
+							value={cardHolderName!}
 							onChangeText={(text) => {
 								setcardHolderName(text)
 								animatedCard(false)
@@ -195,7 +194,7 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 
 						<Input
 							placeholder='Número do cartão'
-							value={cardNumber}
+							value={cardNumber!}
 							type='credit-card'
 							mask
 							onChangeText={(text) => {
@@ -216,7 +215,7 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 						>
 							<Input
 								placeholder='Validade'
-								value={expirationDate}
+								value={expirationDate!}
 								type='custom'
 								options={{
 									mask: '99/99',
@@ -231,7 +230,7 @@ const CreditCard = ({ navigation }: NavigationProps) => {
 							/>
 							<Input
 								placeholder='CVV'
-								value={cvv}
+								value={cvv!}
 								type='custom'
 								options={{
 									mask: '9999',

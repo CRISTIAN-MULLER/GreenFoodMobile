@@ -1,17 +1,24 @@
 import React, { useContext } from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
+import { RectButton } from 'react-native-gesture-handler'
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import TextLogoSVG from '../../assets/TextLogoSVG'
 
 import { ProfileContext } from '../contexts/ProfileContext'
 
-const TopBar = () => {
+const TopBar = ({ navigation }: any) => {
 	const { userProfile } = useContext(ProfileContext)
+
+	const handleOpenSideMenu = () => {
+		navigation.openDrawer()
+	}
 
 	return (
 		<View style={styles.topBar}>
-			<Ionicons name='menu' size={36} color='#FFFFFF' />
+			<RectButton onPress={() => handleOpenSideMenu()}>
+				<Ionicons name='menu' size={36} color='#FFFFFF' />
+			</RectButton>
 			<View style={styles.topBarTextView}>
 				<TextLogoSVG height='120' width='140' />
 			</View>

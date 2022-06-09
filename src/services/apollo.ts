@@ -1,8 +1,8 @@
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 
-const uri = 'http://192.168.100.3:4000/graphql'
-// const uri = 'https://green-foodie-api.herokuapp.com/graphql'
+// const uri = 'http://192.168.100.3:4000/graphql'
+const uri = 'https://green-foodie-api.herokuapp.com/graphql'
 
 const httpLink = new HttpLink({
 	uri,

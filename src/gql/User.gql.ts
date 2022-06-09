@@ -42,13 +42,14 @@ const LOGIN = gql`
 				expirationDate
 				cardBrand
 				cvv
+				isFavorite
 			}
 		}
 	}
 `
 
 const REGISTER = gql`
-	mutation RegisterUser($data: RegisterInput!) {
+	mutation RegisterUser($data: UserRegisterInput!) {
 		registerUser(data: $data) {
 			_id
 			foreignIds {
@@ -63,33 +64,6 @@ const REGISTER = gql`
 			profilePicture
 			role
 			favoriteProducts
-			addresses {
-				name
-				zipcode
-				street
-				houseNumber
-				district
-				city
-				state
-				reference
-				location {
-					type
-					coordinates {
-						latitude
-						longitude
-						latitudeDelta
-						longitudeDelta
-					}
-				}
-			}
-			paymentMethods {
-				cardName
-				cardHolderName
-				cardNumber
-				expirationDate
-				cardBrand
-				cvv
-			}
 		}
 	}
 `
@@ -136,6 +110,7 @@ const UPDATE = gql`
 				expirationDate
 				cardBrand
 				cvv
+				isFavorite
 			}
 		}
 	}
@@ -183,6 +158,7 @@ const DELETE_ADDRESS = gql`
 				expirationDate
 				cardBrand
 				cvv
+				isFavorite
 			}
 		}
 	}

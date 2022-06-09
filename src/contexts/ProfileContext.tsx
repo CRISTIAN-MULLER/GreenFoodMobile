@@ -6,10 +6,11 @@ import React, {
 	useState,
 } from 'react'
 import { UserAddressProps } from '@typings/Address'
-import { UserPaymentMethodProps } from '@typings/PaymentMethod'
+import { CardProps } from '@typings/PaymentMethod'
 import { UserProfileProps } from '@typings/Profile'
 import { useMutation } from '@apollo/client'
 import { UPDATE, DELETE_ADDRESS } from '@gql/User.gql'
+// import { ProductProps } from '@typings/Product'
 
 export interface ProfileContextProps {
 	newAddress: UserAddressProps
@@ -17,10 +18,7 @@ export interface ProfileContextProps {
 	userProfile: UserProfileProps
 	setUserProfile: Dispatch<SetStateAction<UserProfileProps>>
 	handleAddress: (address: UserAddressProps, action: string) => void
-	handlePaymentMethod: (
-		paymentMethod: UserPaymentMethodProps,
-		action: string,
-	) => void
+	handlePaymentMethod: (paymentMethod: CardProps, action: string) => void
 }
 
 export const ProfileContext = createContext({} as ProfileContextProps)
@@ -61,6 +59,7 @@ const ProfileProvider: React.FC = ({ children }) => {
 		profilePicture: 'string',
 		role: 'string',
 		addresses: [newAddress],
+		favoriteProducts: [],
 		paymentMethods: [
 			{
 				cardNumber: 'string',
@@ -69,6 +68,7 @@ const ProfileProvider: React.FC = ({ children }) => {
 				expirationDate: 'string',
 				cardBrand: 'string',
 				cvv: 'string',
+				isFavorite: false,
 			},
 		],
 	})
@@ -120,10 +120,7 @@ const ProfileProvider: React.FC = ({ children }) => {
 		}
 	}
 
-	function handlePaymentMethod(
-		updatePaymentMethod: UserPaymentMethodProps,
-		action: string,
-	) {
+	function handlePaymentMethod(updatePaymentMethod: CardProps, action: string) {
 		const profile = userProfile
 
 		if (action === 'delete') {
@@ -145,6 +142,7 @@ const ProfileProvider: React.FC = ({ children }) => {
 						paymentMethod.expirationDate = updatePaymentMethod.expirationDate
 						paymentMethod.cardBrand = updatePaymentMethod.cardBrand
 						paymentMethod.cvv = updatePaymentMethod.cvv
+						paymentMethod.isFavorite = updatePaymentMethod.isFavorite
 					}
 					return paymentMethod
 				},

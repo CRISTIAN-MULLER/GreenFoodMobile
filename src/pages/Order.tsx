@@ -60,8 +60,6 @@ const Order = ({ navigation }: NavigationProps) => {
 					payment: {
 						paymentMethod: order!.payment.paymentMethod,
 						paymentStatus: order!.payment.paymentStatus,
-						cardBrand: order!.payment.cardBrand,
-						change: order!.payment.change,
 					},
 					origin: order!.origin,
 					status: order!.status,
@@ -79,45 +77,43 @@ const Order = ({ navigation }: NavigationProps) => {
 	}
 
 	useEffect(() => {
-		if (!order) {
-			const cartItems = cart.items.map((item) => ({
-				productId: item._id,
-				name: item.name,
-				image: item.image,
-				saleUnit: {
-					saleUnit: item.saleUnit.saleUnit,
-					description: item.saleUnit.description,
-					price: item.saleUnit.price,
-					active: item.saleUnit.active,
-				},
-				itemTotalQty: item.itemTotalQty,
-				itemTotalPrice: item.itemTotalPrice,
-			}))
+		const cartItems = cart.items.map((item) => ({
+			productId: item._id,
+			name: item.name,
+			image: item.image,
+			saleUnit: {
+				saleUnit: item.saleUnit.saleUnit,
+				description: item.saleUnit.description,
+				price: item.saleUnit.price,
+				active: item.saleUnit.active,
+			},
+			itemTotalQty: item.itemTotalQty,
+			itemTotalPrice: item.itemTotalPrice,
+		}))
 
-			const newOrder: OrderProps = {
-				customerId: userProfile._id!,
-				deliveryAddress: deliveryAddress!,
-				items: cartItems!,
-				phone: userProfile.phone!,
-				payment: {
-					paymentMethod: 'DEBIT_CARD',
-					paymentStatus: 'TO_PAY',
-					cardBrand: paymentMethod!.cardBrand,
-					change: 0,
-				},
-				origin: 'APP',
-				status: 'ORDER_PLACED',
-				step: 1,
-				observation: 'Nenhuma',
-			}
-			setOrder(newOrder)
+		const newOrder: OrderProps = {
+			customerId: userProfile._id!,
+			deliveryAddress: deliveryAddress!,
+			items: cartItems,
+			phone: userProfile.phone!,
+			payment: {
+				paymentMethod,
+				paymentStatus: 'TO_PAY',
+			},
+			origin: 'APP',
+			status: 'ORDER_PLACED',
+			step: 1,
+			observation: 'Nenhuma',
 		}
+		setOrder(newOrder)
+
+		console.log(order)
 	}, [])
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.wrapper}>
-				<TopBar />
+				<TopBar navigation={navigation} />
 
 				<Text style={styles.textDelivery}>Resumo do Pedido</Text>
 				<Text style={styles.text}>Confira os dados e depois CONFIRME.</Text>
@@ -362,7 +358,10 @@ const Order = ({ navigation }: NavigationProps) => {
 				</View>
 				<Button
 					buttonText='CONFIMAR PEDIDO'
-					onPress={() => handleCreateOrder()}
+					onPress={() => {
+						console.log(order)
+						handleCreateOrder()
+					}}
 				/>
 				<BottomBar navigation={navigation} />
 			</View>

@@ -141,7 +141,7 @@ const Address = ({ navigation }: NavigationProps) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.wrapper}>
-				<TopBar />
+				<TopBar navigation={navigation} />
 				<ScrollView style={{ flex: 1, marginHorizontal: 10 }}>
 					<View
 						style={{

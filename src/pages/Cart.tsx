@@ -24,7 +24,7 @@ const Cart = ({ navigation }: NavigationProps) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.wrapper}>
-				<TopBar />
+				<TopBar navigation={navigation} />
 				{cart.items.length === 0 ? (
 					<View style={styles.svg}>
 						<EmptyCartSVG width='80%' height='80%' />

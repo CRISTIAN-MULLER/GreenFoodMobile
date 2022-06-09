@@ -1,5 +1,13 @@
-import React, { useContext } from 'react'
-import { SafeAreaView, StyleSheet, View, StatusBar, Text } from 'react-native'
+import React, { useContext, useState } from 'react'
+import {
+	SafeAreaView,
+	StyleSheet,
+	ScrollView,
+	View,
+	StatusBar,
+	Text,
+	RefreshControl,
+} from 'react-native'
 
 import TopBar from '@components/TopBar'
 import BottomBar from '@components/BottomBar'
@@ -15,14 +23,54 @@ import {
 	MaterialCommunityIcons,
 } from '@expo/vector-icons'
 import { OrderContext } from '@contexts/OrderContext'
+import { GET_ALL_ORDERS } from '@gql/Order.gql'
+import { useQuery } from '@apollo/client'
 
 const Order = ({ navigation }: NavigationProps) => {
-	const { order } = useContext(OrderContext)
+	const { order, setOrder } = useContext(OrderContext)
+	const { fetchMore } = useQuery(GET_ALL_ORDERS, {
+		variables: {
+			data: {
+				limit: 1,
+			},
+		},
+	})
+
+	const [refreshing] = useState(false)
+
+	const onRefresh = async () => {
+		const {
+			data: { getAllOrders: createdOrder },
+		} = await fetchMore({
+			variables: {
+				data: {
+					limit: 1,
+				},
+				filter: {
+					orderId: order?._id,
+				},
+			},
+		})
+
+		const [fetchedOrder] = createdOrder.orders
+		setOrder(fetchedOrder)
+	}
+
+	const setColor = (step: number) => {
+		if (order!.step < step) return 'rgba(33, 33, 33, 0.38)'
+		if (order!.step === step) return '#FF8108'
+		return '#005723'
+	}
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.wrapper}>
-				<TopBar />
+			<ScrollView
+				contentContainerStyle={styles.wrapper}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
+			>
+				<TopBar navigation={navigation} />
 				<View
 					style={{
 						justifyContent: 'space-between',
@@ -62,7 +110,7 @@ const Order = ({ navigation }: NavigationProps) => {
 						<Foundation name='clipboard-notes' size={30} color='#005723' />
 						<Text
 							style={{
-								color: '#005723',
+								color: setColor(1),
 								fontSize: 16,
 								fontWeight: '700',
 								fontFamily: 'Roboto',
@@ -78,8 +126,15 @@ const Order = ({ navigation }: NavigationProps) => {
 							alignItems: 'center',
 						}}
 					>
-						<Entypo name='flow-line' size={30} color='#005723' />
-						<Text style={styles.text}>
+						<Entypo name='flow-line' size={30} color={setColor(1)} />
+						<Text
+							style={[
+								styles.text,
+								{
+									color: setColor(1),
+								},
+							]}
+						>
 							Aguarde a confirmação do estabelecimento.
 						</Text>
 					</View>
@@ -89,17 +144,11 @@ const Order = ({ navigation }: NavigationProps) => {
 							alignItems: 'center',
 						}}
 					>
-						<Ionicons
-							name='checkmark-done'
-							size={30}
-							color={order!.step < 2 ? 'rgba(33, 33, 33, 0.38)' : '#005723'}
-						/>
+						<Ionicons name='checkmark-done' size={30} color={setColor(2)} />
 
 						<Text
 							style={{
-								color: `${
-									order!.step < 2 ? 'rgba(33, 33, 33, 0.38)' : '#005723'
-								}`,
+								color: setColor(2),
 								fontSize: 16,
 								fontWeight: '700',
 								fontFamily: 'Roboto',
@@ -115,18 +164,12 @@ const Order = ({ navigation }: NavigationProps) => {
 							alignItems: 'center',
 						}}
 					>
-						<Entypo
-							name='flow-line'
-							size={30}
-							color={order!.step < 2 ? 'rgba(33, 33, 33, 0.38)' : '#005723'}
-						/>
+						<Entypo name='flow-line' size={30} color={setColor(2)} />
 						<Text
 							style={[
 								styles.text,
 								{
-									color: `${
-										order!.step < 2 ? 'rgba(33, 33, 33, 0.38)' : '#005723'
-									}`,
+									color: setColor(2),
 								},
 							]}
 						>
@@ -140,16 +183,10 @@ const Order = ({ navigation }: NavigationProps) => {
 							alignItems: 'center',
 						}}
 					>
-						<FontAwesome5
-							name='people-carry'
-							size={24}
-							color={order!.step < 3 ? 'rgba(33, 33, 33, 0.38)' : '#005723'}
-						/>
+						<FontAwesome5 name='people-carry' size={24} color={setColor(3)} />
 						<Text
 							style={{
-								color: `${
-									order!.step < 3 ? 'rgba(33, 33, 33, 0.38)' : '#005723'
-								}`,
+								color: setColor(3),
 								fontSize: 16,
 								fontWeight: '700',
 								fontFamily: 'Roboto',
@@ -165,18 +202,12 @@ const Order = ({ navigation }: NavigationProps) => {
 							alignItems: 'center',
 						}}
 					>
-						<Entypo
-							name='flow-line'
-							size={30}
-							color={order!.step < 3 ? 'rgba(33, 33, 33, 0.38)' : '#005723'}
-						/>
+						<Entypo name='flow-line' size={30} color={setColor(3)} />
 						<Text
 							style={[
 								styles.text,
 								{
-									color: `${
-										order!.step < 3 ? 'rgba(33, 33, 33, 0.38)' : '#005723'
-									}`,
+									color: setColor(3),
 								},
 							]}
 						>
@@ -193,13 +224,11 @@ const Order = ({ navigation }: NavigationProps) => {
 						<MaterialCommunityIcons
 							name='truck-delivery-outline'
 							size={30}
-							color={order!.step < 3 ? 'rgba(33, 33, 33, 0.38)' : '#005723'}
+							color={setColor(4)}
 						/>
 						<Text
 							style={{
-								color: `${
-									order!.step < 4 ? 'rgba(33, 33, 33, 0.38)' : '#005723'
-								}`,
+								color: setColor(4),
 								fontSize: 16,
 								fontWeight: '700',
 								fontFamily: 'Roboto',
@@ -215,18 +244,12 @@ const Order = ({ navigation }: NavigationProps) => {
 							alignItems: 'center',
 						}}
 					>
-						<Entypo
-							name='flow-line'
-							size={30}
-							color={order!.step < 4 ? 'rgba(33, 33, 33, 0.38)' : '#005723'}
-						/>
+						<Entypo name='flow-line' size={30} color={setColor(4)} />
 						<Text
 							style={[
 								styles.text,
 								{
-									color: `${
-										order!.step < 4 ? 'rgba(33, 33, 33, 0.38)' : '#005723'
-									}`,
+									color: setColor(4),
 								},
 							]}
 						>
@@ -240,16 +263,10 @@ const Order = ({ navigation }: NavigationProps) => {
 							alignItems: 'center',
 						}}
 					>
-						<FontAwesome5
-							name='smile-beam'
-							size={30}
-							color={order!.step < 5 ? 'rgba(33, 33, 33, 0.38)' : '#005723'}
-						/>
+						<FontAwesome5 name='smile-beam' size={30} color={setColor(5)} />
 						<Text
 							style={{
-								color: `${
-									order!.step < 5 ? 'rgba(33, 33, 33, 0.38)' : '#005723'
-								}`,
+								color: setColor(5),
 								fontSize: 16,
 								fontWeight: '700',
 								fontFamily: 'Roboto',
@@ -265,18 +282,12 @@ const Order = ({ navigation }: NavigationProps) => {
 							alignItems: 'center',
 						}}
 					>
-						<Entypo
-							name='flow-line'
-							size={30}
-							color={order!.step < 5 ? 'rgba(33, 33, 33, 0.38)' : '#005723'}
-						/>
+						<Entypo name='flow-line' size={30} color={setColor(5)} />
 						<Text
 							style={[
 								styles.text,
 								{
-									color: `${
-										order!.step < 5 ? 'rgba(33, 33, 33, 0.38)' : '#005723'
-									}`,
+									color: setColor(5),
 								},
 							]}
 						>
@@ -289,7 +300,7 @@ const Order = ({ navigation }: NavigationProps) => {
 					onPress={() => navigation.navigate('Menu')}
 				/>
 				<BottomBar navigation={navigation} />
-			</View>
+			</ScrollView>
 		</SafeAreaView>
 	)
 }

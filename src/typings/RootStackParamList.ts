@@ -1,6 +1,6 @@
+import { CardProps } from '@typings/PaymentMethod'
 import { Dispatch, SetStateAction } from 'react'
 import { UserAddressProps } from './Address'
-import { UserPaymentMethodProps } from './PaymentMethod'
 
 type RootStackParamList = {
 	Address: {
@@ -13,7 +13,7 @@ type RootStackParamList = {
 	AddressSelection: undefined
 	Cart: undefined
 	CreditCard: {
-		paymentMethod: UserPaymentMethodProps
+		paymentMethod: CardProps
 		action: string
 		refresh?: boolean
 		setRefresh?: Dispatch<SetStateAction<boolean>>
@@ -21,6 +21,7 @@ type RootStackParamList = {
 	Delivery: undefined
 	Login: undefined
 	Menu: undefined
+	SideMenu: undefined
 	Order: undefined
 	PaymentSelection: undefined
 	TrackOrder: undefined
