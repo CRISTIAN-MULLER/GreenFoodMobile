@@ -13,7 +13,6 @@ import TopBar from '@components/TopBar'
 import BottomBar from '@components/BottomBar'
 
 import ProductCardPrimary from '@components/ProductCardPrimary'
-
 import { ProductContext } from '@contexts/ProductContext'
 import { NavigationProps } from '@typings/Navigation'
 import { useQuery } from '@apollo/client'
