@@ -1,20 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler'
+import React from 'react'
+import { UIManager, Platform } from 'react-native'
+import { LogBox } from 'react-native'
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import { ApolloProvider } from '@apollo/client'
+import AppContextProvider from '@contexts/AppContextProvider'
+import Routes from './src/routes'
+
+import apolloClient from './src/services/apollo'
+
+require('intl') // import intl object
+require('intl/locale-data/jsonp/pt-BR') // load the required locale details
+
+LogBox.ignoreLogs(['ViewPropTypes will be removed'])
+
+if (Platform.OS === 'android') {
+	// only Android needs polyfill
+	UIManager.setLayoutAnimationEnabledExperimental(true)
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const App = () => (
+	<ApolloProvider client={apolloClient}>
+		<AppContextProvider>
+			<Routes />
+		</AppContextProvider>
+	</ApolloProvider>
+)
+
+export default App
