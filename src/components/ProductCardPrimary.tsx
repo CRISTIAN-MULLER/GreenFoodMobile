@@ -2,21 +2,46 @@ import React, { useContext, useState } from 'react'
 
 import { Text, StyleSheet, Image, View, Modal } from 'react-native'
 import { RectButton } from 'react-native-gesture-handler'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 
 import { CartContext } from '@contexts/CartContext'
+import { ProfileContext } from '@contexts/ProfileContext'
 import { PrimaryProductHandleProps } from '@typings/Product'
 import ProductCardSecondary from './ProductCardSecondary'
 
 const ProductCardPrimary = ({ data }: PrimaryProductHandleProps) => {
+	const { userProfile } = useContext(ProfileContext)
 	const { cart, formatCurrency } = useContext(CartContext)
 	const [showModalAddToCart, setShowModalAddToCart] = useState(false)
+
+	const checkIsFavorite = (itemId: string) => {
+		const isFavorite = userProfile.favoriteProducts?.find(
+			(item) => item.toString() === itemId,
+		)
+		if (isFavorite) {
+			return 'favorite'
+		}
+		return 'favorite-outline'
+	}
 	return (
 		<View style={styles.container}>
 			<RectButton
 				style={styles.rect}
 				onPress={() => setShowModalAddToCart(!showModalAddToCart)}
 			>
+				<View
+					style={{
+						marginTop: 10,
+						alignSelf: 'flex-start',
+						position: 'absolute',
+					}}
+				>
+					<MaterialIcons
+						name={checkIsFavorite(data._id)}
+						size={20}
+						color='#FF8108'
+					/>
+				</View>
 				<Image source={{ uri: data.image }} style={styles.image} />
 
 				<Text>{data.name}</Text>

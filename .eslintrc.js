@@ -1,7 +1,6 @@
 module.exports = {
 	env: {
-		es2021: true,
-		'react-native/react-native': true,
+		es2022: true,
 	},
 	extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
 	parser: '@typescript-eslint/parser',

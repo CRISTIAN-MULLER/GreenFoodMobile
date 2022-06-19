@@ -40,7 +40,7 @@ const ProductSearchModal = ({
 		>
 			<View style={styles.modalContainer}>
 				<View style={styles.wrapper}>
-					<Text style={styles.text}>Digite o nome do produto.</Text>
+					<Text style={styles.text}>O que você procura?</Text>
 					<FloatingLabelInput
 						containerStyles={styles.textInput}
 						value={searchText}
@@ -74,30 +74,25 @@ const ProductSearchModal = ({
 export default ProductSearchModal
 
 const styles = StyleSheet.create({
-	container: {
-		borderStyle: 'solid',
-		borderWidth: 1,
-		borderColor: 'rgba(33, 33, 33, 0.08)',
-		borderRadius: 5,
-		margin: 5,
-		justifyContent: 'space-between',
-		alignItems: 'stretch',
-	},
 	modalContainer: {
 		flex: 1,
+
 		alignItems: 'center',
 		justifyContent: 'center',
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	wrapper: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: '80%',
 		backgroundColor: '#FFFFFF',
-		borderRadius: 4,
+		borderRadius: 8,
 		padding: 10,
 	},
 	text: {
 		marginHorizontal: 10,
 		marginVertical: 10,
-		color: 'rgba(33, 33, 33, 0.38)',
+		color: '#005723',
 		alignItems: 'flex-start',
 		fontSize: 18,
 		fontWeight: '600',
@@ -115,6 +110,7 @@ const styles = StyleSheet.create({
 		textAlign: 'left',
 	},
 	button: {
+		width: '100%',
 		height: 50,
 		backgroundColor: '#FF8108',
 		borderRadius: 8,

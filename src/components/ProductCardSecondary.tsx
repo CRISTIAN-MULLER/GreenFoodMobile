@@ -13,7 +13,7 @@ const ProductCardSecondary = ({
 	showModalAddToCart,
 	setShowModalAddToCart,
 }: ProductHandleProps) => {
-	const { userProfile } = useContext(ProfileContext)
+	const { userProfile, handleFavorite } = useContext(ProfileContext)
 	const { cart, handleAddItemToCart, formatCurrency } = useContext(CartContext)
 	const [saleUnit, setSaleUnit] = useState<SaleUnitProps>({
 		_id: '',
@@ -23,11 +23,8 @@ const ProductCardSecondary = ({
 		active: false,
 		isDefault: false,
 	})
-
 	const [itemTotalQty, setItemTotalQty] = useState(1)
-
 	const [itemTotalPrice, setItemTotalPrice, ,] = useState(0)
-
 	const saleUnitSelection = (id: any) => {
 		const selectedSaleUnit = data.saleUnits.find(
 			(userSaleUnit) => userSaleUnit._id === id,
@@ -82,14 +79,21 @@ const ProductCardSecondary = ({
 				<View
 					style={{
 						marginTop: 10,
-						alignSelf: 'flex-end',
+						alignSelf: 'flex-start',
 					}}
 				>
-					<MaterialIcons
-						name={checkIsFavorite(data._id)}
-						size={40}
-						color='#FF8108'
-					/>
+					<TouchableOpacity
+						activeOpacity={0.7}
+						onPress={() => {
+							handleFavorite(data._id)
+						}}
+					>
+						<MaterialIcons
+							name={checkIsFavorite(data._id)}
+							size={40}
+							color='#FF8108'
+						/>
+					</TouchableOpacity>
 				</View>
 				<Image source={{ uri: data.image }} style={styles.image} />
 				<View style={styles.card}>

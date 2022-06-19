@@ -6,6 +6,7 @@ import {
 	StatusBar,
 	Text,
 	FlatList,
+	ActivityIndicator,
 } from 'react-native'
 
 import TopBar from '@components/TopBar'
@@ -28,11 +29,12 @@ const Orderslist = ({ navigation }: NavigationProps) => {
 
 	const { order, userOrders, setUserOrders } = useContext(OrderContext)
 	const [nextPage, setNextPage] = useState('')
+	const [loadingMore, setLoadingMore] = useState(false)
 
 	const { loading, data, fetchMore } = useQuery(GET_ALL_ORDERS, {
 		variables: {
 			data: {
-				limit: 6,
+				limit: 3,
 				sortField: 'createdAt',
 				sortAscending: false,
 			},
@@ -45,6 +47,7 @@ const Orderslist = ({ navigation }: NavigationProps) => {
 	async function handleFetchMore(distance: number) {
 		if (distance < 1) return
 		if (nextPage) {
+			setLoadingMore(true)
 			const {
 				data: {
 					getAllOrders: { orders: refetchedOrders, next },
@@ -52,7 +55,7 @@ const Orderslist = ({ navigation }: NavigationProps) => {
 			} = await fetchMore({
 				variables: {
 					data: {
-						limit: 6,
+						limit: 3,
 						sortField: 'createdAt',
 						sortAscending: false,
 						nextPage,
@@ -65,7 +68,30 @@ const Orderslist = ({ navigation }: NavigationProps) => {
 			setNextPage(next)
 			const newOrders = [...userOrders!, ...refetchedOrders]
 			setUserOrders(newOrders)
+			setLoadingMore(false)
+			return
 		}
+
+		const {
+			data: {
+				getAllOrders: { orders: refetchedOrders, next },
+			},
+		} = await fetchMore({
+			variables: {
+				data: {
+					limit: 3,
+					sortField: 'createdAt',
+					sortAscending: false,
+					nextPage,
+				},
+				filter: {
+					customerId: userProfile._id,
+				},
+			},
+		})
+		setNextPage(next)
+		const newOrders = [...refetchedOrders]
+		setUserOrders(newOrders)
 	}
 
 	useEffect(() => {
@@ -76,7 +102,17 @@ const Orderslist = ({ navigation }: NavigationProps) => {
 			setNextPage(next)
 			setUserOrders(refetchedOrders)
 		}
-	}, [data, order])
+	}, [data])
+
+	useEffect(() => {
+		if (data) {
+			const {
+				getAllOrders: { orders: refetchedOrders, next },
+			} = data
+			setNextPage(next)
+			setUserOrders(refetchedOrders)
+		}
+	}, [order])
 	if (loading) return <OrderLoad />
 
 	return (
@@ -98,6 +134,13 @@ const Orderslist = ({ navigation }: NavigationProps) => {
 					onEndReachedThreshold={0.2}
 					onEndReached={({ distanceFromEnd }) =>
 						handleFetchMore(distanceFromEnd)
+					}
+					ListFooterComponent={
+						loadingMore ? (
+							<ActivityIndicator size='large' color='#005723' />
+						) : (
+							<View />
+						)
 					}
 				/>
 

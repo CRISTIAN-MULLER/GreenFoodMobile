@@ -71,6 +71,7 @@ const Order = ({ navigation }: NavigationProps) => {
 		})
 
 		if (createdOrder) {
+			console.log('createdOrder', createdOrder)
 			setOrder(createdOrder)
 			setCart(cartInitialState)
 			navigation.navigate('Delivery')
@@ -359,7 +360,6 @@ const Order = ({ navigation }: NavigationProps) => {
 				<Button
 					buttonText='CONFIMAR PEDIDO'
 					onPress={() => {
-						console.log(order)
 						handleCreateOrder()
 					}}
 				/>

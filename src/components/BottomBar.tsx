@@ -11,6 +11,7 @@ import { ProfileContext } from '@contexts/ProfileContext'
 import { ProductContext } from '@contexts/ProductContext'
 import { useQuery } from '@apollo/client'
 import GET_ALL_PRODUCTS from '@gql/Product.gql'
+import AwesomeAlert from 'react-native-awesome-alerts'
 import ProductSearchModal from './ProductSearchModal'
 
 // import { useQuery } from '@apollo/client'
@@ -28,6 +29,7 @@ export const BottomBar = ({ navigation }: NavigationProps) => {
 	const [filtered, setFiltered] = useState<boolean>()
 	const [searched, setSearched] = useState<boolean>()
 	const [searchText, setSearchText] = useState('')
+	const [showAlert, setShowAlert] = useState(false)
 	const { cart } = useContext(CartContext)
 	const { userProfile } = useContext(ProfileContext)
 	const route = useRoute()
@@ -52,32 +54,37 @@ export const BottomBar = ({ navigation }: NavigationProps) => {
 	function handleMenu() {
 		navigation.navigate('Menu')
 	}
-	function handleOpenSearchModal() {
-		setShowModalSearchProduct(!showModalSearchProduct)
-		console.log(showModalSearchProduct)
-		//	navigation.navigate('Cart')
-	}
 
-	const handleSearchProduct = async () => {
-		console.log(searchText)
+	function handleOpenSearchModal() {
 		if (searched) {
+			setFiltered(false)
 			setSearched(false)
 			setProducts([])
 			fetchProducts()
+			return
 		}
-		if (!searched) {
-			setSearched(true)
-			setProducts([])
-		}
+		setShowModalSearchProduct(!showModalSearchProduct)
+	}
+
+	const handleSearchProduct = async () => {
+		setFiltered(false)
+		setSearched(true)
+		setProducts([])
 	}
 
 	const handleFavorite = async () => {
 		if (filtered) {
+			setSearched(false)
 			setFiltered(false)
 			setProducts([])
 			fetchProducts()
 		}
 		if (!filtered) {
+			if (!userProfile.favoriteProducts?.length) {
+				setShowAlert(!showAlert)
+				return
+			}
+			setSearched(false)
 			setFiltered(true)
 			setProducts([])
 		}
@@ -119,7 +126,7 @@ export const BottomBar = ({ navigation }: NavigationProps) => {
 					sortAscending: true,
 					sortField: 'name',
 				},
-				filter: filter,
+				filter,
 			},
 		})
 
@@ -135,6 +142,7 @@ export const BottomBar = ({ navigation }: NavigationProps) => {
 				status: 'ativo',
 				_id: userProfile.favoriteProducts,
 			})
+			return
 		}
 		if (searched) {
 			filterProducts({
@@ -181,8 +189,12 @@ export const BottomBar = ({ navigation }: NavigationProps) => {
 				activeOpacity={0.7}
 				onPress={handleOpenSearchModal}
 			>
-				<MaterialIcons name='search' size={30} color='#FFFFFF' />
-				<Text style={styles.bottomBarIcons}>Procurar</Text>
+				<MaterialIcons
+					name={searched ? 'search-off' : 'search'}
+					size={30}
+					color='#FFFFFF'
+				/>
+				<Text style={styles.bottomBarIcons}>Pesquisar</Text>
 			</TouchableOpacity>
 			<TouchableOpacity
 				style={styles.bottomBarIcons}
@@ -205,6 +217,18 @@ export const BottomBar = ({ navigation }: NavigationProps) => {
 					</Text>
 				)}
 			</TouchableOpacity>
+			<AwesomeAlert
+				show={showAlert}
+				showProgress={false}
+				title='Você não tem favoritos.'
+				message='Acesse um produto, e clique no 💛.'
+				showCancelButton={false}
+				showConfirmButton
+				confirmText='Entendi.'
+				confirmButtonColor='#FF8108'
+				onDismiss={() => setShowAlert(false)}
+				onConfirmPressed={() => setShowAlert(false)}
+			/>
 		</View>
 	)
 }

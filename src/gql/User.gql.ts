@@ -167,11 +167,46 @@ const DELETE_ADDRESS = gql`
 const FOREIGN_LOGIN = gql`
 	mutation ForeignLogin($data: ForeignLoginInput!) {
 		foreignLogin(data: $data) {
+			_id
+			foreignIds {
+				userId
+				provider
+			}
 			firstName
 			lastName
-			foreignIds {
-				id
-				provider
+			fullName
+			email
+			phone
+			profilePicture
+			role
+			favoriteProducts
+			addresses {
+				name
+				zipcode
+				street
+				houseNumber
+				district
+				city
+				state
+				reference
+				location {
+					type
+					coordinates {
+						latitude
+						longitude
+						latitudeDelta
+						longitudeDelta
+					}
+				}
+			}
+			paymentMethods {
+				cardName
+				cardHolderName
+				cardNumber
+				expirationDate
+				cardBrand
+				cvv
+				isFavorite
 			}
 		}
 	}

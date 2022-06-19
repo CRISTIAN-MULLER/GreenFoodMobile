@@ -41,9 +41,7 @@ const PaymentSelection = ({ navigation }: NavigationProps) => {
 	}
 
 	useEffect(() => {
-		console.log('pay', paymentMethod)
 		// Subscribe for the focus Listener
-
 		const unsubscribe = navigation.addListener('focus', () => {
 			const favoriteCard = userProfile.paymentMethods!.find(
 				(card) => card.isFavorite === true,

@@ -12,7 +12,10 @@ import apolloClient from './src/services/apollo'
 require('intl') // import intl object
 require('intl/locale-data/jsonp/pt-BR') // load the required locale details
 
-LogBox.ignoreLogs(['ViewPropTypes will be removed'])
+LogBox.ignoreLogs([
+	'ViewPropTypes will be removed',
+	'EventEmitter.removeListener',
+])
 
 if (Platform.OS === 'android') {
 	// only Android needs polyfill

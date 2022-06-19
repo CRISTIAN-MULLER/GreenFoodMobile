@@ -25,19 +25,17 @@ import LogoSVG from '@assets/LogoSVG'
 import { NavigationProps } from '@typings/Navigation'
 import { GoogleAuthResponse } from '@typings/AuthResponse'
 import { ProfileContext } from '@contexts/ProfileContext'
-import { UserProfileProps } from '@typings/Profile'
-import { LOGIN } from '@gql/User.gql'
+import { LOGIN, FOREIGN_LOGIN } from '@gql/User.gql'
 import { SignupSchema } from '@typings/Validations'
 
 const Login = ({ navigation }: NavigationProps) => {
 	const { setUserProfile } = useContext(ProfileContext)
-	const [password, setPassword] = useState('admin')
-	const [userEmail, setUserEmail] = useState<string>(
-		'muller.cristian@outlook.com',
-	)
+	const [password, setPassword] = useState('')
+	const [userEmail, setUserEmail] = useState<string>('')
 	const [show, setShow] = useState(false)
 
 	const [loginUser] = useMutation(LOGIN)
+	const [foreignLoginUser] = useMutation(FOREIGN_LOGIN)
 
 	const handleSignIn = async (source: string) => {
 		if (source === 'google') {
@@ -57,23 +55,28 @@ const Login = ({ navigation }: NavigationProps) => {
 				const response = await fetch(
 					`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`,
 				)
-				const { email, family_name, given_name, id, picture } =
+				const { email, family_name, given_name, picture } =
 					await response.json()
 
-				// setUserProfile!(userProfileReturn)
-				const user: UserProfileProps = {
-					// eslint-disable-next-line camelcase
-					firstName: given_name,
-					// eslint-disable-next-line camelcase
-					lastName: family_name,
-					email,
-					profilePicture: picture,
-					foreignId: {
-						id,
-						provider: 'google',
+				const {
+					data: { foreignLogin },
+				} = await foreignLoginUser({
+					variables: {
+						data: {
+							// eslint-disable-next-line camelcase
+							firstName: given_name,
+							// eslint-disable-next-line camelcase
+							lastName: family_name,
+							email,
+							profilePicture: picture,
+							foreignId: {
+								userId: '109796350897870794527',
+								provider: 'google',
+							},
+						},
 					},
-				}
-				setUserProfile!(user)
+				})
+				setUserProfile!(foreignLogin)
 				navigation.navigate('Menu')
 			}
 		}
@@ -109,7 +112,7 @@ const Login = ({ navigation }: NavigationProps) => {
 					<View style={styles.login}>
 						<Text style={styles.textLogin}>LOGIN</Text>
 						<Formik
-							initialValues={{ userEmail: userEmail, password: password }}
+							initialValues={{ userEmail, password }}
 							validationSchema={SignupSchema}
 							onSubmit={(values) => {
 								setUserEmail(values.userEmail)

@@ -10,7 +10,6 @@ import { CardProps } from '@typings/PaymentMethod'
 import { UserProfileProps } from '@typings/Profile'
 import { useMutation } from '@apollo/client'
 import { UPDATE, DELETE_ADDRESS } from '@gql/User.gql'
-// import { ProductProps } from '@typings/Product'
 
 export interface ProfileContextProps {
 	newAddress: UserAddressProps
@@ -19,6 +18,7 @@ export interface ProfileContextProps {
 	setUserProfile: Dispatch<SetStateAction<UserProfileProps>>
 	handleAddress: (address: UserAddressProps, action: string) => void
 	handlePaymentMethod: (paymentMethod: CardProps, action: string) => void
+	handleFavorite: (favoriteProductId: string) => void
 }
 
 export const ProfileContext = createContext({} as ProfileContextProps)
@@ -72,6 +72,22 @@ const ProfileProvider: React.FC = ({ children }) => {
 			},
 		],
 	})
+
+	const updateUser = async (properties: any[]) => {
+		const updateData = Object.fromEntries(properties)
+
+		const {
+			data: { updateUser: user },
+		} = await UpdateUser({
+			variables: {
+				data: {
+					UserId: userProfile._id,
+					...updateData,
+				},
+			},
+		})
+		setUserProfile(user)
+	}
 
 	const handleAddress = async (
 		updateAddress: UserAddressProps,
@@ -163,6 +179,19 @@ const ProfileProvider: React.FC = ({ children }) => {
 		}
 	}
 
+	const handleFavorite = async (favoriteProductId: string) => {
+		const favoriteProducts: string[] = []
+		userProfile.favoriteProducts?.forEach((id) => {
+			if (id !== favoriteProductId) {
+				favoriteProducts.push(id)
+			}
+		})
+		if (favoriteProducts?.length === userProfile.favoriteProducts?.length) {
+			favoriteProducts.push(favoriteProductId)
+		}
+		updateUser([['favoriteProducts', favoriteProducts]])
+	}
+
 	const profileContext = useMemo(
 		() => ({
 			newAddress,
@@ -171,6 +200,7 @@ const ProfileProvider: React.FC = ({ children }) => {
 			setUserProfile,
 			handleAddress,
 			handlePaymentMethod,
+			handleFavorite,
 		}),
 		[userProfile],
 	)
